@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.User" >
+		<id column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="weichat_no" property="weiChatNo" jdbcType="VARCHAR" />
+		<result column="weichat_image" property="weiChatImage" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	phone,weichat_no,weichat_image
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.User">
+  	insert into user_#{tbinedex} (phone,weichat_no,weichat_image) 
+  		values (#{phone},#{weiChatNo},#{weiChatImage})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.User">
+  	update user_#{tbinedex} set weichat_no = #{weiChatNo}, weichat_image = #{weiChatImage} where phone=#{phone} 
+  </update>
+  
+  <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from user_#{tbinedex} where phone = #{phone}
+  </select>
+  
+</mapper>
