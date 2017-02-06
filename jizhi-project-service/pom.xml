@@ -54,24 +54,9 @@
 
 	<profiles>
 		<profile>
-			<id>dev</id>
-			<properties>
-				<project.environment>dev</project.environment>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault><!-- 这里表示默认环境 -->
-			</activation>
-		</profile>
-		<profile>
 			<id>product</id>
 			<properties>
 				<project.environment>product</project.environment>
-			</properties>
-		</profile>
-		<profile>
-			<id>test</id>
-			<properties>
-				<project.environment>test</project.environment>
 			</properties>
 		</profile>
 		<profile>
@@ -79,13 +64,16 @@
 			<properties>
 				<project.environment>uat</project.environment>
 			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault><!-- 这里表示默认环境 -->
+			</activation>
 		</profile>
 	</profiles>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
-		<finalName>mall-project-service</finalName>
+		<finalName>jizhi-project-service</finalName>
 		<filters>
 			<filter>src/main/resources/config/profile-${project.environment}.properties</filter>
 		</filters>

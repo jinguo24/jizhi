@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yard" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.Yard" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+		<result column="end_time" property="endTime" jdbcType="VARCHAR" />
+		<result column="image" property="image" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,name,address,remark,begin_time,end_time,image,status
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.Yard">
+  	insert into yard (name,address,remark,begin_time,end_time,image,status) 
+  		values (#{name},#{address},#{remark},#{beginTime},#{endTime},#{image},#{status})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.Yard">
+  	update yard 
+  	set name = #{name},
+  	    address = #{address},
+  	    remark = #{remark},
+  	    begin_time = #{beginTime},
+  	    end_time = #{endTime},
+  	    image = #{image}
+  	 where id=#{id} 
+  </update>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from yard where name LIKE CONCAT('%',#{name},'%')
+  	order by id desc limit #{begin},#{size}
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from yard where id = #{id}
+  </select>
+  
+  <update id="updateStatus" parameterType="java.util.HashMap">
+  	update yard 
+  	set status = #{status}
+  	 where id=#{id} 
+  </update>
+</mapper>
