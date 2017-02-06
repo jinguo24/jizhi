@@ -1,4 +1,4 @@
-package com.tmall.admin.filter;
+package com.jizhi.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public class PermissionFilter
     }
     else {
       //判断用户是否已经登录，已经登录的跳转，没有登录跳转到登录页面
-      SysUser user = (com.tmall.admin.filter.SysUser) LoginUserUtil.getCurrentUser(request);
+      SysUser user =  (SysUser) LoginUserUtil.getCurrentUser(request);
       if ( null == user ) {
     	  redirectLogin(request, response);
     	  //chain.doFilter(servletRequest, servletResponse); //TODO 后面要去掉

@@ -1,6 +1,7 @@
 package com.jizhi.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
@@ -11,6 +12,7 @@ public class User implements Serializable{
 	private String phone;
 	private String weiChatNo;
 	private String weiChatImage;
+	private Date createTime;
 	private int tbinedex;
 	public String getPhone() {
 		return phone;
@@ -35,5 +37,11 @@ public class User implements Serializable{
 	}
 	public int getTbinedex() {
 		return tbinedex;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

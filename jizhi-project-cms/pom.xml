@@ -9,11 +9,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.jizhi</groupId>
-			<artifactId>jizhi-project-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.jizhi</groupId>
 			<artifactId>jizhi-project-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

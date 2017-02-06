@@ -1,10 +1,8 @@
 package com.jizhi.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.jizhi.dao.CouponDao;
 import com.jizhi.model.Coupon;
 @Service
@@ -23,6 +21,14 @@ public class CouponService {
 	
 	public Coupon getCoupon(String phone,int id) {
 		return couponDao.getCouponById(phone, id);
+	}
+	
+	public Coupon getCoupon(String phone, String date) {
+		return couponDao.getCouponByPhoneAndDate(phone, date);
+	}
+	
+	public void updateCouponUse(Coupon coupon) {
+		couponDao.updateStatus(coupon);
 	}
 	
 }

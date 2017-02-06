@@ -1,5 +1,6 @@
 package com.jizhi.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,8 @@ public class CouponDao extends BaseIbatisDao {
 	}
 	
 	public void updateStatus(Coupon coupon) {
-		this.sqlSession.update("coupon.updateStatus",coupon);
+		coupon.setUseTime(new Date());
+		this.sqlSession.update("coupon.updateUseStatus",coupon);
 	}
 	
 	public List<Coupon> getCouponList(String phone,int status,int pageIndex,int pageSize) {
@@ -48,6 +50,16 @@ public class CouponDao extends BaseIbatisDao {
 		param.put("tbinedex", c.getTbinedex());
 		param.put("id", id);
 		return this.sqlSession.selectOne("coupon.queryById",param);
+	}
+	
+	public Coupon getCouponByPhoneAndDate(String phone,String date) {
+		Coupon c = new Coupon();
+		c.setPhone(phone);
+		Map param = new HashMap();
+		param.put("tbinedex", c.getTbinedex());
+		param.put("phone", phone);
+		param.put("createDate", date);
+		return this.sqlSession.selectOne("coupon.queryByPhoneAndDate",param);
 	}
 	
 }

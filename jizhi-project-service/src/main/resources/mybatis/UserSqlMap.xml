@@ -5,14 +5,15 @@
 		<id column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="weichat_no" property="weiChatNo" jdbcType="VARCHAR" />
 		<result column="weichat_image" property="weiChatImage" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="DATE" />
   </resultMap>
   <sql id="Base_Column_List" >
-	phone,weichat_no,weichat_image
+	phone,weichat_no,weichat_image,create_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.User">
-  	insert into user_#{tbinedex} (phone,weichat_no,weichat_image) 
-  		values (#{phone},#{weiChatNo},#{weiChatImage})
+  	insert into user_#{tbinedex} (phone,weichat_no,weichat_image,create_time) 
+  		values (#{phone},#{weiChatNo},#{weiChatImage},#{createTime})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.User">
