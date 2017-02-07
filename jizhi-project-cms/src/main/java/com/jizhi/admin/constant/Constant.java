@@ -1,4 +1,4 @@
-package com.tmall.admin.constant;
+package com.jizhi.admin.constant;
 
 public class Constant {
 

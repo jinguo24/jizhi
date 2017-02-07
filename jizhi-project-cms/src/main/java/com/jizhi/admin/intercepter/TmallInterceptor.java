@@ -1,4 +1,4 @@
-package com.tmall.admin.intercepter;
+package com.jizhi.admin.intercepter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

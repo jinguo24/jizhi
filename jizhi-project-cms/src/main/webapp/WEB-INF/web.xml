@@ -40,7 +40,7 @@
 	<!-- 权限集成过滤器起 -->
  	<filter>
 		<filter-name>permissionFilter</filter-name>
-		<filter-class>com.tmall.admin.filter.PermissionFilter</filter-class>
+		<filter-class>com.jizhi.admin.filter.PermissionFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>permissionFilter</filter-name>

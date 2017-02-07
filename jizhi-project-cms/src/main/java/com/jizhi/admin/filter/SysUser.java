@@ -1,4 +1,4 @@
-package com.tmall.admin.filter;
+package com.jizhi.admin.filter;
 
 import java.io.Serializable;
 

@@ -15,7 +15,7 @@
        default-autowire="byName">
 
     <!-- 自动搜索@Controller标注的类 -->
-    <context:component-scan base-package="com.tmall.admin"/>
+    <context:component-scan base-package="com.jizhi"/>
     
     <mvc:resources mapping="/images/**" location="/images/" />
     <mvc:resources mapping="/css/**" location="/css/" />
@@ -25,7 +25,7 @@
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
     	<property name="interceptors">
             <list>
-                <bean class="com.tmall.admin.intercepter.TmallInterceptor"></bean>
+                <bean class="com.jizhi.admin.intercepter.TmallInterceptor"></bean>
             </list>
         </property>
     </bean>

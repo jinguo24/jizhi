@@ -1,4 +1,4 @@
-package com.tmall.admin.controller;
+package com.jizhi.admin.controller;
 
 import java.util.List;
 

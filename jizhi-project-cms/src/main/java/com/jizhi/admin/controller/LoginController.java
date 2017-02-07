@@ -1,4 +1,4 @@
-package com.tmall.admin.controller;
+package com.jizhi.admin.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jizhi.admin.filter.SysUser;
 import com.jizhi.service.UserService;
 import com.simple.common.config.EnvPropertiesConfiger;
 import com.simple.common.filter.LoginUserUtil;
 import com.simple.common.util.AjaxWebUtil;
-import com.tmall.admin.filter.SysUser;
 
 @Controller
 @RequestMapping(value = "/login")
