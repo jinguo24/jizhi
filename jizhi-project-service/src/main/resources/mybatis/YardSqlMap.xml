@@ -38,6 +38,12 @@
   	order by id desc limit #{begin},#{size}
   </select>
   
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select 
+  	count(1)
+  	from yard where name LIKE CONCAT('%',#{name},'%')
+  </select>
+  
   <select id="queryById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>

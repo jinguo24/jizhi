@@ -1,17 +1,18 @@
 package com.jizhi.admin.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.jizhi.model.Yard;
 import com.jizhi.service.YardService;
 import com.simple.common.util.AjaxWebUtil;
+import com.simple.common.util.PageResult;
 
 @Controller
 @RequestMapping(value = "/yard")
@@ -24,7 +25,7 @@ public class YardController {
 	@ResponseBody
 	public String list(int page,int pageSize,String name,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			List<Yard> yards = yardService.getYardList(name, page, pageSize);
+			PageResult yards = yardService.getYardPageResult(name, page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", yards);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
@@ -35,6 +36,7 @@ public class YardController {
 	@ResponseBody
 	public String add(Yard yard,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			yard.setStatus(1);
 			yardService.addYard(yard);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {
@@ -57,7 +59,7 @@ public class YardController {
 		return AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", yard);
 	}
 	
-	@RequestMapping(value = "updateStatus",method=RequestMethod.GET)
+	@RequestMapping(value = "updateStatus",method=RequestMethod.POST)
 	@ResponseBody
 	public String toAuth(int id,int status,HttpServletRequest request, HttpServletResponse response){
 		try {

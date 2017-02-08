@@ -36,6 +36,12 @@ public class YardDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("yard.query",param);
 	}
 	
+	public int getYardCount(String name) {
+		Map param = new HashMap();
+		param.put("name", name);
+		return this.sqlSession.selectOne("yard.queryCount",param);
+	}
+	
 	public Yard getYardById(int id) {
 		Map param = new HashMap();
 		param.put("id", id);
