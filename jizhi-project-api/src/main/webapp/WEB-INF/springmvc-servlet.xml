@@ -59,7 +59,7 @@
                         </list>
                     </property>
                 </bean>
-                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
    				     <property name="supportedMediaTypes">
       					 <list>
       					 <!--返回字符串格式json-->
