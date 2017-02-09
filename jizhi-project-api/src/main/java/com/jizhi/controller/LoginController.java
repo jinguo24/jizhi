@@ -33,16 +33,20 @@ public class LoginController {
 	@ResponseBody
 	public String sendSms(String phone,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			String validateCode = getValidateCode();
+			//String validateCode = getValidateCode();
+			String validateCode = "123456";
 			LocalCache.setCache(phone, validateCode);
 			SmsResult sr = SmsClient.sendMsg(PRE,phone, "验证码:"+validateCode);
 			if (sr.isSuccess()) {
 				return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码成功", sr.getMsg());
 			}else {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+validateCode, sr.getMsg());
+				//return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+validateCode, sr.getMsg());
+				return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码失败:"+validateCode, sr.getMsg());
 			}
 		}catch(Exception e) {
-			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+e.getLocalizedMessage(), null);
+			e.printStackTrace();
+			//return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+e.getLocalizedMessage(), null);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码失败:"+e.getLocalizedMessage(), null);
 		}
 	}
 	
