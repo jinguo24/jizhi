@@ -19,11 +19,11 @@ public class CouponService {
 		return couponDao.getCouponList(phone, status, pageIndex, pageSize);
 	}
 	
-	public Coupon getCoupon(String phone,int id) {
+	public Coupon getCoupon(String phone,String id) {
 		return couponDao.getCouponById(phone, id);
 	}
 	
-	public Coupon getCoupon(String phone, String date) {
+	public Coupon getCouponByDate(String phone, String date) {
 		return couponDao.getCouponByPhoneAndDate(phone, date);
 	}
 	

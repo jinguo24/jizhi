@@ -5,6 +5,8 @@ import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
+import com.simple.common.util.DateUtil;
+
 public class Coupon implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -12,8 +14,10 @@ public class Coupon implements Serializable{
 	private String id;
 	private String phone;
 	private Date createTime;
+	private String createTimeStr;
 	private int useStatus;
 	private Date useTime;
+	private String useTimeStr;
 	private int tbinedex;
 	public String getId() {
 		return id;
@@ -35,12 +39,18 @@ public class Coupon implements Serializable{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+		if (null != createTime) {
+			this.createTimeStr = DateUtil.date2String(createTime);
+		}
 	}
 	public Date getUseTime() {
 		return useTime;
 	}
 	public void setUseTime(Date useTime) {
 		this.useTime = useTime;
+		if (null != useTime) {
+			this.useTimeStr = DateUtil.date2AllString(useTime);
+		}
 	}
 	public int getTbinedex() {
 		return tbinedex;
@@ -50,5 +60,11 @@ public class Coupon implements Serializable{
 	}
 	public void setUseStatus(int useStatus) {
 		this.useStatus = useStatus;
+	}
+	public String getUseTimeStr() {
+		return useTimeStr;
+	}
+	public String getCreateTimeStr() {
+		return createTimeStr;
 	}
 }

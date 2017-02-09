@@ -7,17 +7,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jizhi.filter.SysUser;
 import com.jizhi.model.Coupon;
 import com.jizhi.model.User;
 import com.jizhi.service.CouponService;
+import com.jizhi.service.SysPhoneService;
 import com.jizhi.service.UserService;
 import com.simple.common.filter.LoginUserUtil;
 import com.simple.common.util.AjaxWebUtil;
+import com.simple.common.util.CookieUtils;
 import com.simple.common.util.DateUtil;
 import com.simple.common.util.PrimaryKeyUtil;
 
@@ -30,6 +32,9 @@ public class CouponController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private SysPhoneService sysPhoneService;
 	
 	@RequestMapping(value = "get",method=RequestMethod.GET)
 	@ResponseBody
@@ -49,7 +54,7 @@ public class CouponController {
 			}
 			LoginUserUtil.setCurrentUser(request, u);
 			
-			Coupon c = couponService.getCoupon(u.getPhone(), DateUtil.date2String(new Date()));
+			Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
 			if ( null != c ) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","已经存在", c); 
 			}else {
@@ -58,6 +63,7 @@ public class CouponController {
 				c.setId(id);
 				c.setCreateTime(new Date());
 				c.setPhone(u.getPhone());
+				c.setUseStatus(1);
 				couponService.addCoupon(c);
 				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", c);
 			}
@@ -87,14 +93,22 @@ public class CouponController {
 	@ResponseBody
 	public String use(String phone,String id,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if (StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请使用管理员手机号登录", null);
+			}
+			boolean exists = sysPhoneService.isExists(currentPhone);
+			if (!exists) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"非管理员手机号，不能扫码", null);
+			}
 			Coupon c = couponService.getCoupon(phone, id);
-			if ( null != c ) {
+			if ( null != c && 2 != c.getUseStatus()) {
 				c.setUseStatus(2);
 				c.setUseTime(new Date());
 				couponService.updateCouponUse(c);
 				return AjaxWebUtil.sendAjaxResponse(request, response, true,"使用成功", c); 
 			}else {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"优惠券无记录", c);
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"优惠券无记录或者优惠券已使用", c);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();

@@ -43,7 +43,7 @@ public class CouponDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("coupon.query",param);
 	}
 	
-	public Coupon getCouponById(String phone,int id) {
+	public Coupon getCouponById(String phone,String id) {
 		Coupon c = new Coupon();
 		c.setPhone(phone);
 		Map param = new HashMap();

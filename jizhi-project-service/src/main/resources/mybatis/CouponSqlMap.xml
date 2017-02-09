@@ -6,15 +6,15 @@
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="DATE" />
 		<result column="use_status" property="useStatus" jdbcType="INTEGER" />
-		<result column="use_time" property="useTime" jdbcType="DATE" />
+		<result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
 	id,phone,create_time,use_status,use_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.Coupon">
-  	insert into coupon_#{tbinedex} (phone,create_time,use_status,use_time) 
-  		values (#{phone},#{createTime},#{useStatus},#{useTime})
+  	insert into coupon_#{tbinedex} (id,phone,create_time,use_status,use_time) 
+  		values (#{id},#{phone},#{createTime},#{useStatus},#{useTime})
   </insert>
   
   <update id="updateUseStatus" parameterType="com.jizhi.model.Coupon">
