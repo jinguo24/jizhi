@@ -16,7 +16,7 @@
 		
 		<dependency>
 			<groupId>com.simpleproject</groupId>
-			<artifactId>simple-project-sms</artifactId>
+			<artifactId>simple-project-yuntongxun</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 		

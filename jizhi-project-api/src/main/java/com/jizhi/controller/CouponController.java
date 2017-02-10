@@ -1,6 +1,7 @@
 package com.jizhi.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -113,6 +114,22 @@ public class CouponController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"使用失败", e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "my",method=RequestMethod.GET)
+	@ResponseBody
+	public String my(String phone,String code,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			boolean valid = LocalCache.codeValid(phone, code);
+			if (!valid) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
+			}
+			List<Coupon> list = couponService.getCouponList(phone, 0, page, pageSize);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", list);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
 		}
 	}
 	

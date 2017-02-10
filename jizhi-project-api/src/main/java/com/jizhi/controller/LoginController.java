@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cloopen.rest.demo.SDKTestSendTemplateSMS;
 import com.jizhi.model.User;
+import com.jizhi.service.SysConfigService;
 import com.jizhi.service.UserService;
-import com.ruanwei.tool.SmsClient;
-import com.ruanwei.tool.SmsResult;
 import com.simple.common.config.EnvPropertiesConfiger;
 import com.simple.common.filter.LoginUserUtil;
 import com.simple.common.util.AjaxWebUtil;
@@ -27,26 +27,29 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private SysConfigService sysConfigService;
+	
 	private static final String PRE = "【极指】";
 	
 	@RequestMapping(value = "sendSms",method=RequestMethod.POST)
 	@ResponseBody
 	public String sendSms(String phone,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			//String validateCode = getValidateCode();
-			String validateCode = "123456";
+			String validateCode = getValidateCode();
 			LocalCache.setCache(phone, validateCode);
-			SmsResult sr = SmsClient.sendMsg(PRE,phone, "验证码:"+validateCode);
-			if (sr.isSuccess()) {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码成功", sr.getMsg());
-			}else {
+			String templateId = sysConfigService.getConfigValue("sys_sms_templateId");
+			SDKTestSendTemplateSMS.sendSms(phone, templateId, new String[]{validateCode});
+			//SmsResult sr = SmsClient.sendMsg(PRE,phone, "验证码:"+validateCode);
+			//if (sr.isSuccess()) {
+				//return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码成功", sr.getMsg());
+			//}else {
 				//return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+validateCode, sr.getMsg());
-				return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码失败:"+validateCode, sr.getMsg());
-			}
+			//}
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码成功", null);
 		}catch(Exception e) {
 			e.printStackTrace();
-			//return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+e.getLocalizedMessage(), null);
-			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码失败:"+e.getLocalizedMessage(), null);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"获取验证码失败:"+e.getLocalizedMessage(), null);
 		}
 	}
 	

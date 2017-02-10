@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sysConfig" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.SysConfig" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="config_type" property="configType" jdbcType="VARCHAR" />
+		<result column="config_value" property="configValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,config_type,config_value
+  </sql>
+  
+  <select id="queryValue" resultType="String" parameterType="java.util.HashMap">
+  	select config_value from sys_config where config_type = #{configtype}
+  </select>
+</mapper>
