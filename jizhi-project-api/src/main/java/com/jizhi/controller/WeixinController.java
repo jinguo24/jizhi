@@ -30,10 +30,9 @@ public class WeixinController {
 	
 	@RequestMapping(value = "validateTicket",method=RequestMethod.GET)
 	@ResponseBody
-	public String validateTicket(String id,String phone,String status,HttpServletRequest request, HttpServletResponse response) {
+	public String validateTicket(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(
-					String.format(EnvPropertiesConfiger.getValue("validatePageUrl"),id,phone,status));
+			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(EnvPropertiesConfiger.getValue("validatePageUrl"));
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", config);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -43,9 +42,9 @@ public class WeixinController {
 	
 	@RequestMapping(value = "couponTicket",method=RequestMethod.GET)
 	@ResponseBody
-	public String couponTicket(String id,String phone,HttpServletRequest request, HttpServletResponse response) {
+	public String couponTicket(String id,String phone,String status,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(String.format(EnvPropertiesConfiger.getValue("couponPageUrl"),id,phone));
+			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(String.format(EnvPropertiesConfiger.getValue("couponPageUrl"),id,phone,status));
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", config);
 		}catch(Exception e) {
 			e.printStackTrace();
