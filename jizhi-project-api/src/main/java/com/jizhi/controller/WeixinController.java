@@ -18,9 +18,13 @@ public class WeixinController {
 
 	@RequestMapping(value = "homeTicket",method=RequestMethod.GET)
 	@ResponseBody
-	public String homeTicket(HttpServletRequest request, HttpServletResponse response) {
+	public String homeTicket(String url,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(EnvPropertiesConfiger.getValue("homeUrl"));
+			//JsConfigInfo config = WeiXinAuth.getJsConfigInfo(EnvPropertiesConfiger.getValue("homeUrl"));
+			if(url.contains("from=groupmessage") && (!url.contains("&isappinstalled=0"))) {
+				url = url +"&isappinstalled=0";
+			}
+			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(url);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", config);
 		}catch(Exception e) {
 			e.printStackTrace();
