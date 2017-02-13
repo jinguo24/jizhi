@@ -23,7 +23,7 @@
   </update>
   
   <update id="updateUseStatusByIds" parameterType="java.util.HashMap">
-  	update coupon_#{tbinedex} set use_status = #{useStatus},use_time = #{useTime} where phone=#{phone} id in  
+  	update coupon_#{tbinedex} set use_status = #{useStatus},use_time = #{useTime} where phone=#{phone} and id in  
   	<foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
 	  #{item}  
 	</foreach>
