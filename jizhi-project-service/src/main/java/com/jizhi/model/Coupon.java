@@ -40,7 +40,7 @@ public class Coupon implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 		if (null != createTime) {
-			this.createTimeStr = DateUtil.date2String(createTime);
+			this.createTimeStr = DateUtil.date2AllString(createTime);
 		}
 	}
 	public Date getUseTime() {

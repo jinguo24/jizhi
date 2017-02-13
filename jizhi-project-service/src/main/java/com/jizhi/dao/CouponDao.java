@@ -62,4 +62,13 @@ public class CouponDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("coupon.queryByPhoneAndDate",param);
 	}
 	
+	public Coupon getUnUseCoupon(String phone) {
+		Coupon c = new Coupon();
+		c.setPhone(phone);
+		Map param = new HashMap();
+		param.put("tbinedex", c.getTbinedex());
+		param.put("phone", phone);
+		return this.sqlSession.selectOne("coupon.queryUnuse",param);
+	}
+	
 }

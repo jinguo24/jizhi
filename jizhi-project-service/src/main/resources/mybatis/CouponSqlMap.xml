@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jizhi.model.Coupon" >
 		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="use_status" property="useStatus" jdbcType="INTEGER" />
 		<result column="use_time" property="useTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -39,5 +39,11 @@
   	select 
   	<include refid="Base_Column_List"></include>
   	from coupon_#{tbinedex} where phone = #{phone} and create_time = #{createDate}
+  </select>
+  
+  <select id="queryUnuse" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from coupon_#{tbinedex} where phone = #{phone} and use_status = 1 and use_time is null
   </select>
 </mapper>

@@ -31,4 +31,8 @@ public class CouponService {
 		couponDao.updateStatus(coupon);
 	}
 	
+	public Coupon getUnUseCoupon(String phone) {
+		return couponDao.getUnUseCoupon(phone);
+	}
+	
 }

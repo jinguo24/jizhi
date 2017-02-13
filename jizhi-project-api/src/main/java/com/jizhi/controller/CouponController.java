@@ -55,9 +55,10 @@ public class CouponController {
 			}
 			LoginUserUtil.setCurrentUser(request, u);
 			
-			Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
+			//Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
+			Coupon c = couponService.getUnUseCoupon(u.getPhone());
 			if ( null != c ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","已经存在", c); 
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","存在未使用的优惠券", c); 
 			}else {
 				c = new Coupon();
 				String id = PrimaryKeyUtil.getUUID();
