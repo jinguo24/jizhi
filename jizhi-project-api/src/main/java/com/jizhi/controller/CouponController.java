@@ -160,7 +160,7 @@ public class CouponController {
 //				userService.addUser(u);
 //			}
 //			LoginUserUtil.setCurrentUser(request, u);
-			List<Coupon> list = couponService.getCouponList(currentPhone, 0, page, pageSize);
+			List<Coupon> list = couponService.getCouponList(currentPhone, 1, page, pageSize);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", list);
 		}catch(Exception e) {
 			e.printStackTrace();
