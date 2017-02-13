@@ -31,8 +31,12 @@ public class CouponService {
 		couponDao.updateStatus(coupon);
 	}
 	
-	public Coupon getUnUseCoupon(String phone) {
-		return couponDao.getUnUseCoupon(phone);
+	public Integer getUnusedCountByIds(String phone,String[] ids) {
+		return couponDao.getUnusedCountByIds(ids, phone);
+	}
+	
+	public void useCoupon(String[] ids,String phone) {
+		couponDao.updateStatus(phone, ids);
 	}
 	
 }

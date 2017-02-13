@@ -14,6 +14,7 @@ public class Coupon implements Serializable{
 	private String id;
 	private String phone;
 	private Date createTime;
+	private Date createDate;
 	private String createTimeStr;
 	private int useStatus;
 	private Date useTime;
@@ -66,5 +67,11 @@ public class Coupon implements Serializable{
 	}
 	public String getCreateTimeStr() {
 		return createTimeStr;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 }

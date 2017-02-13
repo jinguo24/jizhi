@@ -28,6 +28,19 @@ public class CouponDao extends BaseIbatisDao {
 		this.sqlSession.update("coupon.updateUseStatus",coupon);
 	}
 	
+	public void updateStatus(String phone, String[] ids) {
+		Coupon c = new Coupon();
+		c.setPhone(phone);
+		Map param = new HashMap();
+		param.put("tbinedex", c.getTbinedex());
+		param.put("useStatus", 2);
+		param.put("useTime", new Date());
+		param.put("phone", phone);
+		param.put("ids", ids);
+		this.sqlSession.update("coupon.updateUseStatusByIds",param);
+	}
+	
+	
 	public List<Coupon> getCouponList(String phone,int status,int pageIndex,int pageSize) {
 		Coupon c = new Coupon();
 		c.setPhone(phone);
@@ -69,6 +82,16 @@ public class CouponDao extends BaseIbatisDao {
 		param.put("tbinedex", c.getTbinedex());
 		param.put("phone", phone);
 		return this.sqlSession.selectOne("coupon.queryUnuse",param);
+	}
+	
+	public Integer getUnusedCountByIds(String[] ids,String phone) {
+		Coupon c = new Coupon();
+		c.setPhone(phone);
+		Map param = new HashMap();
+		param.put("tbinedex", c.getTbinedex());
+		param.put("phone", phone);
+		param.put("ids", ids);
+		return this.sqlSession.selectOne("coupon.queryByIds",param);
 	}
 	
 }

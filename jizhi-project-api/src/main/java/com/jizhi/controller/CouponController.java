@@ -55,10 +55,9 @@ public class CouponController {
 			}
 			LoginUserUtil.setCurrentUser(request, u);
 			
-			//Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
-			Coupon c = couponService.getUnUseCoupon(u.getPhone());
+			Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
 			if ( null != c ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","存在未使用的优惠券", c); 
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","今天已经领取券", c); 
 			}else {
 				c = new Coupon();
 				String id = PrimaryKeyUtil.getUUID();
@@ -66,6 +65,7 @@ public class CouponController {
 				c.setCreateTime(new Date());
 				c.setPhone(u.getPhone());
 				c.setUseStatus(1);
+				c.setCreateDate(new Date());
 				couponService.addCoupon(c);
 				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", c);
 			}
@@ -91,27 +91,46 @@ public class CouponController {
 		}
 	}
 	
-	@RequestMapping(value = "use",method=RequestMethod.GET)
+	@RequestMapping(value = "use",method=RequestMethod.POST)
 	@ResponseBody
-	public String use(String phone,String id,HttpServletRequest request, HttpServletResponse response) {
+	public String use(String id,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			if (StringUtils.isEmpty(id)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请选择优惠券", null);
+			}
+			
 			String currentPhone = CookieUtils.getCookie(request, "cp");
-			if (StringUtils.isEmpty(currentPhone)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请使用管理员手机号登录", null);
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","登录失效", null);
 			}
-			boolean exists = sysPhoneService.isExists(currentPhone);
-			if (!exists) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"非管理员手机号，不能扫码", null);
+			
+			String[] ids = id.split(",");
+			//User u = (User) LoginUserUtil.getCurrentUser(request);
+			Integer count = couponService.getUnusedCountByIds(currentPhone, ids);
+			if ( null == count || count != ids.length) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"存在无效优惠券", null);
 			}
-			Coupon c = couponService.getCoupon(phone, id);
-			if ( null != c && 2 != c.getUseStatus()) {
-				c.setUseStatus(2);
-				c.setUseTime(new Date());
-				couponService.updateCouponUse(c);
-				return AjaxWebUtil.sendAjaxResponse(request, response, true,"使用成功", c); 
-			}else {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"优惠券无记录或者优惠券已使用", c);
-			}
+			
+//			String currentPhone = CookieUtils.getCookie(request, "cp");
+//			if (StringUtils.isEmpty(currentPhone)) {
+//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请使用管理员手机号登录", null);
+//			}
+//			boolean exists = sysPhoneService.isExists(currentPhone);
+//			if (!exists) {
+//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"非管理员手机号，不能扫码", null);
+//			}
+//			Coupon c = couponService.getCoupon(phone, id);
+//			if ( null != c && 2 != c.getUseStatus()) {
+//				c.setUseStatus(2);
+//				c.setUseTime(new Date());
+//				couponService.updateCouponUse(c);
+//				return AjaxWebUtil.sendAjaxResponse(request, response, true,"使用成功", c); 
+//			}else {
+//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"优惠券无记录或者优惠券已使用", c);
+//			}
+			
+			couponService.useCoupon(ids, currentPhone);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"使用成功", null);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"使用失败", e.getLocalizedMessage());
@@ -122,11 +141,26 @@ public class CouponController {
 	@ResponseBody
 	public String my(String phone,String code,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			boolean valid = LocalCache.codeValid(phone, code);
-			if (!valid) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
+			//boolean valid = LocalCache.codeValid(phone, code);
+			//if (!valid) {
+			//	return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
+			//}
+			
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","登录失效", null);
 			}
-			List<Coupon> list = couponService.getCouponList(phone, 0, page, pageSize);
+			
+			
+//			User u = userService.getUser(phone);
+//			if ( null == u) {
+//				u = new User();
+//				u.setPhone(phone);
+//				u.setCreateTime(new Date());
+//				userService.addUser(u);
+//			}
+//			LoginUserUtil.setCurrentUser(request, u);
+			List<Coupon> list = couponService.getCouponList(currentPhone, 0, page, pageSize);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", list);
 		}catch(Exception e) {
 			e.printStackTrace();
