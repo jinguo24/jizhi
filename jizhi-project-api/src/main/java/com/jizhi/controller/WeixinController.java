@@ -68,4 +68,16 @@ public class WeixinController {
 		}
 	}
 	
+	@RequestMapping(value = "mycouponTicket",method=RequestMethod.GET)
+	@ResponseBody
+	public String mycouponTicket(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(EnvPropertiesConfiger.getValue("mycouponUrl"));
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", config);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
+	}
+	
 }

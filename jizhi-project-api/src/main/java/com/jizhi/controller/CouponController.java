@@ -168,4 +168,19 @@ public class CouponController {
 		}
 	}
 	
+	@RequestMapping(value = "validate",method=RequestMethod.GET)
+	@ResponseBody
+	public String validate(String phone,String code,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			boolean valid = LocalCache.codeValid(phone, code);
+			if (!valid) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证成功", null);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
+	}
+	
 }
