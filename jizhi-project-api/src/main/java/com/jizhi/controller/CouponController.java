@@ -75,6 +75,44 @@ public class CouponController {
 		}
 	}
 	
+	@RequestMapping(value = "getCurrent",method=RequestMethod.GET)
+	@ResponseBody
+	public String get(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","登录失效", null);
+			}
+			//SysUser user = (SysUser) LoginUserUtil.getCurrentUser(request);
+			User u = userService.getUser(currentPhone);
+			if ( null == u) {
+				u = new User();
+				u.setPhone(currentPhone);
+				u.setCreateTime(new Date());
+				userService.addUser(u);
+			}
+			LoginUserUtil.setCurrentUser(request, u);
+			
+			Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
+			if ( null != c ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","今天已经领取券", c); 
+			}else {
+				c = new Coupon();
+				String id = PrimaryKeyUtil.getUUID();
+				c.setId(id);
+				c.setCreateTime(new Date());
+				c.setPhone(u.getPhone());
+				c.setUseStatus(1);
+				c.setCreateDate(new Date());
+				couponService.addCoupon(c);
+				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", c);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
+	}
+	
 	@RequestMapping(value = "detail",method=RequestMethod.GET)
 	@ResponseBody
 	public String detail(String phone,String id,HttpServletRequest request, HttpServletResponse response) {
