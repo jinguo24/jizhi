@@ -31,7 +31,7 @@ import com.simple.common.util.PrimaryKeyUtil;
 @RequestMapping(value = "/coupon")
 public class CouponController {
 	
-	private static final String entryKey = "jizhicoupkey";
+	private static final String entryKey = "jzcoupky";
 
 	@Autowired
 	CouponService couponService;
