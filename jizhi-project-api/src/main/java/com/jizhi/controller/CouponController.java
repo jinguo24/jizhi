@@ -1,7 +1,9 @@
 package com.jizhi.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,11 +24,14 @@ import com.simple.common.filter.LoginUserUtil;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.CookieUtils;
 import com.simple.common.util.DateUtil;
+import com.simple.common.util.DesEncrypt;
 import com.simple.common.util.PrimaryKeyUtil;
 
 @Controller
 @RequestMapping(value = "/coupon")
 public class CouponController {
+	
+	private static final String entryKey = "jizhicoupkey";
 
 	@Autowired
 	CouponService couponService;
@@ -57,7 +62,10 @@ public class CouponController {
 			
 			Coupon c = couponService.getCouponByDate(u.getPhone(), DateUtil.date2String(new Date()));
 			if ( null != c ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","今天已经领取券", c); 
+				Map result = new HashMap();
+				result.put("id", c.getId());
+				result.put("token", DesEncrypt.encrypt(phone, entryKey));
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","今天已经领取券", result); 
 			}else {
 				c = new Coupon();
 				String id = PrimaryKeyUtil.getUUID();
@@ -67,7 +75,10 @@ public class CouponController {
 				c.setUseStatus(1);
 				c.setCreateDate(new Date());
 				couponService.addCoupon(c);
-				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", c);
+				Map result = new HashMap();
+				result.put("id", c.getId());
+				result.put("token", DesEncrypt.encrypt(phone, entryKey));
+				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", result);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -81,8 +92,19 @@ public class CouponController {
 		try {
 			String currentPhone = CookieUtils.getCookie(request, "cp");
 			if ( StringUtils.isEmpty(currentPhone)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","登录失效", null);
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = DesEncrypt.decrypt(token, entryKey);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
 			//SysUser user = (SysUser) LoginUserUtil.getCurrentUser(request);
 			User u = userService.getUser(currentPhone);
 			if ( null == u) {
@@ -105,7 +127,10 @@ public class CouponController {
 				c.setUseStatus(1);
 				c.setCreateDate(new Date());
 				couponService.addCoupon(c);
-				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", c);
+				Map result = new HashMap();
+				result.put("id", c.getId());
+				result.put("token", DesEncrypt.encrypt(currentPhone, entryKey));
+				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", result);
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -117,6 +142,16 @@ public class CouponController {
 	@ResponseBody
 	public String detail(String phone,String id,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = DesEncrypt.decrypt(token, entryKey);
+			if (!dephone.equals(phone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
 			Coupon c = couponService.getCoupon(phone, id);
 			if ( null != c ) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", c); 
@@ -140,6 +175,16 @@ public class CouponController {
 			String currentPhone = CookieUtils.getCookie(request, "cp");
 			if ( StringUtils.isEmpty(currentPhone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = DesEncrypt.decrypt(token, entryKey);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			
 			String[] ids = id.split(",");
@@ -186,9 +231,18 @@ public class CouponController {
 			
 			String currentPhone = CookieUtils.getCookie(request, "cp");
 			if ( StringUtils.isEmpty(currentPhone)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","登录失效", null);
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = DesEncrypt.decrypt(token, entryKey);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			
 //			User u = userService.getUser(phone);
 //			if ( null == u) {
@@ -214,7 +268,9 @@ public class CouponController {
 			if (!valid) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
 			}
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证成功", null);
+			Map result = new HashMap();
+			result.put("token", DesEncrypt.encrypt(phone, entryKey));
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证成功", result);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
