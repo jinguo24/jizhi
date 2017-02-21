@@ -22,6 +22,7 @@ import com.jizhi.service.SysPhoneService;
 import com.jizhi.service.UserService;
 import com.simple.common.filter.LoginUserUtil;
 import com.simple.common.util.AjaxWebUtil;
+import com.simple.common.util.Base64;
 import com.simple.common.util.CookieUtils;
 import com.simple.common.util.DateUtil;
 import com.simple.common.util.DesEncrypt;
@@ -64,7 +65,7 @@ public class CouponController {
 			if ( null != c ) {
 				Map result = new HashMap();
 				result.put("id", c.getId());
-				result.put("token", DesEncrypt.encrypt(phone, entryKey));
+				result.put("token", entry(phone));
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","今天已经领取券", result); 
 			}else {
 				c = new Coupon();
@@ -77,7 +78,7 @@ public class CouponController {
 				couponService.addCoupon(c);
 				Map result = new HashMap();
 				result.put("id", c.getId());
-				result.put("token", DesEncrypt.encrypt(phone, entryKey));
+				result.put("token", entry(phone));
 				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", result);
 			}
 		}catch(Exception e) {
@@ -100,7 +101,7 @@ public class CouponController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			
-			String dephone = DesEncrypt.decrypt(token, entryKey);
+			String dephone = decry(token);
 			if (!dephone.equals(currentPhone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
@@ -129,7 +130,7 @@ public class CouponController {
 				couponService.addCoupon(c);
 				Map result = new HashMap();
 				result.put("id", c.getId());
-				result.put("token", DesEncrypt.encrypt(currentPhone, entryKey));
+				result.put("token", entry(currentPhone));
 				return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", result);
 			}
 		}catch(Exception e) {
@@ -147,7 +148,7 @@ public class CouponController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			
-			String dephone = DesEncrypt.decrypt(token, entryKey);
+			String dephone = decry(token);
 			if (!dephone.equals(phone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
@@ -182,7 +183,7 @@ public class CouponController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			
-			String dephone = DesEncrypt.decrypt(token, entryKey);
+			String dephone = decry(token);
 			if (!dephone.equals(currentPhone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
@@ -239,7 +240,7 @@ public class CouponController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			
-			String dephone = DesEncrypt.decrypt(token, entryKey);
+			String dephone = decry(token);
 			if (!dephone.equals(currentPhone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
@@ -269,7 +270,7 @@ public class CouponController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
 			}
 			Map result = new HashMap();
-			result.put("token", DesEncrypt.encrypt(phone, entryKey));
+			result.put("token", entry(phone));
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证成功", result);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -277,4 +278,15 @@ public class CouponController {
 		}
 	}
 	
+	private String entry(String phone) {
+		return Base64.getBase64(DesEncrypt.encrypt(phone, entryKey));
+	}
+	
+	private String decry(String content) {
+		try {
+			return DesEncrypt.decrypt(Base64.getFromBase64(content),entryKey);
+		}catch(Exception e) {
+			return "_jz_unkownphone";
+		}
+	}
 }
