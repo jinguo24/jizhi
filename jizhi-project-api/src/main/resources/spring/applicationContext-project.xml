@@ -12,6 +12,6 @@
     http://www.springframework.org/schema/task/spring-task-3.0.xsd ">
    
    <context:annotation-config />
-   <context:component-scan base-package="com.tmall.admin.controller"/>
+   <context:component-scan base-package="com.jizhi"/>
    
 </beans>

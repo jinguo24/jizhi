@@ -4,7 +4,7 @@
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 		">
 	 	<task:scheduled-tasks>
-			<task:scheduled ref="weixinTask" method="initGlobalAccessToken"  cron="0 0/1 * * * ?"/>
-			<task:scheduled ref="weixinTask" method="initJsTicket"  cron="0 0/1 * * * ?"/>
+			<task:scheduled ref="weixinTask" method="initGlobalAccessToken"  cron="0 0 0/1 * * ?"/>
+			<task:scheduled ref="weixinTask" method="initJsTicket"  cron="0 0 0/1 * * ?"/>
 		</task:scheduled-tasks>
 </beans>
