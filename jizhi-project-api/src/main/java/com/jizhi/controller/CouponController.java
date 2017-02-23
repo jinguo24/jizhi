@@ -27,6 +27,7 @@ import com.simple.common.util.CookieUtils;
 import com.simple.common.util.DateUtil;
 import com.simple.common.util.DesEncrypt;
 import com.simple.common.util.PrimaryKeyUtil;
+import com.simple.common.util.ValidCode;
 
 @Controller
 @RequestMapping(value = "/coupon")
@@ -45,8 +46,15 @@ public class CouponController {
 	
 	@RequestMapping(value = "get",method=RequestMethod.GET)
 	@ResponseBody
-	public String get(String phone,String code,HttpServletRequest request, HttpServletResponse response) {
+	public String get(String phone,String code,String validCode,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			if (!StringUtils.isEmpty(validCode)) {
+				boolean vcvalid = LocalCache.validateCodeValid(phone, validCode);
+				if (!vcvalid) {
+					return AjaxWebUtil.sendAjaxResponse(request, response, false,"图形验证码错误", null);
+				}
+			}
+			
 			boolean valid = LocalCache.codeValid(phone, code);
 			if (!valid) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", null);
@@ -275,6 +283,18 @@ public class CouponController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "getValidCode",method=RequestMethod.GET)
+	public void getValidCode(String phone,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			ValidCode vc = new ValidCode(132,54,16,4,8);
+			String validateCode = vc.getCode();
+			LocalCache.setValidateCode(phone, validateCode);
+			vc.wirteImage(response);
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
