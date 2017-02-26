@@ -25,7 +25,7 @@ public class YardController {
 	@ResponseBody
 	public String list(int page,int pageSize,String name,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			PageResult yards = yardService.getYardPageResult(name, page, pageSize);
+			PageResult yards = yardService.getYardPageResult(name,0, page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", yards);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

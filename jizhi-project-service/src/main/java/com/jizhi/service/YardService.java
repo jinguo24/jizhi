@@ -18,17 +18,17 @@ public class YardService {
 		yardDao.addYard(yard);
 	}
 	
-	public List<Yard> getYardList(String name,int pageIndex,int pageSize) {
-		return yardDao.getYardList(name, pageIndex, pageSize);
+	public List<Yard> getYardList(String name,int status,int pageIndex,int pageSize) {
+		return yardDao.getYardList(name,status, pageIndex, pageSize);
 	}
 	
-	public int getYardCount(String name) {
-		return yardDao.getYardCount(name);
+	public int getYardCount(String name,int status) {
+		return yardDao.getYardCount(name,status);
 	}
 	
-	public PageResult getYardPageResult(String name,int pageIndex,int pageSize) {
-		List<Yard> yards = getYardList(name,pageIndex,pageSize);
-		int count = getYardCount(name);
+	public PageResult getYardPageResult(String name,int status,int pageIndex,int pageSize) {
+		List<Yard> yards = getYardList(name,status,pageIndex,pageSize);
+		int count = getYardCount(name,status);
 		return new PageResult(count,pageSize,pageIndex,yards);
 	}
 	

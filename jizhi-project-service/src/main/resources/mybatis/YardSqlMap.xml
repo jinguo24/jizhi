@@ -34,14 +34,18 @@
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from yard where name LIKE CONCAT('%',#{name},'%')
+  	from yard where 1 = 1 
+  	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
+  	<if test="status > 0 " > and status=#{status}</if>
   	order by id desc limit #{begin},#{size}
   </select>
   
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
   	select 
   	count(1)
-  	from yard where name LIKE CONCAT('%',#{name},'%')
+  	from yard where 1 = 1 
+  	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
+  	<if test="status > 0 " > and status=#{status}</if>
   </select>
   
   <select id="queryById" resultMap="BaseResultMap" parameterType="java.util.HashMap">

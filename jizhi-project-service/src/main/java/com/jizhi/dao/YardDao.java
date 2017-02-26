@@ -25,9 +25,10 @@ public class YardDao extends BaseIbatisDao {
 		this.sqlSession.update("yard.update",yard);
 	}
 	
-	public List<Yard> getYardList(String name,int pageIndex,int pageSize) {
+	public List<Yard> getYardList(String name,int status,int pageIndex,int pageSize) {
 		Map param = new HashMap();
 		param.put("name", name);
+		param.put("status", status);
 		if (pageIndex <= 0) {
 			pageIndex = 1;
 		}
@@ -36,9 +37,10 @@ public class YardDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("yard.query",param);
 	}
 	
-	public int getYardCount(String name) {
+	public int getYardCount(String name,int status) {
 		Map param = new HashMap();
 		param.put("name", name);
+		param.put("status", status);
 		return this.sqlSession.selectOne("yard.queryCount",param);
 	}
 	
