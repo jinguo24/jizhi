@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="race" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.Race" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="image" property="image" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,name,description,image,type,create_time
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.Race">
+  	insert into race (name,description,image,type,create_time) 
+  		values (#{name},#{description},#{image},#{type},#{createTime})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.Race">
+  	update race set 
+  		name = #{name},
+  		description = #{description},
+  		image = #{image},
+  		type = #{type} where id=#{id}
+  </update>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race where 1=1
+  	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
+  	<if test="type > 0 " > and type=#{type}</if>
+  	limit #{begin},#{size}
+  </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select 
+  	count(1)
+  	from race where 1=1
+  	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
+  	<if test="type > 0 " > and type=#{type}</if>
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race where id = #{id}
+  </select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="racePeriods" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.RacePeriods" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="number" property="number" jdbcType="INTEGER" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="begin_date" property="beginDate" jdbcType="DATE" />
+		<result column="end_date" property="endDate" jdbcType="DATE" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,number,race_id,create_time,begin_date,end_date,remark
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.RacePeriods">
+  	insert into racePeriods (number,race_id,create_time,begin_date,end_date,remark) 
+  		values (#{number},#{raceId},#{createTime},#{beginDate},#{endDate},#{remark})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.RacePeriods">
+  	update racePeriods set 
+  		number = #{number},
+  		race_id = #{raceId},
+  		begin_date = #{beginDate},
+  		end_date = #{endDate},
+  		remark = #{remark} where id=#{id}
+  </update>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from racePeriods where race_id = #{raceId}
+  	limit #{begin},#{size} order by number
+  	
+  </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select 
+  	count(1)
+  	from racePeriods where race_id = #{raceId}
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from racePeriods where id = #{id}
+  </select>
+</mapper>

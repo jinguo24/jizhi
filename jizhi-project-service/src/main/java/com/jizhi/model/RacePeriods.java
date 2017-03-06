@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 赛事周期
+ * 赛事分期
  * @author zhengfy1
  */
 public class RacePeriods implements Serializable{
