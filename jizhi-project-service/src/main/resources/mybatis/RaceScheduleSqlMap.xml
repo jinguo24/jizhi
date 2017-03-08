@@ -2,28 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="raceSchedule" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.RaceSchedule" >
-		<id column="id" property="id" jdbcType="Integer" />
-		<result column="weichat_no" property="weiChatNo" jdbcType="VARCHAR" />
-		<result column="weichat_image" property="weiChatImage" jdbcType="VARCHAR" />
-		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="race_periods_id" property="racePeriodsId" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	phone,weichat_no,weichat_image,create_time
+	id,race_periods_id,name,sort
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceSchedule">
-  	insert into user_#{tbinedex} (phone,weichat_no,weichat_image,create_time) 
-  		values (#{phone},#{weiChatNo},#{weiChatImage},#{createTime})
+  	insert into race_schedule (race_periods_id,name,sort) 
+  		values (#{racePeriodsId},#{name},#{sort})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceSchedule">
-  	update user_#{tbinedex} set weichat_no = #{weiChatNo}, weichat_image = #{weiChatImage} where phone=#{phone} 
+  	update race_schedule set race_periods_id = #{racePeriodsId}, name = #{name}, sort = #{sort} where id=#{id} 
   </update>
   
-  <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="queryByPeriods" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from user_#{tbinedex} where phone = #{phone}
+  	from race_schedule where race_periods_id = #{racePeriodsId} order by sort desc 
   </select>
   
 </mapper>

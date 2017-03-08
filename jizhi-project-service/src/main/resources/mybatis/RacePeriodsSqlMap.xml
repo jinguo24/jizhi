@@ -15,12 +15,12 @@
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RacePeriods">
-  	insert into racePeriods (number,race_id,create_time,begin_date,end_date,remark) 
+  	insert into race_periods (number,race_id,create_time,begin_date,end_date,remark) 
   		values (#{number},#{raceId},#{createTime},#{beginDate},#{endDate},#{remark})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RacePeriods">
-  	update racePeriods set 
+  	update race_periods set 
   		number = #{number},
   		race_id = #{raceId},
   		begin_date = #{beginDate},
@@ -31,7 +31,7 @@
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from racePeriods where race_id = #{raceId}
+  	from race_periods where race_id = #{raceId}
   	limit #{begin},#{size} order by number
   	
   </select>
@@ -39,12 +39,12 @@
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
   	select 
   	count(1)
-  	from racePeriods where race_id = #{raceId}
+  	from race_periods where race_id = #{raceId}
   </select>
   
   <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from racePeriods where id = #{id}
+  	from race_periods where id = #{id}
   </select>
 </mapper>

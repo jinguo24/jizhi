@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="raceScheduleTeam" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.RaceScheduleTeam" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="race_schedule_id" property="raceScheduleId" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="team_one" property="teamOne" jdbcType="INTEGER" />
+		<result column="team_two" property="teamTwo" jdbcType="INTEGER" />
+		<result column="team_one_scores" property="teamOneScores" jdbcType="INTEGER" />
+		<result column="team_two_scores" property="teamTwoScores" jdbcType="INTEGER" />
+		<result column="success_team_id" property="successTeamId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,race_schedule_id,sort,begin_time,end_time,team_one,team_two,team_one_scores,team_two_scores,success_team_id
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.RaceScheduleTeam">
+  	insert into race_schedule_team (race_schedule_id,sort,begin_time,end_time,team_one,team_two,team_one_scores,team_two_scores,success_team_id) 
+  		values (#{raceScheduleId},#{sort},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{teamOneScores},#{teamTwoScores},#{successTeamId})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.RaceScheduleTeam">
+  	update race_schedule_team set 
+  		sort = #{sort}, 
+  		begin_time = #{beginTime},
+  		end_time = #{endTime},
+  		team_one = #{teamOne},
+  		team_two = #{teamTwo},
+  		team_one_scores = #{teamOneScores},
+  		team_two_scores = #{teamTwoScores},
+  		success_team_id = #{successTeamId}
+  		where race_schedule_id = #{raceScheduleId} 
+  </update>
+  
+  <select id="queryBySchedule" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_schedule_team where race_schedule_id = #{schedule}
+  </select>
+  
+</mapper>

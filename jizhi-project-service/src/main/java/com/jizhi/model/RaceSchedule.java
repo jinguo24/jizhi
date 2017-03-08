@@ -2,7 +2,7 @@ package com.jizhi.model;
 
 import java.io.Serializable;
 /**
- * 赛程分表
+ * 赛程小组
  * @author zhengfy1
  */
 public class RaceSchedule implements Serializable{

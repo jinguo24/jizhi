@@ -3,7 +3,7 @@ package com.jizhi.model;
 import java.io.Serializable;
 
 /**
- * 比赛结构，人员，分表
+ * 比赛结果，人员，分表
  * @author zhengfy1
  *
  */
@@ -12,7 +12,10 @@ public class RaceResults implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private int id;
-	private int raceScheduleId;//赛程编号
+	private int raceId;//赛事编号
+	private int racePeriodsId;//赛程分期编号
+	private int raceScheduleId;//赛程小组编号
+	private int raceScheduleTeamId;//赛程小组队伍编号
 	private String phone;//队员电话
 	private String nickname;//昵称
 	private int number;//号码
@@ -29,6 +32,12 @@ public class RaceResults implements Serializable{
 	}
 	public void setRaceScheduleId(int raceScheduleId) {
 		this.raceScheduleId = raceScheduleId;
+	}
+	public int getRaceScheduleTeamId() {
+		return raceScheduleTeamId;
+	}
+	public void setRaceScheduleTeamId(int raceScheduleTeamId) {
+		this.raceScheduleTeamId = raceScheduleTeamId;
 		if (raceScheduleId > 0 ) {
 			this.tbinedex = raceScheduleId%10;
 		}
@@ -59,5 +68,17 @@ public class RaceResults implements Serializable{
 	}
 	public int getTbinedex() {
 		return tbinedex;
+	}
+	public int getRaceId() {
+		return raceId;
+	}
+	public void setRaceId(int raceId) {
+		this.raceId = raceId;
+	}
+	public int getRacePeriodsId() {
+		return racePeriodsId;
+	}
+	public void setRacePeriodsId(int racePeriodsId) {
+		this.racePeriodsId = racePeriodsId;
 	}
 }

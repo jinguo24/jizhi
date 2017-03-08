@@ -3,7 +3,7 @@ package com.jizhi.model;
 import java.io.Serializable;
 import java.util.Date;
 /**
- * 赛程的队伍   -- 分表
+ * 赛程小组队伍
  * @author zhengfy1
  */
 public class RaceScheduleTeam implements Serializable{
@@ -19,7 +19,6 @@ public class RaceScheduleTeam implements Serializable{
 	private int teamOneScores;//第一队进球数
 	private int teamTwoScores;//第二对进球数
 	private int successTeamId;//获胜球队编号
-	private int tbinedex;
 	public int getId() {
 		return id;
 	}
@@ -31,9 +30,6 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setRaceScheduleId(int raceScheduleId) {
 		this.raceScheduleId = raceScheduleId;
-		if (raceScheduleId > 0 ) {
-			this.tbinedex = raceScheduleId%10;
-		}
 	}
 	public Date getBeginTime() {
 		return beginTime;
@@ -82,8 +78,5 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setSort(int sort) {
 		this.sort = sort;
-	}
-	public int getTbinedex() {
-		return tbinedex;
 	}
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="raceResults" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.RaceResults" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
+		<result column="race_periods_id" property="racePeriodsId" jdbcType="INTEGER" />
+		<result column="race_schedule_id" property="raceScheduleId" jdbcType="INTEGER" />
+		<result column="race_schedule_team_id" property="raceScheduleTeamId" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickname" jdbcType="VARCHAR" />
+		<result column="number" property="number" jdbcType="INTEGER" />
+		<result column="scores" property="scores" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,race_id,race_periods_id,race_schedule_id,race_schedule_team_id,phone,nick_name,number,scores
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.RaceResults">
+  	insert into race_result_#{tbinedex} (race_id,race_periods_id,race_schedule_id,race_schedule_team_id,phone,nick_name,number,scores) 
+  		values (#{raceId},#{racePeriodsId},#{raceScheduleId},#{raceScheduleTeamId},#{phone},#{nickname},#{number},#{scores})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.RaceResults">
+  	update race_result_#{tbinedex} set 
+  		phone = #{phone}, 
+  		nick_name = #{nickname},
+  		number = #{number},
+  		scores = #{scores}
+  		where race_schedule_team_id=#{raceScheduleTeamId} and id = #{id}
+  </update>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_result_#{tbinedex} where race_schedule_team_id=#{raceScheduleTeamId} 
+  </select>
+  
+</mapper>
