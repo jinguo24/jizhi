@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="teamMembers" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.TeamMembers" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="main" property="main" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,team_id,phone,remark,main
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.TeamMembers">
+  	insert into team_members_#{tbinedex} (team_id,phone,remark,main) 
+  		values (#{teamId},#{phone},#{remark},#{main})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.TeamMembers">
+  	update team_members_#{tbinedex} set 
+  			phone = #{phone},
+  			remark = #{remark},
+  			main = #{main}
+  	where team_id=#{teamId} and id = #{id}
+  </update>
+  
+  <select id="queryByTeam" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from team_members_#{tbinedex} where team_id=#{teamId}
+  	limit #{begin},#{size}
+  </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select count(1)
+  	from team_members_#{tbinedex} where team_id=#{teamId}
+  </select>
+</mapper>

@@ -38,6 +38,7 @@
 	</filter-mapping>
 
 	<!-- 权限集成过滤器起 -->
+	<!-- 
  	<filter>
 		<filter-name>permissionFilter</filter-name>
 		<filter-class>com.simple.common.filter.PermissionFilter</filter-class>
@@ -46,7 +47,7 @@
 		<filter-name>permissionFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-
+ 	-->
 
 	<!-- springmvc 配置 -->
 	<servlet>

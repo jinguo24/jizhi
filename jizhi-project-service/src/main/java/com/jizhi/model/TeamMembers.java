@@ -2,6 +2,8 @@ package com.jizhi.model;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 球队队员--分表
  * @author zhengfy1
@@ -10,9 +12,8 @@ public class TeamMembers implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private int teamId;//队编号
+	private String teamId;//队编号
 	private String phone;//电话
-	private String nickName;//昵称
 	private String remark;//备注
 	private int main;//主力球员 1-是 0-不是
 	private int tbinedex;
@@ -22,13 +23,13 @@ public class TeamMembers implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getTeamId() {
+	public String getTeamId() {
 		return teamId;
 	}
-	public void setTeamId(int teamId) {
+	public void setTeamId(String teamId) {
 		this.teamId = teamId;
-		if ( teamId > 0) {
-			this.tbinedex = teamId%10 ;
+		if (!StringUtils.isEmpty(teamId)) {
+			this.tbinedex = teamId.hashCode()%10 ;
 		}
 	}
 	public String getPhone() {
@@ -36,12 +37,6 @@ public class TeamMembers implements Serializable{
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-	public String getNickName() {
-		return nickName;
-	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
 	}
 	public String getRemark() {
 		return remark;

@@ -10,6 +10,8 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private String phone;
+	private String name;
+	private String nickName;
 	private String weiChatNo;
 	private String weiChatImage;
 	private Date createTime;
@@ -43,5 +45,17 @@ public class User implements Serializable{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 }

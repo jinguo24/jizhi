@@ -5,17 +5,40 @@ import com.simple.common.util.DesEncrypt;
 
 public class LocalUtil {
 
-	private static final String entryKey = "jzcoupky";
+	private static final String login_entryKey = "jzcoupky";
 	
 	public static String entry(String phone) {
-		return Base64.getBase64(DesEncrypt.encrypt(phone, entryKey));
+		return entry(phone, login_entryKey);
 	}
 	
 	public static String decry(String content) {
+		return decry(content,login_entryKey);
+	}
+	
+	private static final String leader_entryKey = "jzleader";
+	
+	public static String entryLeader(String phone) {
+		return entry(phone, leader_entryKey);
+	}
+	
+	public static String decryLeader(String content) {
+		return decry(content,leader_entryKey);
+	}
+	
+	private static String entry(String content,String key) {
+		return Base64.getBase64(DesEncrypt.encrypt(content, key));
+	}
+	
+	private static String decry(String content,String key) {
 		try {
-			return DesEncrypt.decrypt(Base64.getFromBase64(content),entryKey);
+			return DesEncrypt.decrypt(Base64.getFromBase64(content),key);
 		}catch(Exception e) {
 			return "_jz_unkownphone";
 		}
 	}
+	
+
+	
+
+	
 }

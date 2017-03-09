@@ -48,5 +48,4 @@ public class RaceDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("race.queryCount",param);
 	}
 	
-	
 }

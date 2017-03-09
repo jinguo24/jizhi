@@ -10,7 +10,7 @@ import java.util.Date;
 public class Team implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private int id;
+	private String id;
 	private String name;//名称
 	private String image;//队标
 	private String leaderPhone;//领队电话
@@ -18,10 +18,12 @@ public class Team implements Serializable{
 	private int type;//1-足球队 2-羽毛球队 3-篮球队
 	private int points;//积分数
 	private Date createTime;//创建时间
-	public int getId() {
+	private int status=1 ;//状态 1-审核中 2-审核通过 3-审核拒绝
+	private String remark;//审核备注
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -65,5 +67,17 @@ public class Team implements Serializable{
 	}
 	public void setPoints(int points) {
 		this.points = points;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }
