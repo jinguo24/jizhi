@@ -20,6 +20,8 @@ public class RaceResults implements Serializable{
 	private String nickname;//昵称
 	private int number;//号码
 	private int scores;//进球数
+	private int shots;//射门数
+	private int ontimes;//上场时长(秒)
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -80,5 +82,17 @@ public class RaceResults implements Serializable{
 	}
 	public void setRacePeriodsId(int racePeriodsId) {
 		this.racePeriodsId = racePeriodsId;
+	}
+	public int getShots() {
+		return shots;
+	}
+	public void setShots(int shots) {
+		this.shots = shots;
+	}
+	public int getOntimes() {
+		return ontimes;
+	}
+	public void setOntimes(int ontimes) {
+		this.ontimes = ontimes;
 	}
 }

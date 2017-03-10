@@ -11,14 +11,16 @@
 		<result column="nick_name" property="nickname" jdbcType="VARCHAR" />
 		<result column="number" property="number" jdbcType="INTEGER" />
 		<result column="scores" property="scores" jdbcType="INTEGER" />
+		<result column="shots" property="shots" jdbcType="INTEGER" />
+		<result column="ontimes" property="ontimes" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,race_periods_id,race_schedule_id,race_schedule_team_id,phone,nick_name,number,scores
+	id,race_id,race_periods_id,race_schedule_id,race_schedule_team_id,phone,nick_name,number,scores,shots,ontimes
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceResults">
-  	insert into race_result_#{tbinedex} (race_id,race_periods_id,race_schedule_id,race_schedule_team_id,phone,nick_name,number,scores) 
-  		values (#{raceId},#{racePeriodsId},#{raceScheduleId},#{raceScheduleTeamId},#{phone},#{nickname},#{number},#{scores})
+  	insert into race_result_#{tbinedex} (race_id,race_periods_id,race_schedule_id,race_schedule_team_id,phone,nick_name,number,scores,shots,ontimes) 
+  		values (#{raceId},#{racePeriodsId},#{raceScheduleId},#{raceScheduleTeamId},#{phone},#{nickname},#{number},#{scores},#{shots},#{ontimes})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceResults">
@@ -26,7 +28,9 @@
   		phone = #{phone}, 
   		nick_name = #{nickname},
   		number = #{number},
-  		scores = #{scores}
+  		scores = #{scores},
+  		shots = #{shots},
+  		ontimes = #{ontimes}
   		where race_schedule_team_id=#{raceScheduleTeamId} and id = #{id}
   </update>
   
