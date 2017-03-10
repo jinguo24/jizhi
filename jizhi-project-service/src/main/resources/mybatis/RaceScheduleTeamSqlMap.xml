@@ -35,10 +35,27 @@
   		where race_schedule_id = #{raceScheduleId} 
   </update>
   
-  <select id="queryBySchedule" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
   	from race_schedule_team where race_schedule_id = #{schedule}
+  	limit #{begin},#{size}
   </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select 
+  	count(1) 
+  	from race_schedule_team where race_schedule_id = #{schedule}
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_schedule_team where id = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="Integer">
+  	delete from race_schedule_team where id = #{id}
+  </delete>
   
 </mapper>

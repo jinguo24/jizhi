@@ -20,10 +20,29 @@
   	update race_schedule set race_periods_id = #{racePeriodsId}, name = #{name}, sort = #{sort} where id=#{id} 
   </update>
   
-  <select id="queryByPeriods" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_schedule where race_periods_id = #{racePeriodsId} order by sort desc 
+  	from race_schedule where race_periods_id = #{racePeriodsId} 
+  	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
+  	limit #{begin},#{size} order by sort desc 
   </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select 
+  	count(1)
+  	from race_schedule where race_periods_id = #{racePeriodsId} 
+  	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_schedule where id = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="Integer">
+	delete from race_schedule where id = #{id}
+  </delete>
   
 </mapper>

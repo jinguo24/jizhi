@@ -28,18 +28,24 @@ public class TeamDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("team.queryById",id);
 	}
 	
-	public List<Team> queryList(int status,int begin,int size) {
+	public List<Team> queryList(int status,int type,int begin,int size) {
 		Map param = new HashMap();
 		param.put("status", status);
+		param.put("type", type);
 		param.put("begin", begin);
 		param.put("size", size);
 		return this.sqlSession.selectList("team.query",param);
 	}
 	
-	public Integer queryCount(int status) {
+	public Integer queryCount(int status,int type) {
 		Map param = new HashMap();
 		param.put("status", status);
+		param.put("type", type);
 		return this.sqlSession.selectOne("team.queryCount",param);
+	}
+	
+	public void delete(String teamId) {
+		this.sqlSession.delete("team.delete",teamId);
 	}
 	
 }

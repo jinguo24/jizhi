@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="teamAwards" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.TeamAwards" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,team_id,content,create_time
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.TeamAwards">
+  	insert into team_awards (team_id,content,create_time) 
+  		values (#{teamId},#{content},#{createTime})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.TeamAwards">
+  	update team_awards set 
+  			team_id = #{teamId},
+  			content = #{content},
+  			create_time = #{createTime}
+  	where id=#{id}
+  </update>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from team_awards where 1=1
+  	<if test="teamId != null and teamId !='' " > and team_id = #{teamId} </if>
+  	order by create_time desc limit #{begin},#{size}
+  </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select count(1)
+  	from team_awards where 1=1
+  	<if test="teamId != null and teamId !='' " > and team_id = #{teamId} </if>
+  </select>
+</mapper>

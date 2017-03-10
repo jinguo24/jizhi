@@ -91,7 +91,6 @@ public class TeamController {
 				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 				userService.addUser(user);
 			}
-			
 			TeamMembers tm = new TeamMembers();
 			tm.setMain(0);
 			tm.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));

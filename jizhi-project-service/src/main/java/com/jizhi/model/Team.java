@@ -16,7 +16,6 @@ public class Team implements Serializable{
 	private String leaderPhone;//领队电话
 	private String description;//描述
 	private int type;//1-足球队 2-羽毛球队 3-篮球队
-	private int points;//积分数
 	private Date createTime;//创建时间
 	private int status=1 ;//状态 1-审核中 2-审核通过 3-审核拒绝
 	private String remark;//审核备注
@@ -61,12 +60,6 @@ public class Team implements Serializable{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
-	}
-	public int getPoints() {
-		return points;
-	}
-	public void setPoints(int points) {
-		this.points = points;
 	}
 	public int getStatus() {
 		return status;

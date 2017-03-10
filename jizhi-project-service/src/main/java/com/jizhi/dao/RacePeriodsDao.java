@@ -47,5 +47,9 @@ public class RacePeriodsDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("racePeriods.queryCount",param);
 	}
 	
+	public void deleteById(int id) {
+		this.sqlSession.delete("racePeriods.delete",id);
+	}
+	
 	
 }
