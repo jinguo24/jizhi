@@ -34,6 +34,23 @@
   	select 
   	<include refid="Base_Column_List"></include>
   	from race_result_#{tbinedex} where race_schedule_team_id=#{raceScheduleTeamId} 
+  	limit #{begin},#{size}
   </select>
+  
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select 
+  	count(1)
+  	from race_result_#{tbinedex} where race_schedule_team_id=#{raceScheduleTeamId} 
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_result_#{tbinedex} where race_schedule_team_id=#{raceScheduleTeamId} and id = #{id}
+  </select>
+  
+  <delete id="delete" parameterType="java.util.HashMap">
+   delete from race_result_#{tbinedex} where race_schedule_team_id=#{raceScheduleTeamId} and id = #{id}
+  </delete>
   
 </mapper>

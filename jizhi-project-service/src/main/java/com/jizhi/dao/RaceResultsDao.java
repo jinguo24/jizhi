@@ -26,12 +26,43 @@ public class RaceResultsDao extends BaseIbatisDao {
 		this.sqlSession.update("raceResults.update",raceResults);
 	}
 	
-	public List<RaceResults> query(int scheduleTeamId) {
+	public List<RaceResults> query(int scheduleTeamId,int begin,int size) {
 		Map param = new HashMap();
 		RaceResults rr = new RaceResults();
 		rr.setRaceScheduleTeamId(scheduleTeamId);
 		param.put("raceScheduleTeamId", scheduleTeamId);
 		param.put("tbinedex", rr.getTbinedex());
-		return this.sqlSession.selectList("race.queryById",param);
+		param.put("begin", begin);
+		param.put("size", size);
+		return this.sqlSession.selectList("raceResults.query",param);
+	}
+	
+	public Integer queryCount(int scheduleTeamId) {
+		Map param = new HashMap();
+		RaceResults rr = new RaceResults();
+		rr.setRaceScheduleTeamId(scheduleTeamId);
+		param.put("raceScheduleTeamId", scheduleTeamId);
+		param.put("tbinedex", rr.getTbinedex());
+		return this.sqlSession.selectOne("raceResults.queryCount",param);
+	}
+	
+	public RaceResults queryById(int scheduleTeamId, int id) {
+		Map param = new HashMap();
+		RaceResults rr = new RaceResults();
+		rr.setRaceScheduleTeamId(scheduleTeamId);
+		param.put("raceScheduleTeamId", scheduleTeamId);
+		param.put("id", id);
+		param.put("tbinedex", rr.getTbinedex());
+		return this.sqlSession.selectOne("raceResults.queryById",param);
+	}
+	
+	public void deleteById(int scheduleTeamId, int id) {
+		Map param = new HashMap();
+		RaceResults rr = new RaceResults();
+		rr.setRaceScheduleTeamId(scheduleTeamId);
+		param.put("raceScheduleTeamId", scheduleTeamId);
+		param.put("id", id);
+		param.put("tbinedex", rr.getTbinedex());
+		this.sqlSession.delete("raceResults.delete",param);
 	}
 }

@@ -58,13 +58,13 @@ public class RaceScheduleService {
 		return raceScheduleTeamDao.query(scheduleId, (pageIndex-1)*pageSize, pageSize);
 	}
 	
-	public Integer queryCount(int scheduleId) {
+	public Integer queryTeamCount(int scheduleId) {
 		return raceScheduleTeamDao.queryCount(scheduleId);
 	}
 	
 	public PageResult getRaceScheduleTeamPageResult(int scheduleId,int pageIndex,int pageSize) {
 		List<RaceScheduleTeam> raceSchedules = queryRaceScheduleTeamList(scheduleId,pageIndex,pageSize);
-		int count = queryCount(scheduleId);
+		int count = queryTeamCount(scheduleId);
 		return new PageResult(count,pageSize,pageIndex,raceSchedules);
 	}
 	
