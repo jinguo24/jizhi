@@ -7,21 +7,23 @@
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="main" property="main" jdbcType="INTEGER" />
+		<result column="leader" property="leader" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,team_id,phone,remark,main
+	id,team_id,phone,remark,main,leader
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TeamMembers">
-  	insert into team_members_#{tbinedex} (team_id,phone,remark,main) 
-  		values (#{teamId},#{phone},#{remark},#{main})
+  	insert into team_members_#{tbinedex} (team_id,phone,remark,main,leader) 
+  		values (#{teamId},#{phone},#{remark},#{main},#{leader})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TeamMembers">
   	update team_members_#{tbinedex} set 
   			phone = #{phone},
   			remark = #{remark},
-  			main = #{main}
+  			main = #{main},
+  			leader = #{leader}
   	where team_id=#{teamId} and id = #{id}
   </update>
   

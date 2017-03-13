@@ -16,6 +16,7 @@ public class RaceResults implements Serializable{
 	private int racePeriodsId;//赛程分期编号
 	private int raceScheduleId;//赛程小组编号
 	private int raceScheduleTeamId;//赛程小组队伍编号
+	private String teamId;//队编号
 	private String phone;//队员电话
 	private String nickname;//昵称
 	private int number;//号码
@@ -94,5 +95,11 @@ public class RaceResults implements Serializable{
 	}
 	public void setOntimes(int ontimes) {
 		this.ontimes = ontimes;
+	}
+	public String getTeamId() {
+		return teamId;
+	}
+	public void setTeamId(String teamId) {
+		this.teamId = teamId;
 	}
 }

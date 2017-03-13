@@ -14,11 +14,13 @@ public class RaceScheduleTeam implements Serializable{
 	private int sort;//排序
 	private Date beginTime;//开始时间
 	private Date endTime;//结束时间
-	private int teamOne;//第一队
-	private int teamTwo;//第二队
+	private String teamOne;//第一队
+	private String teamTwo;//第二队
 	private int teamOneScores;//第一队进球数
 	private int teamTwoScores;//第二对进球数
-	private int successTeamId;//获胜球队编号
+	private int teamOneShots;//第一队射门数
+	private int teamTwoShots;//第二对射门数
+	private String successTeamId;//获胜球队编号
 	public int getId() {
 		return id;
 	}
@@ -43,18 +45,6 @@ public class RaceScheduleTeam implements Serializable{
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
-	public int getTeamOne() {
-		return teamOne;
-	}
-	public void setTeamOne(int teamOne) {
-		this.teamOne = teamOne;
-	}
-	public int getTeamTwo() {
-		return teamTwo;
-	}
-	public void setTeamTwo(int teamTwo) {
-		this.teamTwo = teamTwo;
-	}
 	public int getTeamOneScores() {
 		return teamOneScores;
 	}
@@ -67,16 +57,40 @@ public class RaceScheduleTeam implements Serializable{
 	public void setTeamTwoScores(int teamTwoScores) {
 		this.teamTwoScores = teamTwoScores;
 	}
-	public int getSuccessTeamId() {
-		return successTeamId;
-	}
-	public void setSuccessTeamId(int successTeamId) {
-		this.successTeamId = successTeamId;
-	}
 	public int getSort() {
 		return sort;
 	}
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+	public String getTeamOne() {
+		return teamOne;
+	}
+	public void setTeamOne(String teamOne) {
+		this.teamOne = teamOne;
+	}
+	public String getTeamTwo() {
+		return teamTwo;
+	}
+	public void setTeamTwo(String teamTwo) {
+		this.teamTwo = teamTwo;
+	}
+	public String getSuccessTeamId() {
+		return successTeamId;
+	}
+	public void setSuccessTeamId(String successTeamId) {
+		this.successTeamId = successTeamId;
+	}
+	public int getTeamOneShots() {
+		return teamOneShots;
+	}
+	public void setTeamOneShots(int teamOneShots) {
+		this.teamOneShots = teamOneShots;
+	}
+	public int getTeamTwoShots() {
+		return teamTwoShots;
+	}
+	public void setTeamTwoShots(int teamTwoShots) {
+		this.teamTwoShots = teamTwoShots;
 	}
 }
