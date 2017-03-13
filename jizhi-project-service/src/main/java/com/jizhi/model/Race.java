@@ -20,6 +20,7 @@ public class Race implements Serializable{
 	private Date createTime;//创建时间
 	private Date beginDate;//开始时间
 	private Date endDate;//结束时间
+	private String address;//场地
 	private String remark;//备注
 	public int getId() {
 		return id;
@@ -74,5 +75,11 @@ public class Race implements Serializable{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }
