@@ -8,8 +8,8 @@
 		<result column="image" property="image" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-		<result column="begin_date" property="beginDate" jdbcType="TIMESTAMP" />
-		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="begin_date" property="beginDate" jdbcType="DATE" />
+		<result column="end_date" property="endDate" jdbcType="DATE" />
 		<result column="ramark" property="remark" jdbcType="VARCHAR" />
 		<result column="address" property="address" jdbcType="VARCHAR" />
   </resultMap>

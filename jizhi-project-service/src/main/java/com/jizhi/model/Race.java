@@ -3,6 +3,8 @@ package com.jizhi.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * 赛事
  * @author zhengfy1
@@ -12,20 +14,23 @@ public class Race implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private Integer id;
 	private String name;
 	private String description;
 	private String image;
 	private int type;//1-足球  2-篮球  3-羽毛球
+	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss	" )
 	private Date createTime;//创建时间
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date beginDate;//开始时间
+	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date endDate;//结束时间
 	private String address;//场地
 	private String remark;//备注
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {

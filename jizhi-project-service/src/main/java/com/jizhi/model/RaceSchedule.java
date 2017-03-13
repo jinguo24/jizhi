@@ -10,7 +10,7 @@ public class RaceSchedule implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private int id;
-	private int racePeriodsId;//第几期的
+	private int raceId;//第几期的
 	private String name;//赛程名称
 	private int sort;//排序
 	
@@ -20,11 +20,11 @@ public class RaceSchedule implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getRacePeriodsId() {
-		return racePeriodsId;
+	public int getRaceId() {
+		return raceId;
 	}
-	public void setRacePeriodsId(int racePeriodsId) {
-		this.racePeriodsId = racePeriodsId;
+	public void setRaceId(int raceId) {
+		this.raceId = raceId;
 	}
 	public String getName() {
 		return name;

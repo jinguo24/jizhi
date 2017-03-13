@@ -3,27 +3,27 @@
 <mapper namespace="raceSchedule" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.RaceSchedule" >
 		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="race_periods_id" property="racePeriodsId" jdbcType="INTEGER" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_periods_id,name,sort
+	id,race_id,name,sort
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceSchedule">
-  	insert into race_schedule (race_periods_id,name,sort) 
-  		values (#{racePeriodsId},#{name},#{sort})
+  	insert into race_schedule (race_id,name,sort) 
+  		values (#{raceId},#{name},#{sort})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceSchedule">
-  	update race_schedule set race_periods_id = #{racePeriodsId}, name = #{name}, sort = #{sort} where id=#{id} 
+  	update race_schedule set race_id = #{raceId}, name = #{name}, sort = #{sort} where id=#{id} 
   </update>
   
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_schedule where race_periods_id = #{racePeriodsId} 
+  	from race_schedule where race_id = #{raceId} 
   	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
   	limit #{begin},#{size} order by sort desc 
   </select>
@@ -31,7 +31,7 @@
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
   	select 
   	count(1)
-  	from race_schedule where race_periods_id = #{racePeriodsId} 
+  	from race_schedule where race_id = #{raceId} 
   	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
   </select>
   
