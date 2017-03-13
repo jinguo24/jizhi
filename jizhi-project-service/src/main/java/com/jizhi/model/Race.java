@@ -16,8 +16,11 @@ public class Race implements Serializable{
 	private String name;
 	private String description;
 	private String image;
-	private int type;//1-擂台赛  2-联赛  3-挑战赛
+	private int type;//1-足球  2-篮球  3-羽毛球
 	private Date createTime;//创建时间
+	private Date beginDate;//开始时间
+	private Date endDate;//结束时间
+	private String remark;//备注
 	public int getId() {
 		return id;
 	}
@@ -53,5 +56,23 @@ public class Race implements Serializable{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public Date getBeginDate() {
+		return beginDate;
+	}
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

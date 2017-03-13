@@ -18,11 +18,12 @@ public class RaceResults implements Serializable{
 	private int raceScheduleTeamId;//赛程小组队伍编号
 	private String teamId;//队编号
 	private String phone;//队员电话
-	private String nickname;//昵称
 	private int number;//号码
 	private int scores;//进球数
 	private int shots;//射门数
 	private int ontimes;//上场时长(秒)
+	private int pushs;//扑救数
+	private String remark;//备注
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -50,12 +51,6 @@ public class RaceResults implements Serializable{
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-	public String getNickname() {
-		return nickname;
-	}
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
 	}
 	public int getNumber() {
 		return number;
@@ -101,5 +96,17 @@ public class RaceResults implements Serializable{
 	}
 	public void setTeamId(String teamId) {
 		this.teamId = teamId;
+	}
+	public int getPushs() {
+		return pushs;
+	}
+	public void setPushs(int pushs) {
+		this.pushs = pushs;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 }

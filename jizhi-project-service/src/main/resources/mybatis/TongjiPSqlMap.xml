@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tongjip" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.TongjiP" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="shots" property="shots" jdbcType="INTEGER" />
+		<result column="scores" property="scores" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="counts" property="counts" jdbcType="INTEGER" />
+		<result column="ontimes" property="ontimes" jdbcType="INTEGER" />
+		<result column="pushs" property="pushs" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,phone,shots,scores,type,counts,ontimes,pushs
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.TongjiP">
+  	insert into race_tongji_p_#{tbinedex} (phone,shots,scores,type,counts,ontimes,pushs) 
+  		values (#{phone},#{shots},#{scores},#{type},#{counts},#{ontimes},#{pushs})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.TongjiP">
+  	update race_tongji_p_#{tbinedex} set 
+  		shots = #{shots}, 
+  		scores = #{scores},
+  		type = #{type},
+  		counts = #{counts},
+  		ontimes = #{ontimes},
+  		pushs = #{pushs}
+  		where phone=#{phone} 
+  </update>
+  
+  <delete id="truncateTable" parameterType="Integer">
+  	truncate table race_tongji_p_#{tbinedex}
+  </delete>
+  
+</mapper>

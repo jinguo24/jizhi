@@ -8,14 +8,17 @@
 		<result column="image" property="image" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="begin_date" property="beginDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="ramark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,description,image,type,create_time
+	id,name,description,image,type,create_time,begin_date,end_date,ramark
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.Race">
-  	insert into race (name,description,image,type,create_time) 
-  		values (#{name},#{description},#{image},#{type},#{createTime})
+  	insert into race (name,description,image,type,create_time,begin_date,end_date,ramark) 
+  		values (#{name},#{description},#{image},#{type},#{createTime},#{beginDate},#{endDate},#{remark})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.Race">
@@ -23,7 +26,11 @@
   		name = #{name},
   		description = #{description},
   		image = #{image},
-  		type = #{type} where id=#{id}
+  		type = #{type},
+  		begin_date = #{beginDate},
+  		end_date = #{endDate},
+  		ramark = #{remark}
+  		 where id=#{id}
   </update>
   
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">

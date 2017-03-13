@@ -9,30 +9,32 @@
 		<result column="race_schedule_team_id" property="raceScheduleTeamId" jdbcType="INTEGER" />
 		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="nick_name" property="nickname" jdbcType="VARCHAR" />
 		<result column="number" property="number" jdbcType="INTEGER" />
 		<result column="scores" property="scores" jdbcType="INTEGER" />
 		<result column="shots" property="shots" jdbcType="INTEGER" />
 		<result column="ontimes" property="ontimes" jdbcType="INTEGER" />
+		<result column="pushs" property="pushs" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,race_periods_id,race_schedule_id,race_schedule_team_id,team_id,phone,nick_name,number,scores,shots,ontimes
+	id,race_id,race_periods_id,race_schedule_id,race_schedule_team_id,team_id,phone,number,scores,shots,ontimes,pushs,remark
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceResults">
-  	insert into race_result_#{tbinedex} (race_id,race_periods_id,race_schedule_id,race_schedule_team_id,team_id,phone,nick_name,number,scores,shots,ontimes) 
-  		values (#{raceId},#{racePeriodsId},#{raceScheduleId},#{raceScheduleTeamId},#{teamId},#{phone},#{nickname},#{number},#{scores},#{shots},#{ontimes})
+  	insert into race_result_#{tbinedex} (race_id,race_periods_id,race_schedule_id,race_schedule_team_id,team_id,phone,number,scores,shots,ontimes,pushs,remark) 
+  		values (#{raceId},#{racePeriodsId},#{raceScheduleId},#{raceScheduleTeamId},#{teamId},#{phone},#{number},#{scores},#{shots},#{ontimes},#{pushs},#{remark})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceResults">
   	update race_result_#{tbinedex} set 
   		phone = #{phone}, 
-  		nick_name = #{nickname},
   		number = #{number},
   		scores = #{scores},
   		shots = #{shots},
   		ontimes = #{ontimes},
-  		team_id = #{teamId}
+  		team_id = #{teamId},
+  		pushs = #{pushs},
+  		remark = #{remark}
   		where race_schedule_team_id=#{raceScheduleTeamId} and id = #{id}
   </update>
   
