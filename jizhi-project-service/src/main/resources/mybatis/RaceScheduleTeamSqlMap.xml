@@ -9,19 +9,17 @@
 		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
 		<result column="team_one" property="teamOne" jdbcType="VARCHAR" />
 		<result column="team_two" property="teamTwo" jdbcType="VARCHAR" />
-		<result column="team_one_scores" property="teamOneScores" jdbcType="INTEGER" />
-		<result column="team_two_scores" property="teamTwoScores" jdbcType="INTEGER" />
-		<result column="team_one_shots" property="teamOneShots" jdbcType="INTEGER" />
-		<result column="team_two_shots" property="teamTwoShots" jdbcType="INTEGER" />
 		<result column="success_team_id" property="successTeamId" jdbcType="VARCHAR" />
+		<result column="collect_item" property="collectItems" jdbcType="VARCHAR" />
+		<result column="judge_item" property="judgeItems" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_schedule_id,sort,begin_time,end_time,team_one,team_two,team_one_scores,team_two_scores,team_one_shots,team_two_shots,success_team_id
+	id,race_schedule_id,sort,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceScheduleTeam">
-  	insert into race_schedule_team (race_schedule_id,sort,begin_time,end_time,team_one,team_two,team_one_scores,team_two_scores,team_one_shots,team_two_shots,success_team_id) 
-  		values (#{raceScheduleId},#{sort},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{teamOneScores},#{teamTwoScores},#{teamOneShots},#{teamTwoShots},#{successTeamId})
+  	insert into race_schedule_team (race_schedule_id,sort,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item) 
+  		values (#{raceScheduleId},#{sort},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceScheduleTeam">
@@ -31,11 +29,9 @@
   		end_time = #{endTime},
   		team_one = #{teamOne},
   		team_two = #{teamTwo},
-  		team_one_scores = #{teamOneScores},
-  		team_two_scores = #{teamTwoScores},
   		success_team_id = #{successTeamId},
-  		team_one_shots = #{teamOneShots},
-  		team_two_shots = #{teamTwoShots}
+  		collect_item = #{collectItems},
+  		judge_item = #{judgeItems}
   		where race_schedule_id = #{raceScheduleId} 
   </update>
   

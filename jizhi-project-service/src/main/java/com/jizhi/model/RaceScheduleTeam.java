@@ -16,11 +16,9 @@ public class RaceScheduleTeam implements Serializable{
 	private Date endTime;//结束时间
 	private String teamOne;//第一队
 	private String teamTwo;//第二队
-	private int teamOneScores;//第一队进球数
-	private int teamTwoScores;//第二对进球数
-	private int teamOneShots;//第一队射门数
-	private int teamTwoShots;//第二对射门数
 	private String successTeamId;//获胜球队编号
+	private String collectItems;//收集数据项json
+	private String judgeItems;//评判数据项json
 	public int getId() {
 		return id;
 	}
@@ -44,18 +42,6 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
-	}
-	public int getTeamOneScores() {
-		return teamOneScores;
-	}
-	public void setTeamOneScores(int teamOneScores) {
-		this.teamOneScores = teamOneScores;
-	}
-	public int getTeamTwoScores() {
-		return teamTwoScores;
-	}
-	public void setTeamTwoScores(int teamTwoScores) {
-		this.teamTwoScores = teamTwoScores;
 	}
 	public int getSort() {
 		return sort;
@@ -81,16 +67,16 @@ public class RaceScheduleTeam implements Serializable{
 	public void setSuccessTeamId(String successTeamId) {
 		this.successTeamId = successTeamId;
 	}
-	public int getTeamOneShots() {
-		return teamOneShots;
+	public String getCollectItems() {
+		return collectItems;
 	}
-	public void setTeamOneShots(int teamOneShots) {
-		this.teamOneShots = teamOneShots;
+	public void setCollectItems(String collectItems) {
+		this.collectItems = collectItems;
 	}
-	public int getTeamTwoShots() {
-		return teamTwoShots;
+	public String getJudgeItems() {
+		return judgeItems;
 	}
-	public void setTeamTwoShots(int teamTwoShots) {
-		this.teamTwoShots = teamTwoShots;
+	public void setJudgeItems(String judgeItems) {
+		this.judgeItems = judgeItems;
 	}
 }
