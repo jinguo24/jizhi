@@ -38,4 +38,8 @@
   	select count(1)
   	from team_members_#{tbinedex} where team_id=#{teamId}
   </select>
+  
+  <delete id="deleteByTeamId" parameterType="java.util.HashMap">
+  	delete team_members_#{tbinedex} where team_id=#{teamId}
+  </delete>
 </mapper>

@@ -33,6 +33,7 @@ public class TeamService {
 	
 	public void delete(String id) {
 		teamDao.delete(id);
+		teamMemeberDao.deleteByTeamId(id);
 	}
 	
 	public void addTeamMember(TeamMembers teamMember) {

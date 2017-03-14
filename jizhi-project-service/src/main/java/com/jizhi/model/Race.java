@@ -19,11 +19,8 @@ public class Race implements Serializable{
 	private String description;
 	private String image;
 	private int type;//1-足球  2-篮球  3-羽毛球
-	@DateTimeFormat( pattern = "yyyy-MM-dd HH:mm:ss	" )
 	private Date createTime;//创建时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date beginDate;//开始时间
-	@DateTimeFormat( pattern = "yyyy-MM-dd" )
 	private Date endDate;//结束时间
 	private String address;//场地
 	private String remark;//备注

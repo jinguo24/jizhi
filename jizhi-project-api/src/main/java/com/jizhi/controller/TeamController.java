@@ -1,13 +1,17 @@
 package com.jizhi.controller;
 
 import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jizhi.constant.RaceEnums;
 import com.jizhi.model.Team;
 import com.jizhi.model.TeamMembers;
 import com.jizhi.model.User;
@@ -29,7 +33,7 @@ public class TeamController {
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
 	public String applyTeam(String phone,String name,String nickname,String image,HttpServletRequest request, HttpServletResponse response) {
-		return applyTeam(1, phone, name, nickname, image, request, response);
+		return applyTeam(RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, nickname, image, request, response);
 	}
 	
 	private String applyTeam(int type,String phone,String name,String nickname,String image,HttpServletRequest request, HttpServletResponse response) {
@@ -52,6 +56,13 @@ public class TeamController {
 			team.setStatus(1);
 			team.setType(type);
 			teamService.addTeam(team);
+			
+			TeamMembers tm = new TeamMembers();
+			tm.setMain(1);
+			tm.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+			tm.setTeamId(team.getId());
+			tm.setLeader(1);
+			teamService.addTeamMember(tm);
 			String token = LocalUtil.entryLeader(team.getId());
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", token);
 		}catch(Exception e) {
@@ -69,7 +80,7 @@ public class TeamController {
 			if  (null == team) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"今天已经领取券", team); 
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证通过", team); 
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
@@ -78,7 +89,7 @@ public class TeamController {
 	
 	@RequestMapping(value = "teamMemberAdd",method=RequestMethod.POST)
 	@ResponseBody
-	public String detail(String token,String name,String nickName,String phone,HttpServletRequest request, HttpServletResponse response) {
+	public String detail(String token,String name,String nickName,String phone,String remark,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String tid = LocalUtil.decryLeader(token);
 			//判断用户是否存在，不存在则新增用户
@@ -95,6 +106,7 @@ public class TeamController {
 			tm.setMain(0);
 			tm.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 			tm.setTeamId(tid);
+			tm.setRemark(org.apache.commons.lang.StringUtils.trimToEmpty(remark));
 			teamService.addTeamMember(tm);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
 		}catch(Exception e) {

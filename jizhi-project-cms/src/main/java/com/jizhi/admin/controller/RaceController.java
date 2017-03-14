@@ -1,10 +1,16 @@
 package com.jizhi.admin.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,6 +44,16 @@ public class RaceController {
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
 		}
+	}
+	
+	/**
+	 * 处理时间
+	 * @param binder
+	 */
+	@InitBinder  
+	protected  void initBinder(WebDataBinder binder) {  
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));  
 	}
 	
 	@RequestMapping(value = "add",method=RequestMethod.POST)
