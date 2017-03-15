@@ -63,6 +63,7 @@ public class TeamController {
 			TeamMembers tm = new TeamMembers();
 			tm.setMain(1);
 			tm.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+			tm.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
 			tm.setTeamId(team.getId());
 			tm.setLeader(1);
 			teamService.addTeamMember(tm);

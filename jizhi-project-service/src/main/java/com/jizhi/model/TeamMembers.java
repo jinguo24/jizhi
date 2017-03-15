@@ -31,7 +31,7 @@ public class TeamMembers implements Serializable{
 	public void setTeamId(String teamId) {
 		this.teamId = teamId;
 		if (!StringUtils.isEmpty(teamId)) {
-			this.tbinedex = teamId.hashCode()%10 ;
+			this.tbinedex = Math.abs(teamId.hashCode()%10) ;
 		}
 	}
 	public String getPhone() {
