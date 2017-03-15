@@ -14,6 +14,7 @@ public class Team implements Serializable{
 	private String name;//名称
 	private String image;//队标
 	private String leaderPhone;//领队电话
+	private String leaderName;//领队名称
 	private String description;//描述
 	private int type;//1-足球队 2-羽毛球队 3-篮球队
 	private Date createTime;//创建时间
@@ -72,5 +73,11 @@ public class Team implements Serializable{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getLeaderName() {
+		return leaderName;
+	}
+	public void setLeaderName(String leaderName) {
+		this.leaderName = leaderName;
 	}
 }

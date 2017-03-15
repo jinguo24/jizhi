@@ -32,11 +32,11 @@ public class TeamController {
 	
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
-	public String applyTeam(String phone,String name,String nickname,String image,HttpServletRequest request, HttpServletResponse response) {
-		return applyTeam(RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, nickname, image, request, response);
+	public String applyTeam(String phone,String name,String teamname,String image,HttpServletRequest request, HttpServletResponse response) {
+		return applyTeam(RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, teamname, image, request, response);
 	}
 	
-	private String applyTeam(int type,String phone,String name,String nickname,String image,HttpServletRequest request, HttpServletResponse response) {
+	private String applyTeam(int type,String phone,String name,String teamname,String image,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			//判断用户是否存在，不存在则新增用户
 			User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
@@ -44,7 +44,6 @@ public class TeamController {
 				user = new User();
 				user.setCreateTime(new Date());
 				user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
-				user.setNickName(org.apache.commons.lang.StringUtils.trimToEmpty(nickname));
 				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 				userService.addUser(user);
 			}
@@ -55,6 +54,7 @@ public class TeamController {
 			team.setLeaderPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 			team.setStatus(1);
 			team.setType(type);
+			team.setName(teamname);
 			teamService.addTeam(team);
 			
 			TeamMembers tm = new TeamMembers();
@@ -79,6 +79,10 @@ public class TeamController {
 			Team team = teamService.getById(tid);
 			if  (null == team) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+			}
+			User user = userService.getUser(team.getLeaderPhone());
+			if ( null != user ) {
+				team.setLeaderName(user.getName());
 			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证通过", team); 
 		}catch(Exception e) {

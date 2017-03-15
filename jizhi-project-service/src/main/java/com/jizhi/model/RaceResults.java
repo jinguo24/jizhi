@@ -40,7 +40,7 @@ public class RaceResults implements Serializable{
 	public void setRaceScheduleTeamId(int raceScheduleTeamId) {
 		this.raceScheduleTeamId = raceScheduleTeamId;
 		if (raceScheduleId > 0 ) {
-			this.tbinedex = raceScheduleId%10;
+			this.tbinedex = raceScheduleId%100;
 		}
 	}
 	public String getPhone() {

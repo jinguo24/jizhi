@@ -10,7 +10,7 @@
 		<result column="create_time" property="createTime" jdbcType="DATE" />
   </resultMap>
   <sql id="Base_Column_List" >
-	phone,name,nick_nameweichat_no,weichat_image,create_time
+	phone,name,nick_name,weichat_no,weichat_image,create_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.User">

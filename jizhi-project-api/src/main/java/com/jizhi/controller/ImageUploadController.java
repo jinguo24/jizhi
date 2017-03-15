@@ -35,7 +35,8 @@ public class ImageUploadController {
 	public String upload(@RequestParam("file") MultipartFile[] files, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println(">>>>"+DateUtil.date2AllString(new Date()));
 		try {
-			List<String> images = new ArrayList<String>();
+			//List<String> images = new ArrayList<String>();
+			String imagepath = null;
 			for (MultipartFile file:files ) {
 				long timestart = System.currentTimeMillis();
 //				String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
@@ -66,8 +67,8 @@ public class ImageUploadController {
 					}
 				}
 				System.out.println(">>>>img time2 : "+(System.currentTimeMillis()-time1));
-				images.add(path);
-				
+				//images.add(path);
+				imagepath = path;
 //				File f = new File(foler+ File.separator + PrimaryKeyUtil.getUUID() + "." + suffix);
 //				file.transferTo(f);//此处会生成图片到磁盘
 //				//先上传一张背景为黑色的图片
@@ -89,7 +90,7 @@ public class ImageUploadController {
 //				}
 //				images.add(path);
 			}
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"上传成功", images);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"上传成功", imagepath);
 		}catch(Exception e) {
 			log.error("上传失败",e);
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"上传失败:"+e.getLocalizedMessage(), e.getLocalizedMessage());
