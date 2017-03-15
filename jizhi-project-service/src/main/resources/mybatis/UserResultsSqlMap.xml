@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userResults" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.UserResults" >
+		<id column="phone" property="phone" jdbcType="VARCHAR" />
+		<id column="collection_items" property="collectItems" jdbcType="VARCHAR" />
+		<id column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	phone,collection_items,judge_items
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.UserResults">
+  	insert into user_results_#{tbinedex} (phone,collection_items,judge_items) 
+  		values (#{phone},#{collectItems},#{judgeItems})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.UserResults">
+  	update user_results_#{tbinedex} 
+  	set collection_items = #{collectItems}, 
+  	judge_items = #{judgeItems}
+  	where phone=#{phone} 
+  </update>
+  
+  <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from user_results_#{tbinedex} where phone = #{phone}
+  </select>
+  
+</mapper>

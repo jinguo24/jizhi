@@ -14,6 +14,7 @@ public class TeamMembers implements Serializable{
 	private int id;
 	private String teamId;//队编号
 	private String phone;//电话
+	private String name;//名称
 	private String remark;//备注
 	private int main;//主力球员 1-是 0-不是
 	private int leader;//领队 1-是 0-不是
@@ -59,5 +60,11 @@ public class TeamMembers implements Serializable{
 	}
 	public void setLeader(int leader) {
 		this.leader = leader;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

@@ -57,5 +57,9 @@ public class TeamService {
 		return new PageResult(count,pageSize,pageIndex,teams);
 	}
 	
+	public List<TeamMembers> queryTeamMembers(String team) {
+		return teamMemeberDao.queryByTeam(team, 0, 500);
+	}
+	
 	
 }

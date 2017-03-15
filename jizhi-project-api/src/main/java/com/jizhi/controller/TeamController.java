@@ -1,10 +1,12 @@
 package com.jizhi.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +54,7 @@ public class TeamController {
 			team.setCreateTime(new Date());
 			team.setImage(image);
 			team.setLeaderPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+			team.setLeaderName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
 			team.setStatus(1);
 			team.setType(type);
 			team.setName(teamname);
@@ -80,10 +83,14 @@ public class TeamController {
 			if  (null == team) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
-			User user = userService.getUser(team.getLeaderPhone());
-			if ( null != user ) {
-				team.setLeaderName(user.getName());
+			String dys = request.getParameter("dys");
+			if (!StringUtils.isEmpty(dys) && "1".equals(dys)) {
+				List<TeamMembers> tms =  teamService.queryTeamMembers(tid);
+				if ( null != tms ) {
+					team.setMembers(tms);
+				}
 			}
+			
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证通过", team); 
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -96,6 +103,9 @@ public class TeamController {
 	public String detail(String token,String name,String nickName,String phone,String remark,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String tid = LocalUtil.decryLeader(token);
+			if ("_jz_unkownphone".equals(tid)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+			}
 			//判断用户是否存在，不存在则新增用户
 			User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 			if ( null == user ) {
@@ -111,6 +121,7 @@ public class TeamController {
 			tm.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 			tm.setTeamId(tid);
 			tm.setRemark(org.apache.commons.lang.StringUtils.trimToEmpty(remark));
+			tm.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
 			teamService.addTeamMember(tm);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
 		}catch(Exception e) {

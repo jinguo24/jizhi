@@ -6,6 +6,7 @@
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="image" property="image" jdbcType="VARCHAR" />
 		<result column="leader_phone" property="leaderPhone" jdbcType="VARCHAR" />
+		<result column="leader_name" property="leaderName" jdbcType="VARCHAR" />
 		<result column="description" property="description" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -13,12 +14,12 @@
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,image,leader_phone,description,type,create_time,status,remark
+	id,name,image,leader_phone,leader_name,description,type,create_time,status,remark
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.Team">
-  	insert into team (id,name,image,leader_phone,description,type,create_time,status,remark) 
-  		values (#{id},#{name},#{image},#{leaderPhone},#{description},#{type},#{createTime},#{status},#{remark})
+  	insert into team (id,name,image,leader_phone,leader_name,description,type,create_time,status,remark) 
+  		values (#{id},#{name},#{image},#{leaderPhone},#{leaderName},#{description},#{type},#{createTime},#{status},#{remark})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.Team">
@@ -29,7 +30,8 @@
   			description = #{description},
   			type = #{type},
   			status = #{status},
-  			remark = #{remark}
+  			remark = #{remark},
+  			leader_name = #{leaderName}
   	where id=#{id}
   </update>
   

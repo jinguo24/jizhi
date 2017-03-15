@@ -1,7 +1,9 @@
 package com.jizhi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 球队
@@ -20,6 +22,7 @@ public class Team implements Serializable{
 	private Date createTime;//创建时间
 	private int status=1 ;//状态 1-审核中 2-审核通过 3-审核拒绝
 	private String remark;//审核备注
+	private List<TeamMembers> members = new ArrayList<TeamMembers>();
 	public String getId() {
 		return id;
 	}
@@ -79,5 +82,11 @@ public class Team implements Serializable{
 	}
 	public void setLeaderName(String leaderName) {
 		this.leaderName = leaderName;
+	}
+	public List<TeamMembers> getMembers() {
+		return members;
+	}
+	public void setMembers(List<TeamMembers> members) {
+		this.members = members;
 	}
 }

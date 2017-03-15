@@ -8,14 +8,15 @@
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="main" property="main" jdbcType="INTEGER" />
 		<result column="leader" property="leader" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,team_id,phone,remark,main,leader
+	id,team_id,phone,name,remark,main,leader
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TeamMembers">
-  	insert into team_members_#{tbinedex} (team_id,phone,remark,main,leader) 
-  		values (#{teamId},#{phone},#{remark},#{main},#{leader})
+  	insert into team_members_#{tbinedex} (team_id,phone,name,remark,main,leader) 
+  		values (#{teamId},#{phone},#{name},#{remark},#{main},#{leader})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TeamMembers">
@@ -23,7 +24,8 @@
   			phone = #{phone},
   			remark = #{remark},
   			main = #{main},
-  			leader = #{leader}
+  			leader = #{leader},
+  			name = #{name}
   	where team_id=#{teamId} and id = #{id}
   </update>
   
