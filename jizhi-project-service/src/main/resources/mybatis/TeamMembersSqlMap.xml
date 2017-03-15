@@ -44,4 +44,9 @@
   <delete id="deleteByTeamId" parameterType="java.util.HashMap">
   	delete team_members_#{tbinedex} where team_id=#{teamId}
   </delete>
+  
+  <select id="queryCountByPhone" resultType="Integer" parameterType="java.util.HashMap">
+  	select count(1)
+  	from team_members_#{tbinedex} where team_id=#{teamId} and phone = #{phone}
+  </select>
 </mapper>

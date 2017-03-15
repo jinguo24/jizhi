@@ -56,4 +56,14 @@ public class TeamMemberDao extends BaseIbatisDao {
 		this.sqlSession.delete("teamMembers.deleteByTeamId",param);
 	}
 	
+	public Integer queryCountByPhone(String teamId,String phone) {
+		Map param = new HashMap();
+		TeamMembers tm = new TeamMembers();
+		tm.setTeamId(teamId);
+		param.put("teamId", teamId);
+		param.put("tbinedex", tm.getTbinedex());
+		param.put("phone", phone);
+		return this.sqlSession.selectOne("teamMembers.queryCountByPhone",param);
+	}
+	
 }

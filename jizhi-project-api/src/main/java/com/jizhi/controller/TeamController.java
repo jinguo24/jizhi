@@ -116,6 +116,10 @@ public class TeamController {
 				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
 				userService.addUser(user);
 			}
+			Integer c = teamService.queryMembersCountByPhone(tid, phone);
+			if ( null != c && c > 0 ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", null);
+			}
 			TeamMembers tm = new TeamMembers();
 			tm.setMain(0);
 			tm.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));

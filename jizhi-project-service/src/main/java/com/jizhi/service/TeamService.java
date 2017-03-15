@@ -61,5 +61,8 @@ public class TeamService {
 		return teamMemeberDao.queryByTeam(team, 0, 500);
 	}
 	
+	public Integer queryMembersCountByPhone(String team,String phone) {
+		return teamMemeberDao.queryCountByPhone(team, phone);
+	}
 	
 }
