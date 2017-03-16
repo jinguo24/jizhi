@@ -48,4 +48,10 @@ public class TeamDao extends BaseIbatisDao {
 		this.sqlSession.delete("team.delete",teamId);
 	}
 	
+	public List<Team> queryList(List<String> teamIds) {
+		Map param = new HashMap();
+		param.put("ids", teamIds);
+		return this.sqlSession.selectList("team.queryValidByIds",param);
+	}
+	
 }

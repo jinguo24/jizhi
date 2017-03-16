@@ -49,4 +49,10 @@
   	select count(1)
   	from team_members_#{tbinedex} where team_id=#{teamId} and phone = #{phone}
   </select>
+  
+  <select id="queryIds" resultType="String" parameterType="java.util.HashMap">
+  	select distinct team_id 
+  	from team_members_#{tbinedex} where phone = #{phone}
+  </select>
+  
 </mapper>

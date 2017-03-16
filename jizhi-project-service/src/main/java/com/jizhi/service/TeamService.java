@@ -1,5 +1,6 @@
 package com.jizhi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import com.jizhi.dao.TeamDao;
 import com.jizhi.dao.TeamMemberDao;
 import com.jizhi.model.Team;
 import com.jizhi.model.TeamMembers;
-import com.jizhi.model.Yard;
 import com.simple.common.util.PageResult;
 @Service
 public class TeamService {
@@ -63,6 +63,17 @@ public class TeamService {
 	
 	public Integer queryMembersCountByPhone(String team,String phone) {
 		return teamMemeberDao.queryCountByPhone(team, phone);
+	}
+	
+	public List<Team> queryTeamsByPhone(String phone) {
+		List<String> alltemids = new ArrayList<String>();
+		for (int i = 0 ; i < 10; i ++) {
+			List<String> temids = teamMemeberDao.queryTeamIds(i, phone);
+			if ( null != temids) {
+				alltemids.addAll(temids);
+			}
+		}
+		return teamDao.queryList(alltemids);
 	}
 	
 }

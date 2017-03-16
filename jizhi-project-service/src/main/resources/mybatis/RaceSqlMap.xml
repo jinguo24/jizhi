@@ -12,14 +12,15 @@
 		<result column="end_date" property="endDate" jdbcType="DATE" />
 		<result column="ramark" property="remark" jdbcType="VARCHAR" />
 		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,description,image,type,create_time,begin_date,end_date,ramark,address
+	id,name,description,image,type,create_time,begin_date,end_date,ramark,address,status
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.Race">
-  	insert into race (name,description,image,type,create_time,begin_date,end_date,ramark,address) 
-  		values (#{name},#{description},#{image},#{type},#{createTime},#{beginDate},#{endDate},#{remark},#{address})
+  	insert into race (name,description,image,type,create_time,begin_date,end_date,ramark,address,status) 
+  		values (#{name},#{description},#{image},#{type},#{createTime},#{beginDate},#{endDate},#{remark},#{address},#{status})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.Race">
@@ -31,7 +32,8 @@
   		begin_date = #{beginDate},
   		end_date = #{endDate},
   		ramark = #{remark},
-  		address = #{address}
+  		address = #{address},
+  		status = #{status}
   		 where id=#{id}
   </update>
   

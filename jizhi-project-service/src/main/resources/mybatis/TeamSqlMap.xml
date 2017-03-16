@@ -60,4 +60,14 @@
   <delete id="delete" parameterType="String">
   	delete from team where id = #{id}
   </delete>
+  
+  <select id="queryValidByIds" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from team where status in (1,2) and id in  
+	 <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{item}  
+	 </foreach>  
+  </select>
+  
 </mapper>

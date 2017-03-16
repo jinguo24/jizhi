@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="teamRaceApply" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.TeamRaceApply" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
+		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="race_name" property="raceName" jdbcType="VARCHAR" />
+		<result column="team_name" property="teamName" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,race_id,team_id,status,race_name,team_name,remark
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.TeamRaceApply">
+  	insert into race_team_apply (race_id,team_id,status,race_name,team_name,remark) 
+  		values (#{raceId},#{teamId},#{status},#{raceName},#{teamName},#{remark})
+  </insert>
+  
+  <update id="updateStatus" parameterType="com.jizhi.model.TeamRaceApply">
+  	update race_team_apply set status = #{status},remark = #{remark} where id = #{id}
+  </update>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_team_apply where 1 = 1
+  	<if test="raceName != null and raceName != '' " > and race_name LIKE CONCAT('%',#{raceName},'%') </if>
+  	<if test="status > 0" > and status = #{status} </if>
+  	order by id desc limit #{begin},#{size}
+  </select>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_team_apply where id = #{id}
+  </select>
+  
+  <select id="queryByRaceAndTeam" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_team_apply where race_id = #{raceId} and team_id = #{teamId}
+  </select>
+  
+  
+  
+  
+</mapper>

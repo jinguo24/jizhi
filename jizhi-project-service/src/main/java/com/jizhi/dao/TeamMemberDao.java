@@ -66,4 +66,11 @@ public class TeamMemberDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("teamMembers.queryCountByPhone",param);
 	}
 	
+	public List<String> queryTeamIds(int index,String phone) {
+		Map param = new HashMap();
+		param.put("tbinedex", index);
+		param.put("phone", phone);
+		return this.sqlSession.selectList("teamMembers.queryIds",param);
+	}
+	
 }

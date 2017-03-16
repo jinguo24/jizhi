@@ -24,6 +24,7 @@ public class Race implements Serializable{
 	private Date endDate;//结束时间
 	private String address;//场地
 	private String remark;//备注
+	private int status;//状态
 	public Integer getId() {
 		return id;
 	}
@@ -83,5 +84,11 @@ public class Race implements Serializable{
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }
