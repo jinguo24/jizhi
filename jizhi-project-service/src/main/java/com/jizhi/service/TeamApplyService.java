@@ -22,6 +22,10 @@ public class TeamApplyService {
 		return teamRaceApplyDao.getByRaceAndTeam(raceId, teamName);
 	}
 	
+	public List<TeamRaceApply> queryTeamRaceApplyList(String raceName,int status,String phone) {
+		return teamRaceApplyDao.getTeamRaceApplyList(raceName, status, phone, 0, 500);
+	}
+	
 	public void addTeamApply(TeamRaceApply teamapply) {
 		teamRaceApplyDao.addTeamRaceApply(teamapply);
 	}
@@ -43,14 +47,30 @@ public class TeamApplyService {
 	}
 	
 	public List<TeamRaceApply> queryTeamApplyList(String phone) {
+		//查询所有的leader
+		List<TeamRaceApply> alls = new ArrayList<TeamRaceApply>();
+		List<TeamRaceApply> ts = queryTeamRaceApplyList(null,0,phone);
+		if ( null != ts && ts.size() > 0 ) {
+			alls.addAll(ts);
+		}
+		
+		//查询所有成员
 		List<String> alltemids = new ArrayList<String>();
+		
 		for (int i = 0 ; i < 10; i ++) {
 			List<String> temids = racePersonApplyDao.queryTeamApplyIds(i, phone);
-			if ( null != temids) {
+			if ( null != temids && temids.size() > 0 ) {
 				alltemids.addAll(temids);
 			}
 		}
-		return teamRaceApplyDao.queryListByIds(alltemids);
+		if (alltemids.size() > 0 ) {
+			List<TeamRaceApply> tss = teamRaceApplyDao.queryListByIds(alltemids);
+			if ( null != tss && tss.size() > 0 ) {
+				alls.removeAll(tss);
+				alls.addAll(tss);
+			}
+		}
+		return alls;
 	}
 	
 }

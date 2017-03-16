@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.constant.RaceEnums;
+import com.jizhi.model.Race;
 import com.jizhi.model.RacePersonApply;
-import com.jizhi.model.Team;
 import com.jizhi.model.TeamRaceApply;
 import com.jizhi.model.User;
+import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamApplyService;
 import com.jizhi.service.UserService;
 import com.simple.common.util.AjaxWebUtil;
@@ -34,6 +35,9 @@ public class TeamController {
 	
 	@Autowired
 	private TeamApplyService teamApplyService;
+	
+	@Autowired
+	private RaceService raceService;
 	
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
@@ -94,7 +98,7 @@ public class TeamController {
 			if ("_jz_unkownphone".equals(taid)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
-			TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(taid);
+			TeamRaceApply teamapply = queryTeamApply(taid,request);
 			if  (null == teamapply) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
@@ -110,6 +114,11 @@ public class TeamController {
 		if (null == teamapply) {
 			return null;
 		}
+		initMembers(teamapply,request);
+		return teamapply;
+	}
+	
+	private void initMembers(TeamRaceApply teamapply,HttpServletRequest request) {
 		String dys = request.getParameter("dys");
 		if (!StringUtils.isEmpty(dys) && "1".equals(dys)) {
 			List<RacePersonApply> tms =  new ArrayList<RacePersonApply>();
@@ -118,16 +127,16 @@ public class TeamController {
 			ra.setPhone(teamapply.getLeaderPhone());
 			ra.setRaceId(teamapply.getRaceId());
 			ra.setRaceName(teamapply.getRaceName());
-			ra.setTeamApplyId(taid);
+			ra.setTeamApplyId(teamapply.getId());
 			ra.setTeamName(teamapply.getTeamName());
+			ra.setLeader(1);
 			tms.add(ra);
-			List<RacePersonApply> ts = teamApplyService.queryPersonApplysByTeamApply(teamapply.getRaceId(), taid);
+			List<RacePersonApply> ts = teamApplyService.queryPersonApplysByTeamApply(teamapply.getRaceId(), teamapply.getId());
 			if ( null != ts ) {
 				tms.addAll(ts);
 			}
 			teamapply.setMembers(tms);
 		}
-		return teamapply;
 	}
 	
 	@RequestMapping(value = "teamMemberAdd",method=RequestMethod.POST)
@@ -179,37 +188,49 @@ public class TeamController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
 		}
 	}
 	
 	@RequestMapping(value = "myApplyTeam",method=RequestMethod.GET)
 	@ResponseBody
-	public String myteam(HttpServletRequest request, HttpServletResponse response) {
+	public String myteam(String phone,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			
-			String currentPhone = CookieUtils.getCookie(request, "cp");
-			if ( StringUtils.isEmpty(currentPhone)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-			}
+//			String currentPhone = CookieUtils.getCookie(request, "cp");
+//			if ( StringUtils.isEmpty(currentPhone)) {
+//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+//			}
+//			
+//			String token = CookieUtils.getCookie(request, "token");
+//			if ( StringUtils.isEmpty(token)) {
+//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+//			}
+//			
+//			String dephone = LocalUtil.decry(token);
+//			if (!dephone.equals(currentPhone)) {
+//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+//			}
 			
-			String token = CookieUtils.getCookie(request, "token");
-			if ( StringUtils.isEmpty(token)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			List<TeamRaceApply> teams = teamApplyService.queryTeamApplyList(phone);
+			if ( null != teams ) {
+				for (int i = 0 ; i < teams.size() ; i ++ ) {
+					initMembers(teams.get(i),request);
+					initRaceInfo(teams.get(i));
+				}
 			}
-			
-			String dephone = LocalUtil.decry(token);
-			if (!dephone.equals(currentPhone)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-			}
-			
-			List<TeamRaceApply> teams = teamApplyService.queryTeamApplyList(currentPhone);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
 		}
 	}
+	
+	private void initRaceInfo(TeamRaceApply teamRaceApply) {
+		Race race = raceService.queryById(teamRaceApply.getRaceId());
+		teamRaceApply.setRace(race);
+	}
+	
 	
 	@RequestMapping(value = "detail",method=RequestMethod.GET)
 	@ResponseBody

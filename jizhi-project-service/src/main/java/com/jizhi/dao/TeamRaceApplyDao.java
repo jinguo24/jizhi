@@ -28,9 +28,10 @@ public class TeamRaceApplyDao extends BaseIbatisDao {
 		this.sqlSession.update("teamRaceApply.updateStatus",teamRaceApply);
 	}
 	
-	public List<TeamRaceApply> getTeamRaceApplyList(String raceName,int status,int pageIndex,int pageSize) {
+	public List<TeamRaceApply> getTeamRaceApplyList(String raceName,int status,String phone,int pageIndex,int pageSize) {
 		Map param = new HashMap();
 		param.put("raceName", raceName);
+		param.put("leaderPhone", phone);
 		param.put("status", status);
 		if (pageIndex <=0 ) {
 			pageIndex = 1;

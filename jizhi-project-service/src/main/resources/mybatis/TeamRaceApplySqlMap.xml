@@ -31,6 +31,7 @@
   	<include refid="Base_Column_List"></include>
   	from race_team_apply where 1 = 1
   	<if test="raceName != null and raceName != '' " > and race_name LIKE CONCAT('%',#{raceName},'%') </if>
+  	<if test="leaderPhone != null and leaderPhone != '' " > and leader_phone = #{leaderPhone} </if>
   	<if test="status > 0" > and status = #{status} </if>
   	<if test="type > 0" > and type = #{type} </if>
   	order by id desc limit #{begin},#{size}

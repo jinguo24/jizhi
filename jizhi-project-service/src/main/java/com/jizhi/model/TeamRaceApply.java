@@ -3,6 +3,9 @@ package com.jizhi.model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 public class TeamRaceApply implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -11,6 +14,7 @@ public class TeamRaceApply implements Serializable{
 	private int raceId;
 	private int status;
 	private String raceName;
+	private Race race;
 	private String teamName;
 	private String remark;
 	private int type;
@@ -83,5 +87,15 @@ public class TeamRaceApply implements Serializable{
 	}
 	public void setMembers(List<RacePersonApply> members) {
 		this.members = members;
+	}
+	public Race getRace() {
+		return race;
+	}
+	public void setRace(Race race) {
+		this.race = race;
+	}
+	@Override
+	public String toString() {
+		return JSONObject.toJSONString(this);
 	}
 }
