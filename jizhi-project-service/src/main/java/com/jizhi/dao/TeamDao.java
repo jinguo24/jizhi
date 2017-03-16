@@ -28,6 +28,10 @@ public class TeamDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("team.queryById",id);
 	}
 	
+	public Team queryByName(String Name) {
+		return this.sqlSession.selectOne("team.queryByName",Name);
+	}
+	
 	public List<Team> queryList(int status,int type,int begin,int size) {
 		Map param = new HashMap();
 		param.put("status", status);

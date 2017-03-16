@@ -40,14 +40,20 @@ public class TeamRaceApplyDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("teamRaceApply.query",param);
 	}
 	
-	public TeamRaceApply getTeamRaceApplyById(int id) {
+	public TeamRaceApply getTeamRaceApplyById(String id) {
 		return this.sqlSession.selectOne("teamRaceApply.queryById",id);
 	}
 	
-	public TeamRaceApply getByRaceAndTeam(int raceId,String teamId) {
+	public TeamRaceApply getByRaceAndTeam(int raceId,String teamName) {
 		Map param = new HashMap();
 		param.put("raceId", raceId);
-		param.put("teamId", teamId);
+		param.put("teamName", teamName);
 		return this.sqlSession.selectOne("teamRaceApply.queryByRaceAndTeam",param);
+	}
+	
+	public List<TeamRaceApply> queryListByIds(List<String> ids) {
+		Map param = new HashMap();
+		param.put("ids", ids);
+		return this.sqlSession.selectList("teamRaceApply.queryByIds",param);
 	}
 }

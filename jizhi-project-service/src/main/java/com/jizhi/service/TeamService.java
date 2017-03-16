@@ -31,6 +31,10 @@ public class TeamService {
 		return teamDao.queryById(id);
 	}
 	
+	public Team getByName(String name) {
+		return teamDao.queryByName(name);
+	}
+	
 	public void delete(String id) {
 		teamDao.delete(id);
 		teamMemeberDao.deleteByTeamId(id);
@@ -61,8 +65,8 @@ public class TeamService {
 		return teamMemeberDao.queryByTeam(team, 0, 500);
 	}
 	
-	public Integer queryMembersCountByPhone(String team,String phone) {
-		return teamMemeberDao.queryCountByPhone(team, phone);
+	public TeamMembers queryMembersByPhone(String team,String phone) {
+		return teamMemeberDao.queryByPhone(team, phone);
 	}
 	
 	public List<Team> queryTeamsByPhone(String phone) {

@@ -57,6 +57,12 @@
   	from team where id = #{id}
   </select>
   
+  <select id="queryByName" resultMap="BaseResultMap" parameterType="String">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from team where name = #{name}
+  </select>
+  
   <delete id="delete" parameterType="String">
   	delete from team where id = #{id}
   </delete>

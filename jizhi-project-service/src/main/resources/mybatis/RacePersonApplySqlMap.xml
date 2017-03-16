@@ -9,14 +9,16 @@
 		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
 		<result column="team_name" property="teamName" jdbcType="VARCHAR" />
 		<result column="race_name" property="raceName" jdbcType="VARCHAR" />
+		<result column="team_apply_id" property="teamApplyId" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,phone,create_time,team_id,team_name,race_name
+	id,race_id,phone,create_time,team_id,team_name,race_name,team_apply_id,name
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RacePersonApply">
-  	insert into race_person_apply_#{tbinedex} (race_id,phone,create_time,team_id,team_name,race_name) 
-  		values (#{raceId},#{phone},#{createTime},#{teamId},#{teamName},#{raceName})
+  	insert into race_person_apply_#{tbinedex} (race_id,phone,create_time,team_id,team_name,race_name,team_apply_id,name) 
+  		values (#{raceId},#{phone},#{createTime},#{teamId},#{teamName},#{raceName},#{teamApplyId},#{name})
   </insert>
   
   <select id="queryByPhoneAndRace" resultMap="BaseResultMap" parameterType="java.util.HashMap">
@@ -29,12 +31,17 @@
   	select 
   	<include refid="Base_Column_List"></include>
   	from race_person_apply_#{tbinedex} where race_id = #{raceId}
-  	<if test="teamId != null and teamId != '' " > and team_id = #{teamId} </if>
+  	<if test="teamApplyId != null and teamApplyId != '' " > and team_apply_id = #{teamApplyId} </if>
   	order by id desc limit #{begin},#{size}
   </select>
   
   <delete id="deleteByRaceId" parameterType="java.util.HashMap">
   	delete from race_person_apply_#{tbinedex} where id = #{id} and race_id = #{raceId} 
   </delete>
+  
+  <select id="queryTeamApplyIds" resultType="String" parameterType="java.util.HashMap">
+  	select distinct team_apply_id 
+  	from race_person_apply_#{tbinedex} where phone = #{phone}
+  </select>
   
 </mapper>

@@ -11,9 +11,10 @@ public class RacePersonApply implements Serializable{
 	private int raceId;
 	private String phone;
 	private Date createTime;
-	private String teamId;
 	private String teamName;
 	private String raceName;
+	private String teamApplyId;
+	private String name;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -40,12 +41,6 @@ public class RacePersonApply implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	public String getTeamId() {
-		return teamId;
-	}
-	public void setTeamId(String teamId) {
-		this.teamId = teamId;
-	}
 	public String getTeamName() {
 		return teamName;
 	}
@@ -60,5 +55,17 @@ public class RacePersonApply implements Serializable{
 	}
 	public int getTbinedex() {
 		return tbinedex;
+	}
+	public String getTeamApplyId() {
+		return teamApplyId;
+	}
+	public void setTeamApplyId(String teamApplyId) {
+		this.teamApplyId = teamApplyId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

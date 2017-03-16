@@ -1,22 +1,27 @@
 package com.jizhi.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TeamRaceApply implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private String id;
 	private int raceId;
-	private String teamId;
 	private int status;
 	private String raceName;
 	private String teamName;
 	private String remark;
-	public int getId() {
+	private int type;
+	private String teamImage;
+	private String leaderPhone;
+	private String leaderName;
+	private List<RacePersonApply> members;
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public int getRaceId() {
@@ -24,12 +29,6 @@ public class TeamRaceApply implements Serializable{
 	}
 	public void setRaceId(int raceId) {
 		this.raceId = raceId;
-	}
-	public String getTeamId() {
-		return teamId;
-	}
-	public void setTeamId(String teamId) {
-		this.teamId = teamId;
 	}
 	public int getStatus() {
 		return status;
@@ -54,5 +53,35 @@ public class TeamRaceApply implements Serializable{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public String getTeamImage() {
+		return teamImage;
+	}
+	public void setTeamImage(String teamImage) {
+		this.teamImage = teamImage;
+	}
+	public String getLeaderPhone() {
+		return leaderPhone;
+	}
+	public void setLeaderPhone(String leaderPhone) {
+		this.leaderPhone = leaderPhone;
+	}
+	public String getLeaderName() {
+		return leaderName;
+	}
+	public void setLeaderName(String leaderName) {
+		this.leaderName = leaderName;
+	}
+	public List<RacePersonApply> getMembers() {
+		return members;
+	}
+	public void setMembers(List<RacePersonApply> members) {
+		this.members = members;
 	}
 }

@@ -32,12 +32,12 @@ public class RacePersonApplyDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("racePersonApply.queryByPhoneAndRace",param);
 	}
 	
-	public List<RacePersonApply> queryList(int raceId,String teamId,int begin,int size) {
+	public List<RacePersonApply> queryList(int raceId,String teamApplyId,int begin,int size) {
 		RacePersonApply u = new RacePersonApply();
 		u.setRaceId(raceId);
 		Map param = new HashMap();
 		param.put("tbinedex", u.getTbinedex());
-		param.put("teamId", teamId);
+		param.put("teamApplyId", teamApplyId);
 		param.put("raceId", raceId);
 		param.put("begin", begin);
 		param.put("size", size);
@@ -52,6 +52,13 @@ public class RacePersonApplyDao extends BaseIbatisDao {
 		param.put("raceId", raceId);
 		param.put("id", id);
 		this.sqlSession.delete("racePersonApply.deleteByRaceId",param);
-	}	
+	}
+	
+	public List<String> queryTeamApplyIds(int index,String phone) {
+		Map param = new HashMap();
+		param.put("tbinedex", index);
+		param.put("phone", phone);
+		return this.sqlSession.selectList("racePersonApply.queryTeamApplyIds",param);
+	}
 	
 }
