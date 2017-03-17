@@ -90,7 +90,7 @@ public class TeamApplyController {
 	}
 	
 	
-	@RequestMapping(value = "auth",method=RequestMethod.POST)
+	@RequestMapping(value = "auth",method=RequestMethod.GET)
 	@ResponseBody
 	public String auth(String id,int status,HttpServletRequest request, HttpServletResponse response) {
 		try {

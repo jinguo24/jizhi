@@ -116,7 +116,9 @@ public class TeamApplyService {
 	
 	public void updateReject(TeamRaceApply teamapply) {
 		TeamRaceApplyReject tar = new TeamRaceApplyReject();
-		tar.setCreateTime(teamapply.getCreateTime());
+		if ( null != teamapply.getCreateTime()) {
+			tar.setCreateTime(teamapply.getCreateTime());
+		}
 		tar.setId(teamapply.getId());
 		tar.setLeaderName(teamapply.getLeaderName());
 		tar.setLeaderPhone(teamapply.getLeaderPhone());
