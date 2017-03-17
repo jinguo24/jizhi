@@ -25,6 +25,7 @@ import com.jizhi.service.TeamApplyService;
 import com.jizhi.service.TeamService;
 import com.jizhi.service.UserService;
 import com.simple.common.util.AjaxWebUtil;
+import com.simple.common.util.CookieUtils;
 import com.simple.common.util.PrimaryKeyUtil;
 
 @Controller
@@ -82,6 +83,11 @@ public class TeamController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队名称已被占用", "球队名称已被占用");
 			}
 			
+			Race race  = raceService.queryById(raceId);
+			if (null == race || race.getStatus() != 1) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			}
+			
 			teamapply = new TeamRaceApply();
 			teamapply.setId(PrimaryKeyUtil.getUUID());
 			teamapply.setRaceId(raceId);
@@ -112,7 +118,7 @@ public class TeamController {
 			}
 			TeamRaceApply teamapply = queryTeamApply(taid,request);
 			if  (null == teamapply) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队审核未通过", null);
 			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证通过", teamapply); 
 		}catch(Exception e) {
@@ -187,6 +193,11 @@ public class TeamController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"手机号已被占用", null);
 			}
 			
+			Race race  = raceService.queryById(teamapply.getRaceId());
+			if (null == race || race.getStatus() != 1) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			}
+			
 			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
 			if ( null != rpapply ) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", rpapply);
@@ -213,22 +224,22 @@ public class TeamController {
 	public String myteam(String phone,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			
-			List<TeamRaceApply> teams = teamApplyService.queryTeamApplyList(phone);
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			List<TeamRaceApply> teams = teamApplyService.queryTeamApplyList(currentPhone);
 			if ( null != teams ) {
 				for (int i = 0 ; i < teams.size() ; i ++ ) {
 					initMembers(teams.get(i),request);
@@ -252,20 +263,20 @@ public class TeamController {
 	@ResponseBody
 	public String detail(String id,HttpServletRequest request, HttpServletResponse response) {
 		try {
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			
 			TeamRaceApply team = queryTeamApply(id,request);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", team);

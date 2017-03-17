@@ -37,9 +37,9 @@ public class RaceController {
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
-	public String list(String name,int type,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String list(String name,int type,int status,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			PageResult races = raceService.getRacePageResult(name,type, page, pageSize);
+			PageResult races = raceService.getRacePageResult(name,type,status, page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", races);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
@@ -83,6 +83,17 @@ public class RaceController {
 	public String update(Race race,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			raceService.updateRace(race);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"添加失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+	
+	@RequestMapping(value = "updateStatus",method=RequestMethod.POST)
+	@ResponseBody
+	public String updateStatus(int raceId,int status,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			raceService.updateStatus(raceId, status);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"添加失败:"+e.getLocalizedMessage(), null);

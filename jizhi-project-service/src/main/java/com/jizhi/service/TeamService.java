@@ -44,20 +44,20 @@ public class TeamService {
 		teamMemeberDao.addTeamMembers(teamMember);
 	}
 	
-	public List<Team> queryTeamList(int status,int type, int pageIndex,int pageSize) {
+	public List<Team> queryTeamList(String name,int status,int type, int pageIndex,int pageSize) {
 		if (pageIndex <=0 ) {
 			pageIndex = 1;
 		}
-		return teamDao.queryList(status,type, (pageIndex-1)*pageSize, pageSize);
+		return teamDao.queryList(name,status,type, (pageIndex-1)*pageSize, pageSize);
 	}
 	
-	public Integer queryCount(int status,int type) {
-		return teamDao.queryCount(status, type);
+	public Integer queryCount(String name,int status,int type) {
+		return teamDao.queryCount(name,status, type);
 	}
 	
-	public PageResult getTeamPageResult(int type,int status,int pageIndex,int pageSize) {
-		List<Team> teams = queryTeamList(status,type,pageIndex,pageSize);
-		int count = queryCount(status,type);
+	public PageResult getTeamPageResult(String name,int type,int status,int pageIndex,int pageSize) {
+		List<Team> teams = queryTeamList(name,status,type,pageIndex,pageSize);
+		int count = queryCount(name,status,type);
 		return new PageResult(count,pageSize,pageIndex,teams);
 	}
 	

@@ -88,6 +88,21 @@ public class TeamApplyService {
 			t.setRemark(teamapply.getRemark());
 			teamDao.updateTeam(t);
 		}
+		//领队
+		TeamMembers ld = teamMembersDao.queryByPhone(t.getId(), t.getLeaderPhone());
+		if ( null == ld) {
+			ld = new TeamMembers();
+			ld.setLeader(1);
+			ld.setName(t.getLeaderName());
+			ld.setPhone(t.getLeaderPhone());
+			ld.setTeamId(t.getId());
+			ld.setRemark(t.getRemark());
+			teamMembersDao.addTeamMembers(ld);
+		}else {
+			ld.setLeader(1);
+			ld.setName(t.getLeaderName());
+			teamMembersDao.updateTeamMembers(ld);
+		}
 		//查询申请的成员
 		List<RacePersonApply> rapplys = racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 1000);
 		if ( null != rapplys) {
@@ -173,6 +188,15 @@ public class TeamApplyService {
 			}
 		}
 		return alls;
+	}
+	
+	public PageResult getTeamRaceApplyRejectPageResult(Integer raceId,String raceName,int status,int type,String phone,int pageIndex,int pageSize) {
+		if (pageIndex <=0 ) {
+			pageIndex = 1;
+		}
+		List<TeamRaceApplyReject> rejectlist = teamRaceApplyRejectDao.getTeamRaceApplyList(raceId,raceName, status, type, phone, (pageIndex-1)*pageSize, pageSize);
+		int count = teamRaceApplyRejectDao.getTeamRaceApplyCount(raceId,raceName, status, type, phone);
+		return new PageResult(count,pageSize,pageIndex,rejectlist);
 	}
 	
 }

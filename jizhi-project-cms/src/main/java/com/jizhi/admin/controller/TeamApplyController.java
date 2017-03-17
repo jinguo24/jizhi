@@ -32,9 +32,9 @@ public class TeamApplyController {
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
-	public String list(Integer raceId,String raceName,int status,int type,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String list(Integer raceId,String raceName,int status,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			PageResult teams = teamApplyService.getTeamRaceApplyPageResult(raceId,raceName, status, type, null, page, pageSize);
+			PageResult teams = teamApplyService.getTeamRaceApplyPageResult(raceId,raceName, status, 0, null, page, pageSize);
 			List<TeamRaceApply> tras = teams.getDatas();
 			if ( null != tras ) {
 				for (int i = 0 ; i < tras.size() ; i ++) {
@@ -90,11 +90,14 @@ public class TeamApplyController {
 	}
 	
 	
-	@RequestMapping(value = "auth",method=RequestMethod.GET)
+	@RequestMapping(value = "auth",method=RequestMethod.POST)
 	@ResponseBody
 	public String auth(String id,int status,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(id);
+			if (null == teamapply) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"审核失败:记录不存在", "审核失败:记录不存在");
+			}
 			//审核通过，则添加球队,添加成员到球队
 			if (status == 2) {
 				teamApplyService.updateSuccess(teamapply);
@@ -106,6 +109,17 @@ public class TeamApplyController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"审核失败:"+e.getLocalizedMessage(), e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "rejectlist",method=RequestMethod.GET)
+	@ResponseBody
+	public String rejectlist(Integer raceId,String raceName,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			PageResult teams = teamApplyService.getTeamRaceApplyRejectPageResult(raceId,raceName, 0, 0, null, page, pageSize);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
 		}
 	}
 }

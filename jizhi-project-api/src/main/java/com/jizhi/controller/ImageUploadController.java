@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.simple.common.config.EnvPropertiesConfiger;
 import com.simple.common.image.Thumbnailator;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.DateUtil;
@@ -46,13 +47,13 @@ public class ImageUploadController {
 //				suffix="jpg";
 				String imagewidth = request.getParameter("width");
 				String foler = FileUploadUtil.UPLOAD_IMAGE_DIR +System.currentTimeMillis();
-				File folerfile = new File(foler);
+				File folerfile = new File(EnvPropertiesConfiger.getValue("uploadDir")+foler);
 				if (!folerfile.exists()) {
 					folerfile.mkdirs();
 				}
 				String filepath = foler+ File.separator + PrimaryKeyUtil.getUUID() ;
 				String path = filepath+".jpg";
-				Thumbnailator.scale(file.getInputStream(), 1920, 1080, 0.4f, 0, filepath+".jpg");
+				Thumbnailator.scale(file.getInputStream(), 1920, 1080, 0.4f, 0, EnvPropertiesConfiger.getValue("uploadDir")+filepath+".jpg");
 				long time1 = System.currentTimeMillis();
 				System.out.println(">>>>img time1 : "+(time1-timestart));
 				if (null != imagewidth) {
@@ -62,7 +63,7 @@ public class ImageUploadController {
 					}catch(Exception e) {
 					}
 					if (width>0) {
-						Thumbnailator.cutSquareImage(new File(path), width, width, 0.8f, 0, filepath+"_"+width+".jpg");
+						Thumbnailator.cutSquareImage(new File(EnvPropertiesConfiger.getValue("uploadDir")+path), width, width, 0.8f, 0, EnvPropertiesConfiger.getValue("uploadDir")+filepath+"_"+width+".jpg");
 						path = filepath+"_"+width+".jpg";
 					}
 				}

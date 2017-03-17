@@ -23,6 +23,10 @@
   		values (#{id},#{raceId},#{status},#{raceName},#{teamName},#{remark},#{type},#{teamImage},#{leaderPhone},#{leaderName},#{createTime})
   </insert>
   
+  <update id="updateStatus" parameterType="com.jizhi.model.TeamRaceApply" >
+  	update race_team_apply set status = #{status} where id = #{id}
+  </update>
+  
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>

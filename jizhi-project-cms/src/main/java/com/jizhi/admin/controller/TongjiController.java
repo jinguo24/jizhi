@@ -33,43 +33,10 @@ public class TongjiController {
 	@ResponseBody
 	public String list(String name,int type,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			PageResult races = raceService.getRacePageResult(name,type, page, pageSize);
-			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", races);
+			//PageResult races = raceService.getRacePageResult(name,type, page, pageSize);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", null);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
-		}
-	}
-	
-	@RequestMapping(value = "add",method=RequestMethod.POST)
-	@ResponseBody
-	public String add(Race race,HttpServletRequest request, HttpServletResponse response) {
-		try {
-			raceService.addRace(race);
-			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
-		}catch(Exception e) {
-			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"添加失败:"+e.getLocalizedMessage(), null);
-		}
-	}
-	
-	@RequestMapping(value = "detail",method=RequestMethod.GET)
-	@ResponseBody
-	public String add(int id,HttpServletRequest request, HttpServletResponse response) {
-		try {
-			Race race = raceService.queryById(id);
-			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", race);
-		}catch(Exception e) {
-			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"添加失败:"+e.getLocalizedMessage(), null);
-		}
-	}
-	
-	@RequestMapping(value = "update",method=RequestMethod.POST)
-	@ResponseBody
-	public String update(Race race,HttpServletRequest request, HttpServletResponse response) {
-		try {
-			raceService.updateRace(race);
-			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
-		}catch(Exception e) {
-			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"添加失败:"+e.getLocalizedMessage(), null);
 		}
 	}
 }

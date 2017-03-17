@@ -32,20 +32,29 @@ public class RaceDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("race.queryById",id);
 	}
 	
-	public List<Race> queryList(String name,int type,int begin,int size) {
+	public List<Race> queryList(String name,int type,int status,int begin,int size) {
 		Map param = new HashMap();
 		param.put("name", name);
 		param.put("type", type);
 		param.put("begin", begin);
 		param.put("size", size);
+		param.put("status", status);
 		return this.sqlSession.selectList("race.query",param);
 	}
 	
-	public Integer queryCount(String name,int type) {
+	public Integer queryCount(String name,int type,int status) {
 		Map param = new HashMap();
 		param.put("name", name);
 		param.put("type", type);
+		param.put("status", status);
 		return this.sqlSession.selectOne("race.queryCount",param);
+	}
+	
+	public void updateStatus(int raceId,int status) {
+		Map param = new HashMap();
+		param.put("raceId", raceId);
+		param.put("status", status);
+		this.sqlSession.update("race.updateStatus",param);
 	}
 	
 }

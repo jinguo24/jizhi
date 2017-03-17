@@ -32,9 +32,9 @@ public class TeamController {
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
-	public String list(int type,int status,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String list(String name,int status,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			PageResult teams = teamService.getTeamPageResult(type, status, page, pageSize);
+			PageResult teams = teamService.getTeamPageResult(name,0, status, page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
@@ -46,27 +46,11 @@ public class TeamController {
 	public String detail(String teamId,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Team team = teamService.getById(teamId);
+			team.setMembers(teamService.queryTeamMembers(teamId));
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", team); 
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), e.getLocalizedMessage());
-		}
-	}
-	
-	@RequestMapping(value = "auth",method=RequestMethod.POST)
-	@ResponseBody
-	public String auth(String teamId,int status,String remark,HttpServletRequest request, HttpServletResponse response) {
-		try {
-			if (status>0) {
-				Team team = teamService.getById(teamId);
-				team.setStatus(status);
-				team.setRemark(remark);
-				teamService.updateTeam(team);
-			}
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"审核成功", null); 
-		}catch(Exception e) {
-			e.printStackTrace();
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"审核失败:"+e.getLocalizedMessage(), e.getLocalizedMessage());
 		}
 	}
 	
