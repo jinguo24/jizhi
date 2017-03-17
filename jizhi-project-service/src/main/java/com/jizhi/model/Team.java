@@ -20,7 +20,7 @@ public class Team implements Serializable{
 	private String description;//描述
 	private int type;//1-足球队 2-羽毛球队 3-篮球队
 	private Date createTime;//创建时间
-	private int status=1 ;//状态 1-审核中 2-审核通过 3-审核拒绝
+	private int status=1 ;//状态 1-有效 2-无效
 	private String remark;//审核备注
 	private List<TeamMembers> members = new ArrayList<TeamMembers>();
 	public String getId() {

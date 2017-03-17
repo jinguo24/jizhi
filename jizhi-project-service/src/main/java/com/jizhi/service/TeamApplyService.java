@@ -1,15 +1,24 @@
 package com.jizhi.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jizhi.dao.RacePersonApplyDao;
+import com.jizhi.dao.TeamDao;
+import com.jizhi.dao.TeamMemberDao;
 import com.jizhi.dao.TeamRaceApplyDao;
+import com.jizhi.dao.TeamRaceApplyRejectDao;
 import com.jizhi.model.RacePersonApply;
+import com.jizhi.model.Team;
+import com.jizhi.model.TeamMembers;
 import com.jizhi.model.TeamRaceApply;
+import com.jizhi.model.TeamRaceApplyReject;
+import com.simple.common.util.PageResult;
+import com.simple.common.util.PrimaryKeyUtil;
 @Service
 public class TeamApplyService {
 
@@ -17,14 +26,34 @@ public class TeamApplyService {
 	private TeamRaceApplyDao teamRaceApplyDao;
 	@Autowired
 	private RacePersonApplyDao racePersonApplyDao;
+	@Autowired
+	private TeamDao teamDao;
+	@Autowired
+	private TeamMemberDao teamMembersDao;
+	@Autowired
+	private TeamRaceApplyRejectDao teamRaceApplyRejectDao;
 	
 	public TeamRaceApply queryTeamApply(String teamName,int raceId) {
 		return teamRaceApplyDao.getByRaceAndTeam(raceId, teamName);
 	}
 	
-	public List<TeamRaceApply> queryTeamRaceApplyList(String raceName,int status,String phone) {
-		return teamRaceApplyDao.getTeamRaceApplyList(raceName, status, phone, 0, 500);
+	public List<TeamRaceApply> queryTeamRaceApplyList(Integer raceId,String raceName,int status,int type,String phone,int pageIndex,int pageSize) {
+		if (pageIndex <=0 ) {
+			pageIndex = 1;
+		}
+		return teamRaceApplyDao.getTeamRaceApplyList(raceId,raceName, status, type, phone, (pageIndex-1)*pageSize, pageSize);
 	}
+	
+	public int getTeamRaceApplyCount(Integer raceId,String raceName,int status,int type,String phone) {
+		return teamRaceApplyDao.getTeamRaceApplyCount(raceId,raceName, status, type, phone);
+	}
+	
+	public PageResult getTeamRaceApplyPageResult(Integer raceId,String raceName,int status,int type,String phone,int pageIndex,int pageSize) {
+		List<TeamRaceApply> yards = queryTeamRaceApplyList(raceId,raceName,status,type,phone,pageIndex,pageSize);
+		int count = getTeamRaceApplyCount(raceId,raceName, status, type, phone);
+		return new PageResult(count,pageSize,pageIndex,yards);
+	}
+	
 	
 	public void addTeamApply(TeamRaceApply teamapply) {
 		teamRaceApplyDao.addTeamRaceApply(teamapply);
@@ -33,6 +62,77 @@ public class TeamApplyService {
 	public TeamRaceApply queryTeamApplyById(String id) {
 		return teamRaceApplyDao.getTeamRaceApplyById(id);
 	}
+	
+	public void updateSuccess(TeamRaceApply teamapply) {
+		teamapply.setStatus(2);
+		teamRaceApplyDao.updateStatus(teamapply);
+		
+		//添加球队，添加球队成员
+		Team t = teamDao.queryByName(teamapply.getTeamName());
+		if ( null == t) {
+			t = new Team();
+			t.setCreateTime(new Date());
+			t.setId(PrimaryKeyUtil.getUUID());
+			t.setImage(teamapply.getTeamImage());
+			t.setLeaderPhone(teamapply.getLeaderPhone());
+			t.setLeaderName(teamapply.getLeaderName());
+			t.setName(teamapply.getTeamName());
+			t.setStatus(1);
+			t.setType(teamapply.getType());
+			t.setRemark(teamapply.getRemark());
+			teamDao.addTeam(t);
+		}else {
+			t.setImage(teamapply.getTeamImage());
+			t.setLeaderPhone(teamapply.getLeaderPhone());
+			t.setLeaderName(teamapply.getLeaderName());
+			t.setRemark(teamapply.getRemark());
+			teamDao.updateTeam(t);
+		}
+		//查询申请的成员
+		List<RacePersonApply> rapplys = racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 1000);
+		if ( null != rapplys) {
+			for ( int i = 0 ; i < rapplys.size() ; i ++) {
+				RacePersonApply ra = rapplys.get(i);
+				TeamMembers tm = teamMembersDao.queryByPhone(t.getId(), ra.getPhone());
+				if ( null == tm ) {
+					tm = new TeamMembers();
+					if (t.getLeaderPhone().equals(ra.getPhone())) {
+						tm.setLeader(1);
+					}
+					tm.setName(ra.getName());
+					tm.setPhone(ra.getPhone());
+					tm.setTeamId(t.getId());
+					teamMembersDao.addTeamMembers(tm);
+				}else {
+					tm.setName(ra.getName());
+					if (t.getLeaderPhone().equals(ra.getPhone())) {
+						tm.setLeader(1);
+					}
+					teamMembersDao.updateTeamMembers(tm);
+				}
+			}
+		}
+	}
+	
+	public void updateReject(TeamRaceApply teamapply) {
+		TeamRaceApplyReject tar = new TeamRaceApplyReject();
+		tar.setCreateTime(teamapply.getCreateTime());
+		tar.setId(teamapply.getId());
+		tar.setLeaderName(teamapply.getLeaderName());
+		tar.setLeaderPhone(teamapply.getLeaderPhone());
+		tar.setRaceId(teamapply.getRaceId());
+		tar.setRaceName(teamapply.getRaceName());
+		tar.setRemark(teamapply.getRemark());
+		tar.setTeamImage(teamapply.getTeamImage());
+		tar.setTeamName(teamapply.getTeamName());
+		tar.setType(teamapply.getType());
+		tar.setMemberList(racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 1000));
+		teamRaceApplyRejectDao.addTeamRaceApply(tar);
+		teamRaceApplyDao.deleteById(teamapply.getId());
+		racePersonApplyDao.deleteByTeamApplyId(teamapply.getRaceId(), teamapply.getId());
+		
+	}
+	
 	
 	public RacePersonApply queryPersonApplyByPhone(int raceId,String phone) {
 		return racePersonApplyDao.getByRaceAndPhone(raceId, phone);
@@ -49,7 +149,7 @@ public class TeamApplyService {
 	public List<TeamRaceApply> queryTeamApplyList(String phone) {
 		//查询所有的leader
 		List<TeamRaceApply> alls = new ArrayList<TeamRaceApply>();
-		List<TeamRaceApply> ts = queryTeamRaceApplyList(null,0,phone);
+		List<TeamRaceApply> ts = queryTeamRaceApplyList(0,null,0,0,phone,1,500);
 		if ( null != ts && ts.size() > 0 ) {
 			alls.addAll(ts);
 		}

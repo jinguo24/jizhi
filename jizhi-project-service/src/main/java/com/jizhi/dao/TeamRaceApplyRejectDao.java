@@ -3,28 +3,30 @@ package com.jizhi.dao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import com.jizhi.model.TeamRaceApply;
+
+import com.jizhi.model.TeamRaceApplyReject;
 import com.simple.common.mybatis.annotation.DatabaseTemplate;
 import com.simple.common.mybatis.dao.BaseIbatisDao;
 
 @Repository
 @DatabaseTemplate("st_all")
-public class TeamRaceApplyDao extends BaseIbatisDao {
+public class TeamRaceApplyRejectDao extends BaseIbatisDao {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void addTeamRaceApply(TeamRaceApply teamRaceApply) {
-		this.sqlSession.insert("teamRaceApply.insert", teamRaceApply);
+	public void addTeamRaceApply(TeamRaceApplyReject teamRaceApplyReject) {
+		this.sqlSession.insert("teamRaceApplyReject.insert", teamRaceApplyReject);
 	}
 	
-	public void updateStatus(TeamRaceApply teamRaceApply) {
-		this.sqlSession.update("teamRaceApply.updateStatus",teamRaceApply);
+	public void updateStatus(TeamRaceApplyReject teamRaceApply) {
+		this.sqlSession.update("teamRaceApplyReject.updateStatus",teamRaceApply);
 	}
 	
-	public List<TeamRaceApply> getTeamRaceApplyList(Integer raceId,String raceName,int status,int type,String phone,int pageIndex,int pageSize) {
+	public List<TeamRaceApplyReject> getTeamRaceApplyList(Integer raceId,String raceName,int status,int type,String phone,int pageIndex,int pageSize) {
 		Map param = new HashMap();
 		param.put("raceName", raceName);
 		param.put("leaderPhone", phone);
@@ -40,7 +42,7 @@ public class TeamRaceApplyDao extends BaseIbatisDao {
 		}
 		param.put("begin", (pageIndex-1)*pageSize);
 		param.put("size", pageSize);
-		return this.sqlSession.selectList("teamRaceApply.query",param);
+		return this.sqlSession.selectList("teamRaceApplyReject.query",param);
 	}
 	
 	public Integer getTeamRaceApplyCount(Integer raceId,String raceName,int status,int type,String phone) {
@@ -54,27 +56,27 @@ public class TeamRaceApplyDao extends BaseIbatisDao {
 		}else {
 			param.put("raceId", raceId);
 		}
-		return this.sqlSession.selectOne("teamRaceApply.queryCount",param);
+		return this.sqlSession.selectOne("teamRaceApplyReject.queryCount",param);
 	}
 	
-	public TeamRaceApply getTeamRaceApplyById(String id) {
-		return this.sqlSession.selectOne("teamRaceApply.queryById",id);
+	public TeamRaceApplyReject getTeamRaceApplyById(String id) {
+		return this.sqlSession.selectOne("teamRaceApplyReject.queryById",id);
 	}
 	
-	public TeamRaceApply getByRaceAndTeam(int raceId,String teamName) {
+	public TeamRaceApplyReject getByRaceAndTeam(int raceId,String teamName) {
 		Map param = new HashMap();
 		param.put("raceId", raceId);
 		param.put("teamName", teamName);
-		return this.sqlSession.selectOne("teamRaceApply.queryByRaceAndTeam",param);
+		return this.sqlSession.selectOne("teamRaceApplyReject.queryByRaceAndTeam",param);
 	}
 	
-	public List<TeamRaceApply> queryListByIds(List<String> ids) {
+	public List<TeamRaceApplyReject> queryListByIds(List<String> ids) {
 		Map param = new HashMap();
 		param.put("ids", ids);
-		return this.sqlSession.selectList("teamRaceApply.queryByIds",param);
+		return this.sqlSession.selectList("teamRaceApplyReject.queryByIds",param);
 	}
 	
 	public void deleteById(String id) {
-		this.sqlSession.delete("teamRaceApply.delete",id);
+		this.sqlSession.delete("teamRaceApplyReject.delete",id);
 	}
 }

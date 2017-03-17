@@ -43,4 +43,9 @@
   	from race_person_apply_#{tbinedex} where phone = #{phone}
   </select>
   
+  <delete id="deleteByTeamApplyId" parameterType="java.util.HashMap">
+  	delete from race_person_apply_#{tbinedex} where race_id = #{raceId}  and team_apply_id = #{teamApplyId}
+  </delete>
+  
+  
 </mapper>

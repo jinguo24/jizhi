@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="teamRaceApply" >
-  <resultMap id="BaseResultMap" type="com.jizhi.model.TeamRaceApplyReject " >
+<mapper namespace="teamRaceApplyReject" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.TeamRaceApply" >
 		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="race_id" property="raceId" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="INTEGER" />
@@ -13,20 +13,25 @@
 		<result column="leader_phone" property="leaderPhone" jdbcType="VARCHAR" />
 		<result column="leader_name" property="leaderName" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="members" property="members" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time
+	id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time,members
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TeamRaceApply">
-  	insert into race_team_apply_reject (id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time) 
-  		values (#{id},#{raceId},#{status},#{raceName},#{teamName},#{remark},#{type},#{teamImage},#{leaderPhone},#{leaderName},#{createTime})
+  	insert into race_team_apply (id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time,members) 
+  		values (#{id},#{raceId},#{status},#{raceName},#{teamName},#{remark},#{type},#{teamImage},#{leaderPhone},#{leaderName},#{createTime},#{members})
   </insert>
+  
+  <update id="updateStatus" parameterType="com.jizhi.model.TeamRaceApply">
+  	update race_team_apply set status = #{status},remark = #{remark} where id = #{id}
+  </update>
   
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_team_apply_reject where 1 = 1
+  	from race_team_apply where 1 = 1
   	<if test="raceName != null and raceName != '' " > and race_name LIKE CONCAT('%',#{raceName},'%') </if>
   	<if test="leaderPhone != null and leaderPhone != '' " > and leader_phone = #{leaderPhone} </if>
   	<if test="status > 0" > and status = #{status} </if>
@@ -36,7 +41,7 @@
   </select>
   
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
-  	select count(1) from race_team_apply_reject where 1 = 1
+  	select count(1) from race_team_apply where 1 = 1
   	<if test="raceName != null and raceName != '' " > and race_name LIKE CONCAT('%',#{raceName},'%') </if>
   	<if test="leaderPhone != null and leaderPhone != '' " > and leader_phone = #{leaderPhone} </if>
   	<if test="status > 0" > and status = #{status} </if>
@@ -47,26 +52,26 @@
   <select id="queryById" resultMap="BaseResultMap" parameterType="String">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_team_apply_reject where id = #{id}
+  	from race_team_apply where id = #{id}
   </select>
   
   <select id="queryByRaceAndTeam" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_team_apply_reject where race_id = #{raceId} and team_name = #{teamName}
+  	from race_team_apply where race_id = #{raceId} and team_name = #{teamName}
   </select>
   
   <select id="queryByIds" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_team_apply_reject where status in (1,2) and id in  
+  	from race_team_apply where status in (1,2) and id in  
 	 <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
 	  #{item}  
 	 </foreach>  
   </select>
   
   <delete id="delete" parameterType="String">
-  	delete from race_team_apply_reject where id = #{id}
+  	delete from race_team_apply where id = #{id}
   </delete>
   
   

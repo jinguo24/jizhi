@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-public class TeamRaceApply implements Serializable{
+public class TeamRaceApplyReject implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,7 +23,8 @@ public class TeamRaceApply implements Serializable{
 	private String leaderPhone;
 	private String leaderName;
 	private Date createTime;
-	private List<RacePersonApply> members;
+	private String members;
+	private List<RacePersonApply> memberList;
 	public String getId() {
 		return id;
 	}
@@ -83,12 +85,6 @@ public class TeamRaceApply implements Serializable{
 	public void setLeaderName(String leaderName) {
 		this.leaderName = leaderName;
 	}
-	public List<RacePersonApply> getMembers() {
-		return members;
-	}
-	public void setMembers(List<RacePersonApply> members) {
-		this.members = members;
-	}
 	public Race getRace() {
 		return race;
 	}
@@ -101,8 +97,19 @@ public class TeamRaceApply implements Serializable{
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	@Override
-	public String toString() {
-		return JSONObject.toJSONString(this);
+	public String getMembers() {
+		return members;
+	}
+	public void setMembers(String members) {
+		this.members = members;
+	}
+	public List<RacePersonApply> getMemberList() {
+		return memberList;
+	}
+	public void setMemberList(List<RacePersonApply> memberList) {
+		this.memberList = memberList;
+		if (null != memberList) {
+			this.members = JSONArray.toJSONString(memberList);
+		}
 	}
 }

@@ -61,4 +61,14 @@ public class RacePersonApplyDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("racePersonApply.queryTeamApplyIds",param);
 	}
 	
+	public void deleteByTeamApplyId(int raceId,String teamApplyId) {
+		RacePersonApply u = new RacePersonApply();
+		u.setRaceId(raceId);
+		Map param = new HashMap();
+		param.put("tbinedex", u.getTbinedex());
+		param.put("raceId", raceId);
+		param.put("teamApplyId", teamApplyId);
+		this.sqlSession.delete("racePersonApply.deleteByTeamApplyId",param);
+	}
+	
 }
