@@ -3,49 +3,58 @@
 <mapper namespace="raceScheduleTeam" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.RaceScheduleTeam" >
 		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="race_schedule_id" property="raceScheduleId" jdbcType="INTEGER" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
 		<result column="sort" property="sort" jdbcType="INTEGER" />
-		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
-		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="begin_date" property="beginDate" jdbcType="DATE" />
+		<result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+		<result column="end_time" property="endTime" jdbcType="VARCHAR" />
 		<result column="team_one" property="teamOne" jdbcType="VARCHAR" />
 		<result column="team_two" property="teamTwo" jdbcType="VARCHAR" />
 		<result column="success_team_id" property="successTeamId" jdbcType="VARCHAR" />
 		<result column="collect_item" property="collectItems" jdbcType="VARCHAR" />
 		<result column="judge_item" property="judgeItems" jdbcType="VARCHAR" />
+		<result column="team_one_name" property="teamOneName" jdbcType="VARCHAR" />
+		<result column="team_two_name" property="teamTwoName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_schedule_id,sort,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item
+	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,team_one_name,team_two_name
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceScheduleTeam">
-  	insert into race_schedule_team (race_schedule_id,sort,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item) 
-  		values (#{raceScheduleId},#{sort},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems})
+  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,team_one_name,team_two_name) 
+  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{teamOneName},#{teamTwoName})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceScheduleTeam">
   	update race_schedule_team set 
   		sort = #{sort}, 
+  		begin_date = #{beginDate},
   		begin_time = #{beginTime},
   		end_time = #{endTime},
   		team_one = #{teamOne},
   		team_two = #{teamTwo},
   		success_team_id = #{successTeamId},
   		collect_item = #{collectItems},
-  		judge_item = #{judgeItems}
-  		where race_schedule_id = #{raceScheduleId} 
+  		judge_item = #{judgeItems},
+  		team_one_name = #{teamOneName},
+  		team_two_name = #{teamTwoName}
+  		where race_id = #{raceId} 
   </update>
   
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_schedule_team where race_schedule_id = #{schedule}
+  	from race_schedule_team where 1=1
+  	<if test="raceId > 0 " > and race_id=#{raceId}</if>
+  	order by begin_date desc ,sort asc
   	limit #{begin},#{size}
   </select>
   
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
   	select 
   	count(1) 
-  	from race_schedule_team where race_schedule_id = #{schedule}
+  	from race_schedule_team where 1=1
+  	<if test="raceId > 0 " > and race_id=#{raceId}</if>
   </select>
   
   <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">

@@ -1,5 +1,8 @@
 package com.jizhi.constant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RaceEnums {
 
 	
@@ -56,6 +59,16 @@ public class RaceEnums {
 		public void setType(int type) {
 			this.type = type;
 		}
+		public static List<RacePositions> getPositions(int type) {
+			List<RacePositions> rps = new ArrayList<RacePositions>();
+			for (RacePositions rp : RacePositions.values()) {
+				if (rp.getType() == type) {
+					rps.add(rp);
+				}
+			}
+			return rps;
+		}
+		
 		
 	}
 	

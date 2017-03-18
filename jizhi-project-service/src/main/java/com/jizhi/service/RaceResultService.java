@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.jizhi.dao.RaceResultsDao;
 import com.jizhi.model.RaceResults;
-import com.jizhi.model.RaceSchedule;
-import com.jizhi.model.RaceScheduleTeam;
 import com.simple.common.util.PageResult;
 @Service
 public class RaceResultService {

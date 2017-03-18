@@ -10,12 +10,15 @@ public class RaceScheduleTeam implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private int raceScheduleId;//赛程编号
-	private int sort;//排序
-	private Date beginTime;//开始时间
-	private Date endTime;//结束时间
+	private int raceId;//赛事编号
+	private Date beginDate;//开始日期
+	private String beginTime;//开始时间
+	private String endTime;//结束时间
+	private int sort;
 	private String teamOne;//第一队
+	private String teamOneName;
 	private String teamTwo;//第二队
+	private String teamTwoName;
 	private String successTeamId;//获胜球队编号
 	private String collectItems;//收集数据项json
 	private String judgeItems;//评判数据项json
@@ -25,23 +28,11 @@ public class RaceScheduleTeam implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getRaceScheduleId() {
-		return raceScheduleId;
+	public int getRaceId() {
+		return raceId;
 	}
-	public void setRaceScheduleId(int raceScheduleId) {
-		this.raceScheduleId = raceScheduleId;
-	}
-	public Date getBeginTime() {
-		return beginTime;
-	}
-	public void setBeginTime(Date beginTime) {
-		this.beginTime = beginTime;
-	}
-	public Date getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public void setRaceId(int raceId) {
+		this.raceId = raceId;
 	}
 	public int getSort() {
 		return sort;
@@ -78,5 +69,35 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
+	}
+	public Date getBeginDate() {
+		return beginDate;
+	}
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+	public String getBeginTime() {
+		return beginTime;
+	}
+	public void setBeginTime(String beginTime) {
+		this.beginTime = beginTime;
+	}
+	public String getEndTime() {
+		return endTime;
+	}
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	public String getTeamOneName() {
+		return teamOneName;
+	}
+	public void setTeamOneName(String teamOneName) {
+		this.teamOneName = teamOneName;
+	}
+	public String getTeamTwoName() {
+		return teamTwoName;
+	}
+	public void setTeamTwoName(String teamTwoName) {
+		this.teamTwoName = teamTwoName;
 	}
 }

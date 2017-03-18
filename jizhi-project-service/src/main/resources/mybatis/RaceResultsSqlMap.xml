@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.jizhi.model.RaceResults" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="race_id" property="raceId" jdbcType="INTEGER" />
-		<result column="race_schedule_id" property="raceScheduleId" jdbcType="INTEGER" />
 		<result column="race_schedule_team_id" property="raceScheduleTeamId" jdbcType="INTEGER" />
 		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
@@ -14,12 +13,12 @@
 		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,race_schedule_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items
+	id,race_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceResults">
-  	insert into race_result_#{tbinedex} (race_id,race_schedule_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items) 
-  		values (#{raceId},#{raceScheduleId},#{raceScheduleTeamId},#{teamId},#{phone},#{number},#{position},#{collectItems},#{judgeItems})
+  	insert into race_result_#{tbinedex} (race_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items) 
+  		values (#{raceId},#{raceScheduleTeamId},#{teamId},#{phone},#{number},#{position},#{collectItems},#{judgeItems})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceResults">

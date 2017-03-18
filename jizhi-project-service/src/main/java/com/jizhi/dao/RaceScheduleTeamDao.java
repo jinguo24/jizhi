@@ -26,17 +26,17 @@ public class RaceScheduleTeamDao extends BaseIbatisDao {
 		this.sqlSession.update("raceScheduleTeam.update",raceScheduleTeam);
 	}
 	
-	public List<RaceScheduleTeam> query(int scheduleId,int begin,int size) {
+	public List<RaceScheduleTeam> query(int raceId,int begin,int size) {
 		Map param = new HashMap();
-		param.put("schedule", scheduleId);
+		param.put("raceId", raceId);
 		param.put("begin", begin);
 		param.put("size", size);
 		return this.sqlSession.selectList("raceScheduleTeam.query",param);
 	}
 	
-	public Integer queryCount(int scheduleId) {
+	public Integer queryCount(int raceId) {
 		Map param = new HashMap();
-		param.put("schedule", scheduleId);
+		param.put("raceId", raceId);
 		return this.sqlSession.selectOne("raceScheduleTeam.queryCount",param);
 	}
 	
