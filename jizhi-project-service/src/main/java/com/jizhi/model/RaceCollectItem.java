@@ -11,6 +11,7 @@ public class RaceCollectItem implements Serializable{
 	private int status = 1;
 	private int scale;
 	private int type;
+	private int position;
 	public int getId() {
 		return id;
 	}
@@ -40,5 +41,11 @@ public class RaceCollectItem implements Serializable{
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int position) {
+		this.position = position;
 	}
 }

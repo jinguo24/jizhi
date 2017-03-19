@@ -8,13 +8,14 @@
 		<result column="scale" property="scale" jdbcType="INTEGER" />
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="weight" property="weight" jdbcType="DOUBLE" />
+		<result column="position" property="position" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,item_name,status,scale,type,weight
+	id,item_name,status,scale,type,weight,position
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceJudgeItem">
-  	insert into race_judge_item (item_name,status,scale,type,weight) values (#{itemName},#{status},#{scale},#{type},#{weight})
+  	insert into race_judge_item (item_name,status,scale,type,weight,position) values (#{itemName},#{status},#{scale},#{type},#{weight},#{position})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceJudgeItem">
@@ -22,7 +23,8 @@
   		item_name = #{itemName},
   		scale = #{scale},
   		type = #{type},
-  		weight = #{weight}
+  		weight = #{weight},
+  		position = #{position}
   		 where id=#{id}
   </update>
   

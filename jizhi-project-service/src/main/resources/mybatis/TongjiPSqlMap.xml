@@ -4,35 +4,37 @@
   <resultMap id="BaseResultMap" type="com.jizhi.model.TongjiP" >
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
-		<result column="shots" property="shots" jdbcType="INTEGER" />
-		<result column="scores" property="scores" jdbcType="INTEGER" />
 		<result column="type" property="type" jdbcType="INTEGER" />
-		<result column="counts" property="counts" jdbcType="INTEGER" />
-		<result column="ontimes" property="ontimes" jdbcType="INTEGER" />
-		<result column="pushs" property="pushs" jdbcType="INTEGER" />
+		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
+		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+		<result column="race_counts" property="raceCounts" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,phone,shots,scores,type,counts,ontimes,pushs
+	id,phone,type,collect_items,judge_items,race_counts
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TongjiP">
-  	insert into race_tongji_p_#{tbinedex} (phone,shots,scores,type,counts,ontimes,pushs) 
-  		values (#{phone},#{shots},#{scores},#{type},#{counts},#{ontimes},#{pushs})
+  	insert into race_tongji_p_#{tbinedex} (phone,type,collect_items,judge_items,race_counts) 
+  		values (#{phone},#{type},#{collectItems},#{judgeItems},#{raceCounts})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TongjiP">
   	update race_tongji_p_#{tbinedex} set 
-  		shots = #{shots}, 
-  		scores = #{scores},
-  		type = #{type},
-  		counts = #{counts},
-  		ontimes = #{ontimes},
-  		pushs = #{pushs}
-  		where phone=#{phone} 
+  		collect_items = #{collectItems},
+  		judge_items = #{judgeItems},
+  		race_counts = #{raceCounts}
+  		where phone=#{phone} and type = #{type}
   </update>
   
-  <delete id="truncateTable" parameterType="Integer">
-  	truncate table race_tongji_p_#{tbinedex}
-  </delete>
+  <select id="queryByPhoneAndType" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_tongji_p_#{tbinedex} where phone = #{phone} and type = #{type}
+  </select>
   
+  <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_tongji_p_#{tbinedex} where phone = #{phone}
+  </select>
 </mapper>

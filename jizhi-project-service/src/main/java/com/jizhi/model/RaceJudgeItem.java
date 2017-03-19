@@ -12,6 +12,7 @@ public class RaceJudgeItem implements Serializable{
 	private int scale;
 	private int type;
 	private double weight;
+	private int position;
 	public int getId() {
 		return id;
 	}
@@ -47,5 +48,11 @@ public class RaceJudgeItem implements Serializable{
 	}
 	public void setWeight(double weight) {
 		this.weight = weight;
+	}
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int position) {
+		this.position = position;
 	}
 }

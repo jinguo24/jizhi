@@ -1,11 +1,12 @@
 package com.jizhi.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * 比赛结果，人员，分表
@@ -19,14 +20,15 @@ public class RaceResults implements Serializable{
 	private int id;
 	private int raceId;//赛事编号
 	private int raceScheduleTeamId;//赛程编号
+	private int type=1;//类型
 	private String teamId;//队编号
 	private String phone;//队员电话
 	private int number;//号码
 	private int position;//场上位置
 	private String collectItems;//收集数据项json
-	private List<CollectItem> collectItemsList;
+	private Map<Integer,Double> collectItemsMap;
 	private String judgeItems;//评判数据项json
-	private List<JudgeItem> judgeItemsList;
+	private Map<Integer,Double> judgeItemsMap;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -82,7 +84,7 @@ public class RaceResults implements Serializable{
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
 		if (!StringUtils.isEmpty(collectItems)) {
-			this.collectItemsList = (List<CollectItem>) JSONArray.parse(collectItems);
+			this.collectItemsMap = (Map<Integer,Double>) JSONArray.parse(collectItems);
 		}
 	}
 	public String getJudgeItems() {
@@ -91,61 +93,31 @@ public class RaceResults implements Serializable{
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
 		if (!StringUtils.isEmpty(judgeItems)) {
-			this.judgeItemsList = (List<JudgeItem>) JSONArray.parse(judgeItems);
+			this.judgeItemsMap = (Map<Integer,Double>) JSONArray.parse(judgeItems);
 		}
 	}
-	public List<CollectItem> getCollectItemsList() {
-		return collectItemsList;
+	public Map<Integer, Double> getCollectItemsMap() {
+		return collectItemsMap;
 	}
-	public List<JudgeItem> getJudgeItemsList() {
-		return judgeItemsList;
-	}
-
-	private class CollectItem {
-		private int id;
-		private String name;
-		private double value;
-		public int getId() {
-			return id;
-		}
-		public void setId(int id) {
-			this.id = id;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public double getValue() {
-			return value;
-		}
-		public void setValue(double value) {
-			this.value = value;
+	public void setCollectItemsMap(Map<Integer, Double> collectItemsMap) {
+		this.collectItemsMap = collectItemsMap;
+		if ( null != collectItemsMap) {
+			this.collectItems = JSONObject.toJSONString(collectItemsMap);
 		}
 	}
-	
-	private class JudgeItem {
-		private int id;
-		private String name;
-		private double value;
-		public int getId() {
-			return id;
+	public Map<Integer, Double> getJudgeItemsMap() {
+		return judgeItemsMap;
+	}
+	public void setJudgeItemsMap(Map<Integer, Double> judgeItemsMap) {
+		this.judgeItemsMap = judgeItemsMap;
+		if ( null != judgeItemsMap) {
+			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
 		}
-		public void setId(int id) {
-			this.id = id;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public double getValue() {
-			return value;
-		}
-		public void setValue(double value) {
-			this.value = value;
-		}
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 }

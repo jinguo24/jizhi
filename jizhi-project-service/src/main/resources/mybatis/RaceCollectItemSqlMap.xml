@@ -7,20 +7,22 @@
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="scale" property="scale" jdbcType="INTEGER" />
 		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="position" property="position" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,item_name,status,scale,type
+	id,item_name,status,scale,type,position
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceCollectItem">
-  	insert into race_collect_item (item_name,status,scale,type) values (#{itemName},#{status},#{scale},#{type})
+  	insert into race_collect_item (item_name,status,scale,type,position) values (#{itemName},#{status},#{scale},#{type},#{position})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceCollectItem">
   	update race_collect_item set 
   		item_name = #{itemName},
   		scale = #{scale},
-  		type = #{type}
+  		type = #{type},
+  		position = #{position}
   		 where id=#{id}
   </update>
   

@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jizhi.constant.RaceEnums;
 import com.jizhi.model.Race;
 import com.jizhi.model.RacePersonApply;
-import com.jizhi.model.Team;
 import com.jizhi.model.TeamRaceApply;
 import com.jizhi.model.User;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamApplyService;
-import com.jizhi.service.TeamService;
 import com.jizhi.service.UserService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.CookieUtils;
@@ -40,9 +38,6 @@ public class TeamController {
 	
 	@Autowired
 	private RaceService raceService;
-	
-	@Autowired
-	private TeamService teamService;
 	
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
@@ -77,12 +72,6 @@ public class TeamController {
 			if ( null != teamapply) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队名称已被占用", "球队名称已被占用");
 			}
-			
-			Team team = teamService.getByName(teamname);
-			if ( null != team) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队名称已被占用", "球队名称已被占用");
-			}
-			
 			Race race  = raceService.queryById(raceId);
 			if (null == race || race.getStatus() != 1) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");

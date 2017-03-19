@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jizhi.model.Race;
 import com.jizhi.model.RaceResults;
 import com.jizhi.service.RaceResultService;
+import com.jizhi.service.RaceService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
 
@@ -20,6 +22,8 @@ public class RaceResultController {
 	
 	@Autowired
 	private RaceResultService raceResultService;
+	@Autowired
+	private RaceService raceService;
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
@@ -36,6 +40,8 @@ public class RaceResultController {
 	@ResponseBody
 	public String add(RaceResults results,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			Race race = raceService.queryById(results.getRaceId());
+			results.setType(race.getType());
 			raceResultService.addRaceResults(results);;
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {
@@ -47,6 +53,8 @@ public class RaceResultController {
 	@ResponseBody
 	public String update(RaceResults results,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			Race race = raceService.queryById(results.getRaceId());
+			results.setType(race.getType());
 			raceResultService.updateRaceResults(results);;
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {

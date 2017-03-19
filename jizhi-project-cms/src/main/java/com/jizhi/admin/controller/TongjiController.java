@@ -9,25 +9,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jizhi.model.Race;
-import com.jizhi.service.CouponService;
-import com.jizhi.service.RaceService;
-import com.jizhi.service.UserService;
+import com.jizhi.service.TongjiService;
 import com.simple.common.util.AjaxWebUtil;
-import com.simple.common.util.PageResult;
 
 @Controller
 @RequestMapping(value = "/tongji")
 public class TongjiController {
 	
 	@Autowired
-	CouponService couponService;
+	TongjiService tongjiService;
 	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private RaceService raceService;
+	@RequestMapping(value = "ininp",method=RequestMethod.GET)
+	@ResponseBody
+	public String ininp(String phone,int type,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			tongjiService.updatePersonTonji(phone, type);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", null);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"更新失败:"+e.getLocalizedMessage(), null);
+		}
+	}
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody

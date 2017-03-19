@@ -11,14 +11,15 @@
 		<result column="position" property="position" jdbcType="INTEGER" />
 		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
 		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items
+	id,race_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items,type
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceResults">
-  	insert into race_result_#{tbinedex} (race_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items) 
-  		values (#{raceId},#{raceScheduleTeamId},#{teamId},#{phone},#{number},#{position},#{collectItems},#{judgeItems})
+  	insert into race_result_#{tbinedex} (race_id,race_schedule_team_id,team_id,phone,number,position,collect_items,judge_items,type) 
+  		values (#{raceId},#{raceScheduleTeamId},#{teamId},#{phone},#{number},#{position},#{collectItems},#{judgeItems},#{type})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceResults">
@@ -28,7 +29,8 @@
   		team_id = #{teamId},
   		position = #{position},
   		collect_items = #{collectItems},
-  		judge_items = #{judgeItems}
+  		judge_items = #{judgeItems},
+  		type = #{type}
   		where race_schedule_team_id=#{raceScheduleTeamId} and id = #{id}
   </update>
   
@@ -37,6 +39,12 @@
   	<include refid="Base_Column_List"></include>
   	from race_result_#{tbinedex} where race_schedule_team_id=#{raceScheduleTeamId} 
   	limit #{begin},#{size}
+  </select>
+  
+  <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_result_#{tbinedex} where phone = #{phone} and type = #{type}
   </select>
   
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
