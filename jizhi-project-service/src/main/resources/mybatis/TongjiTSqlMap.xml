@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tongjit" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.TongjiT" >
+		<id column="team_id" property="teamId" jdbcType="VARCHAR" />
+		<result column="counts" property="counts" jdbcType="INTEGER" />
+		<result column="points" property="points" jdbcType="DOUBLE" />
+		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
+		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	team_id,counts,points,collect_items,judge_items
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.TongjiT">
+  	insert into race_tongji_t (team_id,counts,points,collect_items,judge_items) 
+  		values (#{teamId},#{counts},#{points},#{collectItems},#{judgeItems})
+  </insert>
+  
+  <update id="update" parameterType="com.jizhi.model.TongjiT">
+  	update race_tongji_t set 
+  		counts = #{counts},
+  		points = #{points},
+  		collect_items = #{collectItems},
+  		judge_items = #{judgeItems}
+  		where team_id = #{teamId}
+  </update>
+  
+  <select id="queryById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_tongji_t where team_id = #{teamId}
+  </select>
+  
+</mapper>

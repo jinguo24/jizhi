@@ -33,7 +33,7 @@ public class RaceScheduleController {
 			if ( null != raceId) {
 				ira = raceId;
 			}
-			PageResult races = raceScheduleTeamService.getRacePageResult(ira,page, pageSize);
+			PageResult races = raceScheduleTeamService.getRacePageResult(ira,null,0,page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", races);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

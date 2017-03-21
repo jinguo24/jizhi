@@ -2,6 +2,12 @@ package com.jizhi.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
+
+import org.springframework.util.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 /**
  * 赛程小组队伍
  * @author zhengfy1
@@ -20,8 +26,12 @@ public class RaceScheduleTeam implements Serializable{
 	private String teamTwo;//第二队
 	private String teamTwoName;
 	private String successTeamId;//获胜球队编号
+	private Double teamOnePoints;
+	private Double teamTwoPoints;
 	private String collectItems;//收集数据项json
+	private Map<Integer,Double> collectItemsMap;
 	private String judgeItems;//评判数据项json
+	private Map<Integer,Double> judgeItemsMap;
 	private int type;
 	public int getId() {
 		return id;
@@ -64,12 +74,18 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
+		if (!StringUtils.isEmpty(collectItems)) {
+			this.collectItemsMap = (Map<Integer,Double>) JSONArray.parse(collectItems);
+		}
 	}
 	public String getJudgeItems() {
 		return judgeItems;
 	}
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
+		if (!StringUtils.isEmpty(judgeItems)) {
+			this.judgeItemsMap = (Map<Integer,Double>) JSONArray.parse(judgeItems);
+		}
 	}
 	public Date getBeginDate() {
 		return beginDate;
@@ -106,5 +122,35 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public Double getTeamOnePoints() {
+		return teamOnePoints;
+	}
+	public void setTeamOnePoints(Double teamOnePoints) {
+		this.teamOnePoints = teamOnePoints;
+	}
+	public Double getTeamTwoPoints() {
+		return teamTwoPoints;
+	}
+	public void setTeamTwoPoints(Double teamTwoPoints) {
+		this.teamTwoPoints = teamTwoPoints;
+	}
+	public Map<Integer, Double> getCollectItemsMap() {
+		return collectItemsMap;
+	}
+	public void setCollectItemsMap(Map<Integer, Double> collectItemsMap) {
+		this.collectItemsMap = collectItemsMap;
+		if ( null != collectItemsMap) {
+			this.collectItems = JSONObject.toJSONString(collectItemsMap);
+		}
+	}
+	public Map<Integer, Double> getJudgeItemsMap() {
+		return judgeItemsMap;
+	}
+	public void setJudgeItemsMap(Map<Integer, Double> judgeItemsMap) {
+		this.judgeItemsMap = judgeItemsMap;
+		if ( null != judgeItemsMap) {
+			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
+		}
 	}
 }

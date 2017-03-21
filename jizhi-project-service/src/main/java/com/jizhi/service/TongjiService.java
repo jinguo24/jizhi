@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jizhi.dao.RaceResultsDao;
+import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiPDao;
 import com.jizhi.model.RaceResults;
+import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.TongjiP;
+import com.jizhi.model.TongjiT;
 @Service
 public class TongjiService {
 
@@ -19,6 +22,8 @@ public class TongjiService {
 	private TongjiPDao tongjipDao;
 	@Autowired
 	private RaceResultsDao raceResultsDao;
+	@Autowired
+	private RaceScheduleTeamDao raceScheduleTeamDao;
 	
 	public void addTongjiPerson(TongjiP tongjip) {
 		tongjipDao.addTongjiPerson(tongjip);
@@ -134,8 +139,62 @@ public class TongjiService {
 	}
 	
 	
-	public void updateTeamTonji() {
-		
+	public void updateTeamTonji(String teamId,int type) {
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, teamId, type, 0, 10000);
+		if ( null != rsts) {
+			//球队位置数据项统计
+			Map<Integer,Double> collectionMap = new HashMap<Integer,Double>();
+			//球队位置评判统计
+			Map<Integer,Double> judgeMap = new HashMap<Integer,Double>();
+			//总分数
+			Double points = 0.00;
+			for (int i = 0 ; i < rsts.size() ; i ++) {
+				RaceScheduleTeam rst = rsts.get(i);
+				//设置数据收集项
+				Map<Integer,Double> citems= rst.getCollectItemsMap();
+				if ( null != citems) {
+					//设置数据收集项
+					for (Iterator<Integer> it = citems.keySet().iterator();it.hasNext();) {
+						Integer itemId = it.next();
+						Double value = citems.get(itemId);
+						Double oldValue = collectionMap.get(itemId);
+						if ( null == oldValue) {
+							collectionMap.put(itemId, value);
+						}else {
+							collectionMap.put(itemId, oldValue+value);
+						}
+					}
+				}
+				//设置评判项
+				Map<Integer,Double> jitems= rst.getJudgeItemsMap();
+				if ( null != jitems) {
+					//设置数据收集项
+					for (Iterator<Integer> it = jitems.keySet().iterator();it.hasNext();) {
+						Integer itemId = it.next();
+						Double value = citems.get(itemId);
+						Double oldValue = judgeMap.get(itemId);
+						if ( null == oldValue) {
+							judgeMap.put(itemId, value);
+						}else {
+							judgeMap.put(itemId, oldValue+value);
+						}
+					}
+				}
+				//总分数
+				if (teamId.equals(rst.getTeamOne())) {
+					points = points + rst.getTeamOnePoints();
+				}else if (teamId.equals(rst.getTeamTwo())) {
+					points = points + rst.getTeamTwoPoints();
+				}
+			}
+			
+			TongjiT tt = new TongjiT();
+			tt.setCollectItemsMap(collectionMap);
+			tt.setJudgeItemsMap(judgeMap);
+			tt.setPoints(points);
+			tt.setCounts(rsts.size());
+			tt.setTeamId(teamId);
+		}
 	}
 	
 }

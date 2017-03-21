@@ -14,20 +14,20 @@ public class RaceScheduleTeamService {
 	@Autowired
 	private RaceScheduleTeamDao raceScheduleTeamDao;
 	
-	public List<RaceScheduleTeam> queryList(int raceId, int pageIndex,int pageSize) {
+	public List<RaceScheduleTeam> queryList(int raceId,String teamId,int type, int pageIndex,int pageSize) {
 		if (pageIndex <=0 ) {
 			pageIndex = 1;
 		}
-		return raceScheduleTeamDao.query(raceId,(pageIndex-1)*pageSize, pageSize);
+		return raceScheduleTeamDao.query(raceId,teamId,type,(pageIndex-1)*pageSize, pageSize);
 	}
 	
-	public Integer queryCount(int raceId) {
-		return raceScheduleTeamDao.queryCount(raceId);
+	public Integer queryCount(int raceId,String teamId,int type) {
+		return raceScheduleTeamDao.queryCount(raceId,teamId,type);
 	}
 	
-	public PageResult getRacePageResult(int raceId,int pageIndex,int pageSize) {
-		List<RaceScheduleTeam> races = queryList(raceId,pageIndex,pageSize);
-		int count = queryCount(raceId);
+	public PageResult getRacePageResult(int raceId,String teamId,int type,int pageIndex,int pageSize) {
+		List<RaceScheduleTeam> races = queryList(raceId,teamId,type,pageIndex,pageSize);
+		int count = queryCount(raceId,teamId,type);
 		return new PageResult(count,pageSize,pageIndex,races);
 	}
 	
