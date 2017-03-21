@@ -19,7 +19,7 @@ public class TongjiController {
 	@Autowired
 	TongjiService tongjiService;
 	
-	@RequestMapping(value = "ininp",method=RequestMethod.GET)
+	@RequestMapping(value = "initp",method=RequestMethod.GET)
 	@ResponseBody
 	public String ininp(String phone,int type,HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -30,9 +30,9 @@ public class TongjiController {
 		}
 	}
 	
-	@RequestMapping(value = "list",method=RequestMethod.GET)
+	@RequestMapping(value = "initt",method=RequestMethod.GET)
 	@ResponseBody
-	public String list(String name,int type,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String list(String teamId,int type,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			//PageResult races = raceService.getRacePageResult(name,type, page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", null);

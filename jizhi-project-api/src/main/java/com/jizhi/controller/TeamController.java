@@ -1,6 +1,7 @@
 package com.jizhi.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -235,6 +236,7 @@ public class TeamController {
 					initRaceInfo(teams.get(i));
 				}
 			}
+			Collections.sort(teams);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
 		}catch(Exception e) {
 			e.printStackTrace();

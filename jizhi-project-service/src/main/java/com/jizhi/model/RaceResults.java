@@ -29,6 +29,7 @@ public class RaceResults implements Serializable{
 	private Map<Integer,Double> collectItemsMap;
 	private String judgeItems;//评判数据项json
 	private Map<Integer,Double> judgeItemsMap;
+	private Double points;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -119,5 +120,11 @@ public class RaceResults implements Serializable{
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public Double getPoints() {
+		return points;
+	}
+	public void setPoints(Double points) {
+		this.points = points;
 	}
 }

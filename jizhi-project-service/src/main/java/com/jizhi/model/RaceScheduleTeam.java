@@ -22,6 +22,7 @@ public class RaceScheduleTeam implements Serializable{
 	private String successTeamId;//获胜球队编号
 	private String collectItems;//收集数据项json
 	private String judgeItems;//评判数据项json
+	private int type;
 	public int getId() {
 		return id;
 	}
@@ -99,5 +100,11 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setTeamTwoName(String teamTwoName) {
 		this.teamTwoName = teamTwoName;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 }

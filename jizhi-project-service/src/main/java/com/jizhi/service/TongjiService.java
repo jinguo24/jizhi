@@ -62,6 +62,8 @@ public class TongjiService {
 		Map<Integer,Map<Integer,Double>> positionsJudgeMap = new HashMap<Integer,Map<Integer,Double>>();
 		//总数
 		Map<Integer,Integer> countsMap = new HashMap<Integer,Integer>();
+		//总分数
+		Double points = 0.00;
 		//查询用户所有的统计数据，根据type分类，然后把统计项和评判项的对应值相加
 		for (int i = 0 ;i < 10 ; i ++) {
 			List<RaceResults> rrlist = raceResultsDao.queryByPhone(i, tj.getPhone(),tj.getType());
@@ -120,13 +122,20 @@ public class TongjiService {
 					}else {
 						countsMap.put(rr.getPosition(), 1);
 					}
+					//总分数
+					points = points + rr.getPoints();
 				}
 			}
 		}
 		tj.setCollectItemsMap(positionsCollectionMap);
 		tj.setJudgeItemsMap(positionsJudgeMap);
 		tj.setRaceCountsMap(countsMap);
+		tj.setPoints(points);
 	}
 	
+	
+	public void updateTeamTonji() {
+		
+	}
 	
 }

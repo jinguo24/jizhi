@@ -8,21 +8,23 @@
 		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
 		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
 		<result column="race_counts" property="raceCounts" jdbcType="VARCHAR" />
+		<result column="points" property="points" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,phone,type,collect_items,judge_items,race_counts
+	id,phone,type,collect_items,judge_items,race_counts,points
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TongjiP">
-  	insert into race_tongji_p_#{tbinedex} (phone,type,collect_items,judge_items,race_counts) 
-  		values (#{phone},#{type},#{collectItems},#{judgeItems},#{raceCounts})
+  	insert into race_tongji_p_#{tbinedex} (phone,type,collect_items,judge_items,race_counts,points) 
+  		values (#{phone},#{type},#{collectItems},#{judgeItems},#{raceCounts},#{points})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TongjiP">
   	update race_tongji_p_#{tbinedex} set 
   		collect_items = #{collectItems},
   		judge_items = #{judgeItems},
-  		race_counts = #{raceCounts}
+  		race_counts = #{raceCounts},
+  		points = #{points}
   		where phone=#{phone} and type = #{type}
   </update>
   

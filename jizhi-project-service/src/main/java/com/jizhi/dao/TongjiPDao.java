@@ -13,7 +13,7 @@ import com.simple.common.mybatis.annotation.DatabaseTemplate;
 import com.simple.common.mybatis.dao.BaseIbatisDao;
 
 @Repository
-@DatabaseTemplate("ds_all_tongji")
+@DatabaseTemplate("st_all_tongji")
 public class TongjiPDao extends BaseIbatisDao {
 
 	Logger logger = LoggerFactory.getLogger(getClass());

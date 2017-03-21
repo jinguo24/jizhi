@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jizhi.model.Race;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.service.RaceScheduleTeamService;
+import com.jizhi.service.RaceService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
 
@@ -20,6 +22,8 @@ public class RaceScheduleController {
 	
 	@Autowired
 	private RaceScheduleTeamService raceScheduleTeamService;
+	@Autowired
+	private RaceService raceService;
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
@@ -40,6 +44,8 @@ public class RaceScheduleController {
 	@ResponseBody
 	public String add(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			Race race = raceService.queryById(raceSchedule.getId());
+			raceSchedule.setType(race.getType());
 			raceScheduleTeamService.addRacePageResult(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {
@@ -62,6 +68,8 @@ public class RaceScheduleController {
 	@ResponseBody
 	public String update(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			Race race = raceService.queryById(raceSchedule.getId());
+			raceSchedule.setType(race.getType());
 			raceScheduleTeamService.updateRaceScheduleTeam(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", null);
 		}catch(Exception e) {

@@ -5,8 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simple.common.util.DateUtil;
 
-public class TeamRaceApply implements Serializable{
+public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,6 +24,7 @@ public class TeamRaceApply implements Serializable{
 	private String leaderName;
 	private Date createTime;
 	private List<RacePersonApply> members;
+	
 	public String getId() {
 		return id;
 	}
@@ -104,5 +106,9 @@ public class TeamRaceApply implements Serializable{
 	@Override
 	public String toString() {
 		return JSONObject.toJSONString(this);
+	}
+	@Override
+	public int compareTo(TeamRaceApply o) {
+		return o.getCreateTime().compareTo(this.getCreateTime());
 	}
 }

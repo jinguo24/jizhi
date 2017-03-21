@@ -22,6 +22,7 @@ public class TongjiP implements Serializable{
 	private Map<Integer,Map<Integer,Double>> judgeItemsMap = new HashMap<Integer,Map<Integer,Double>>();
 	private String raceCounts;//赛事总数
 	private Map<Integer,Integer> raceCountsMap;
+	private Double points;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -100,6 +101,12 @@ public class TongjiP implements Serializable{
 		if ( null != raceCountsMap) {
 			this.raceCounts = JSONObject.toJSONString(raceCountsMap);
 		}
+	}
+	public Double getPoints() {
+		return points;
+	}
+	public void setPoints(Double points) {
+		this.points = points;
 	}
 	public void clearItems() {
 		this.collectItems = null;
