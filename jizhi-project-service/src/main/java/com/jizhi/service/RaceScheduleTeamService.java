@@ -14,20 +14,20 @@ public class RaceScheduleTeamService {
 	@Autowired
 	private RaceScheduleTeamDao raceScheduleTeamDao;
 	
-	public List<RaceScheduleTeam> queryList(int raceId,String teamId,int type, int pageIndex,int pageSize) {
+	public List<RaceScheduleTeam> queryList(int raceId,String teamId,int type,int status, int pageIndex,int pageSize) {
 		if (pageIndex <=0 ) {
 			pageIndex = 1;
 		}
-		return raceScheduleTeamDao.query(raceId,teamId,type,(pageIndex-1)*pageSize, pageSize);
+		return raceScheduleTeamDao.query(raceId,teamId,type,status,(pageIndex-1)*pageSize, pageSize);
 	}
 	
-	public Integer queryCount(int raceId,String teamId,int type) {
-		return raceScheduleTeamDao.queryCount(raceId,teamId,type);
+	public Integer queryCount(int raceId,String teamId,int type,int status) {
+		return raceScheduleTeamDao.queryCount(raceId,teamId,type,status);
 	}
 	
-	public PageResult getRacePageResult(int raceId,String teamId,int type,int pageIndex,int pageSize) {
-		List<RaceScheduleTeam> races = queryList(raceId,teamId,type,pageIndex,pageSize);
-		int count = queryCount(raceId,teamId,type);
+	public PageResult getRacePageResult(int raceId,String teamId,int type,int status,int pageIndex,int pageSize) {
+		List<RaceScheduleTeam> races = queryList(raceId,teamId,type,status,pageIndex,pageSize);
+		int count = queryCount(raceId,teamId,type,status);
 		return new PageResult(count,pageSize,pageIndex,races);
 	}
 	
@@ -42,6 +42,11 @@ public class RaceScheduleTeamService {
 	public void updateRaceScheduleTeam(RaceScheduleTeam race) {
 		raceScheduleTeamDao.updateRaceScheduleTeam(race);
 	}
+	
+	public void updateRaceScheduleTeamStatus(int raceId,int status) {
+		raceScheduleTeamDao.updateStatus(raceId, status);
+	}
+	
 	
 	public void delete(int id) {
 		raceScheduleTeamDao.deleteById(id);

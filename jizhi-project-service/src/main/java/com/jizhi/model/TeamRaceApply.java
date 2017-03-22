@@ -24,6 +24,8 @@ public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 	private String leaderName;
 	private Date createTime;
 	private List<RacePersonApply> members;
+	private String token;//token
+	private int currentLeader;//当前用户是否领队
 	
 	public String getId() {
 		return id;
@@ -102,6 +104,18 @@ public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public int getCurrentLeader() {
+		return currentLeader;
+	}
+	public void setCurrentLeader(int currentLeader) {
+		this.currentLeader = currentLeader;
 	}
 	@Override
 	public String toString() {

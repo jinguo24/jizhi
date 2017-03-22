@@ -27,13 +27,13 @@ public class RaceScheduleController {
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
-	public String list(Integer raceId,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String list(Integer raceId,int status,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			int ira = 0;
 			if ( null != raceId) {
 				ira = raceId;
 			}
-			PageResult races = raceScheduleTeamService.getRacePageResult(ira,null,0,page, pageSize);
+			PageResult races = raceScheduleTeamService.getRacePageResult(ira,null,0,status,page, pageSize);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", races);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
@@ -44,7 +44,7 @@ public class RaceScheduleController {
 	@ResponseBody
 	public String add(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Race race = raceService.queryById(raceSchedule.getId());
+			Race race = raceService.queryById(raceSchedule.getRaceId());
 			raceSchedule.setType(race.getType());
 			raceScheduleTeamService.addRacePageResult(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
@@ -68,7 +68,7 @@ public class RaceScheduleController {
 	@ResponseBody
 	public String update(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Race race = raceService.queryById(raceSchedule.getId());
+			Race race = raceService.queryById(raceSchedule.getRaceId());
 			raceSchedule.setType(race.getType());
 			raceScheduleTeamService.updateRaceScheduleTeam(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", null);
@@ -76,6 +76,18 @@ public class RaceScheduleController {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"更新失败:"+e.getLocalizedMessage(), null);
 		}
 	}
+	
+	@RequestMapping(value = "updateStatus",method=RequestMethod.POST)
+	@ResponseBody
+	public String updateStatus(int raceId,int status,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			raceScheduleTeamService.updateRaceScheduleTeamStatus(raceId, status);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", null);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"更新失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+	
 	
 	@RequestMapping(value = "delete",method=RequestMethod.POST)
 	@ResponseBody

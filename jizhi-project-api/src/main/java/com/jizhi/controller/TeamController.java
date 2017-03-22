@@ -268,12 +268,21 @@ public class TeamController {
 			if (!dephone.equals(currentPhone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
-			
 			TeamRaceApply team = queryTeamApply(id,request);
+			if ( null != team) {
+				String teamToken = LocalUtil.entryLeader(team.getId());
+				team.setToken(teamToken);
+				if (dephone.equals(team.getLeaderPhone())) {
+					team.setCurrentLeader(1);
+				}
+			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", team);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
 		}
 	}
+	
+	
+	
 }

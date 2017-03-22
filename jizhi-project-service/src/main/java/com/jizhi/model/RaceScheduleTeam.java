@@ -26,13 +26,13 @@ public class RaceScheduleTeam implements Serializable{
 	private String teamTwo;//第二队
 	private String teamTwoName;
 	private String successTeamId;//获胜球队编号
-	private Double teamOnePoints;
-	private Double teamTwoPoints;
 	private String collectItems;//收集数据项json
 	private Map<Integer,Double> collectItemsMap;
 	private String judgeItems;//评判数据项json
 	private Map<Integer,Double> judgeItemsMap;
 	private int type;
+	private String address;
+	private int status ;
 	public int getId() {
 		return id;
 	}
@@ -123,18 +123,6 @@ public class RaceScheduleTeam implements Serializable{
 	public void setType(int type) {
 		this.type = type;
 	}
-	public Double getTeamOnePoints() {
-		return teamOnePoints;
-	}
-	public void setTeamOnePoints(Double teamOnePoints) {
-		this.teamOnePoints = teamOnePoints;
-	}
-	public Double getTeamTwoPoints() {
-		return teamTwoPoints;
-	}
-	public void setTeamTwoPoints(Double teamTwoPoints) {
-		this.teamTwoPoints = teamTwoPoints;
-	}
 	public Map<Integer, Double> getCollectItemsMap() {
 		return collectItemsMap;
 	}
@@ -152,5 +140,17 @@ public class RaceScheduleTeam implements Serializable{
 		if ( null != judgeItemsMap) {
 			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
 		}
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }

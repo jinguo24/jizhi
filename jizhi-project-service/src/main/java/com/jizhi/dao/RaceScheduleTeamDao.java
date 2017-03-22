@@ -26,21 +26,23 @@ public class RaceScheduleTeamDao extends BaseIbatisDao {
 		this.sqlSession.update("raceScheduleTeam.update",raceScheduleTeam);
 	}
 	
-	public List<RaceScheduleTeam> query(int raceId,String teamId,int type,int begin,int size) {
+	public List<RaceScheduleTeam> query(int raceId,String teamId,int type,int status,int begin,int size) {
 		Map param = new HashMap();
 		param.put("raceId", raceId);
 		param.put("teamId", teamId);
 		param.put("type", type);
+		param.put("status", status);
 		param.put("begin", begin);
 		param.put("size", size);
 		return this.sqlSession.selectList("raceScheduleTeam.query",param);
 	}
 	
-	public Integer queryCount(int raceId,String teamId,int type) {
+	public Integer queryCount(int raceId,String teamId,int type,int status) {
 		Map param = new HashMap();
 		param.put("raceId", raceId);
 		param.put("teamId", teamId);
 		param.put("type", type);
+		param.put("status", status);
 		return this.sqlSession.selectOne("raceScheduleTeam.queryCount",param);
 	}
 	
@@ -50,5 +52,12 @@ public class RaceScheduleTeamDao extends BaseIbatisDao {
 	
 	public void deleteById(int id) {
 		this.sqlSession.delete("raceScheduleTeam.delete",id);
+	}
+	
+	public void updateStatus(int raceId,int status) {
+		Map param = new HashMap();
+		param.put("raceId", raceId);
+		param.put("status", status);
+		this.sqlSession.update("raceScheduleTeam.updateStatusByRaceId",param);
 	}
 }

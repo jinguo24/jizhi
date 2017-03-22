@@ -140,7 +140,7 @@ public class TongjiService {
 	
 	
 	public void updateTeamTonji(String teamId,int type) {
-		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, teamId, type, 0, 10000);
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, teamId, type,2, 0, 10000);
 		if ( null != rsts) {
 			//球队位置数据项统计
 			Map<Integer,Double> collectionMap = new HashMap<Integer,Double>();
@@ -180,11 +180,11 @@ public class TongjiService {
 						}
 					}
 				}
-				//总分数
+				//TODO 总分数
 				if (teamId.equals(rst.getTeamOne())) {
-					points = points + rst.getTeamOnePoints();
+					//points = points + rst.getTeamOnePoints();
 				}else if (teamId.equals(rst.getTeamTwo())) {
-					points = points + rst.getTeamTwoPoints();
+					//points = points + rst.getTeamTwoPoints();
 				}
 			}
 			

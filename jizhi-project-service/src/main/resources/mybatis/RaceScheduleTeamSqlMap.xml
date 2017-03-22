@@ -16,16 +16,16 @@
 		<result column="team_one_name" property="teamOneName" jdbcType="VARCHAR" />
 		<result column="team_two_name" property="teamTwoName" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="INTEGER" />
-		<result column="team_one_points" property="teamOnePoints" jdbcType="DOUBLE" />
-		<result column="team_two_points" property="teamTwoPoints" jdbcType="DOUBLE" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,team_one_name,team_two_name,type,team_one_points,team_two_points
+	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,team_one_name,team_two_name,type,address,status
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceScheduleTeam">
-  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,team_one_name,team_two_name,type,team_one_points,team_two_points) 
-  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{teamOneName},#{teamTwoName},#{type},#{teamOnePoints},#{teamTwoPoints})
+  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,team_one_name,team_two_name,type,address,status) 
+  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{teamOneName},#{teamTwoName},#{type},#{address},#{status})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceScheduleTeam">
@@ -42,8 +42,8 @@
   		team_one_name = #{teamOneName},
   		team_two_name = #{teamTwoName},
   		type = #{type},
-  		team_one_points = #{teamOnePoints},
-  		team_two_points = #{teamTwoPoints}
+  		address = #{address},
+  		status = #{status}
   		where race_id = #{raceId} 
   </update>
   
@@ -54,6 +54,7 @@
   	<if test="raceId > 0 " > and race_id=#{raceId}</if>
   	<if test="teamId != null and teamId != '' " > and (team_one = #{teamId} or team_two = #{teamId})</if>
   	<if test="type > 0 " > and type=#{type}</if>
+  	<if test="status > 0 " > and status=#{status}</if>
   	order by begin_date desc ,sort asc
   	limit #{begin},#{size}
   </select>
@@ -65,6 +66,7 @@
   	<if test="raceId > 0 " > and race_id=#{raceId}</if>
   	  	<if test="teamId != null and teamId != '' " > and (team_one = #{teamId} or team_two = #{teamId})</if>
   	<if test="type > 0 " > and type=#{type}</if>
+  	<if test="status > 0 " > and status=#{status}</if>
   </select>
   
   <select id="queryById" resultMap="BaseResultMap" parameterType="Integer">
@@ -76,5 +78,9 @@
   <delete id="delete" parameterType="Integer">
   	delete from race_schedule_team where id = #{id}
   </delete>
+  
+  <update id="updateStatusByRaceId" parameterType="java.util.HashMap">
+  	update race_schedule_team set status = #{status} where race_id = #{raceId} 
+  </update>
   
 </mapper>
