@@ -1,10 +1,17 @@
 package com.jizhi.admin.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,6 +20,7 @@ import com.jizhi.model.Race;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
+import com.jizhi.service.TeamService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
 
@@ -24,6 +32,8 @@ public class RaceScheduleController {
 	private RaceScheduleTeamService raceScheduleTeamService;
 	@Autowired
 	private RaceService raceService;
+	@Autowired
+	private TeamService teamService;
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
@@ -34,10 +44,28 @@ public class RaceScheduleController {
 				ira = raceId;
 			}
 			PageResult races = raceScheduleTeamService.getRacePageResult(ira,null,0,status,page, pageSize);
+			List<RaceScheduleTeam> teams = races.getDatas();
+			if ( null != teams ) {
+				for (int i =0; i < teams.size() ; i ++) {
+					RaceScheduleTeam rst = teams.get(i);
+					rst.setTeamOneObj(teamService.getById(rst.getTeamOne()));
+					rst.setTeamTwoObj(teamService.getById(rst.getTeamTwo()));
+				}
+			}
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", races);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
 		}
+	}
+	
+	/**
+	 * 处理时间
+	 * @param binder
+	 */
+	@InitBinder  
+	protected  void initBinder(WebDataBinder binder) {  
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));  
 	}
 	
 	@RequestMapping(value = "add",method=RequestMethod.POST)

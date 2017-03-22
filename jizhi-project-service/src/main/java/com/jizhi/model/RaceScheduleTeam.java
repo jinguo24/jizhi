@@ -22,9 +22,9 @@ public class RaceScheduleTeam implements Serializable{
 	private String endTime;//结束时间
 	private int sort;
 	private String teamOne;//第一队
-	private String teamOneName;
+	private Team teamOneObj;
 	private String teamTwo;//第二队
-	private String teamTwoName;
+	private Team teamTwoObj;
 	private String successTeamId;//获胜球队编号
 	private String collectItems;//收集数据项json
 	private Map<Integer,Double> collectItemsMap;
@@ -105,18 +105,6 @@ public class RaceScheduleTeam implements Serializable{
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	public String getTeamOneName() {
-		return teamOneName;
-	}
-	public void setTeamOneName(String teamOneName) {
-		this.teamOneName = teamOneName;
-	}
-	public String getTeamTwoName() {
-		return teamTwoName;
-	}
-	public void setTeamTwoName(String teamTwoName) {
-		this.teamTwoName = teamTwoName;
-	}
 	public int getType() {
 		return type;
 	}
@@ -152,5 +140,17 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public Team getTeamOneObj() {
+		return teamOneObj;
+	}
+	public void setTeamOneObj(Team teamOneObj) {
+		this.teamOneObj = teamOneObj;
+	}
+	public Team getTeamTwoObj() {
+		return teamTwoObj;
+	}
+	public void setTeamTwoObj(Team teamTwoObj) {
+		this.teamTwoObj = teamTwoObj;
 	}
 }
