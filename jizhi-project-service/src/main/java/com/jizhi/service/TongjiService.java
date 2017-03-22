@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.jizhi.dao.RaceResultsDao;
 import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiPDao;
+import com.jizhi.dao.TongjiTDao;
 import com.jizhi.model.RaceResults;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.TongjiP;
@@ -24,6 +25,8 @@ public class TongjiService {
 	private RaceResultsDao raceResultsDao;
 	@Autowired
 	private RaceScheduleTeamDao raceScheduleTeamDao;
+	@Autowired
+	private TongjiTDao tongjitDao;
 	
 	public void addTongjiPerson(TongjiP tongjip) {
 		tongjipDao.addTongjiPerson(tongjip);
@@ -161,9 +164,26 @@ public class TongjiService {
 		tj.setPoints(points);
 	}
 	
-	
 	public void updateTeamTonji(String teamId,int type) {
-		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, teamId, type,2, 0, 10000);
+		TongjiT tongjit =tongjitDao.getById(teamId);
+		boolean isNew = false;
+		if ( null == tongjit) {
+			isNew = true;
+			tongjit = new TongjiT();
+			tongjit.setTeamId(teamId);
+		}else {
+			tongjit.clearItems();
+		}
+		updateTeamTonji(tongjit,type);
+		if (isNew) {
+			tongjitDao.addTongjiTeam(tongjit);
+		}else {
+			tongjitDao.update(tongjit);
+		}
+	}
+	
+	private void updateTeamTonji(TongjiT tt,int type) {
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, tt.getTeamId(), type,2, 0, 10000);
 		if ( null != rsts) {
 			//球队位置数据项统计
 			Map<Integer,Double> collectionMap = new HashMap<Integer,Double>();
@@ -171,6 +191,10 @@ public class TongjiService {
 			Map<Integer,Double> judgeMap = new HashMap<Integer,Double>();
 			//总分数
 			Double points = 0.00;
+			//胜
+			int wins = 0;
+			int loses = 0;
+			int evens = 0;
 			for (int i = 0 ; i < rsts.size() ; i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
 				//设置数据收集项
@@ -204,19 +228,28 @@ public class TongjiService {
 					}
 				}
 				//TODO 总分数
-				if (teamId.equals(rst.getTeamOne())) {
+				if (tt.getTeamId().equals(rst.getTeamOne())) {
 					//points = points + rst.getTeamOnePoints();
-				}else if (teamId.equals(rst.getTeamTwo())) {
+				}else if (tt.getTeamId().equals(rst.getTeamTwo())) {
 					//points = points + rst.getTeamTwoPoints();
+				}
+				
+				if (tt.getTeamId().equals(rst.getSuccessTeamId())) {
+					wins++;
+				}else if (rst.getSuccessTeamId().equals("0")) {
+					evens++;
+				}else {
+					loses++;
 				}
 			}
 			
-			TongjiT tt = new TongjiT();
 			tt.setCollectItemsMap(collectionMap);
 			tt.setJudgeItemsMap(judgeMap);
 			tt.setPoints(points);
 			tt.setCounts(rsts.size());
-			tt.setTeamId(teamId);
+			tt.setWins(wins);
+			tt.setLoses(loses);
+			tt.setEven(evens);
 		}
 	}
 	

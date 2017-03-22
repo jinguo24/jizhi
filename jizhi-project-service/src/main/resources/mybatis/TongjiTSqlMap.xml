@@ -5,22 +5,28 @@
 		<id column="team_id" property="teamId" jdbcType="VARCHAR" />
 		<result column="counts" property="counts" jdbcType="INTEGER" />
 		<result column="points" property="points" jdbcType="DOUBLE" />
+		<result column="wins" property="wins" jdbcType="INTEGER" />
+		<result column="loses" property="loses" jdbcType="INTEGER" />
+		<result column="even" property="even" jdbcType="INTEGER" />
 		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
 		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	team_id,counts,points,collect_items,judge_items
+	team_id,counts,points,wins,loses,even,collect_items,judge_items
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TongjiT">
-  	insert into race_tongji_t (team_id,counts,points,collect_items,judge_items) 
-  		values (#{teamId},#{counts},#{points},#{collectItems},#{judgeItems})
+  	insert into race_tongji_t (team_id,counts,points,wins,loses,even,collect_items,judge_items) 
+  		values (#{teamId},#{counts},#{points},#{wins},#{loses},#{even},#{collectItems},#{judgeItems})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TongjiT">
   	update race_tongji_t set 
   		counts = #{counts},
   		points = #{points},
+  		wins = #{wins},
+  		loses = #{loses},
+  		even = #{even},
   		collect_items = #{collectItems},
   		judge_items = #{judgeItems}
   		where team_id = #{teamId}

@@ -15,7 +15,7 @@ public class TongjiTDao extends BaseIbatisDao {
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
-	public void addTongjiPerson(TongjiT tongjit) {
+	public void addTongjiTeam(TongjiT tongjit) {
 		this.sqlSession.insert("tongjit.insert", tongjit);
 	}
 	

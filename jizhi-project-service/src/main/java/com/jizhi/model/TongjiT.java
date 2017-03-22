@@ -16,6 +16,9 @@ public class TongjiT implements Serializable{
 	private Team team;
 	private int counts;
 	private Double points;
+	private int wins;
+	private int loses;
+	private int even;
 	private String collectItems;
 	private Map<Integer,Double> collectItemsMap = new HashMap<Integer,Double>();
 	private String judgeItems;
@@ -80,7 +83,24 @@ public class TongjiT implements Serializable{
 	public Map<Integer, Double> getJudgeItemsMap() {
 		return judgeItemsMap;
 	}
-	
+	public int getWins() {
+		return wins;
+	}
+	public void setWins(int wins) {
+		this.wins = wins;
+	}
+	public int getLoses() {
+		return loses;
+	}
+	public void setLoses(int loses) {
+		this.loses = loses;
+	}
+	public int getEven() {
+		return even;
+	}
+	public void setEven(int even) {
+		this.even = even;
+	}
 	public void clearItems() {
 		this.collectItems = null;
 		this.collectItemsMap = null;
