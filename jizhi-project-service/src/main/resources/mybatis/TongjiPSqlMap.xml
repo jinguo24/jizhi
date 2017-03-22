@@ -6,23 +6,27 @@
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
+		<result column="collect_counts" property="collectCounts" jdbcType="VARCHAR" />
 		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+		<result column="judge_counts" property="judgeCounts" jdbcType="VARCHAR" />
 		<result column="race_counts" property="raceCounts" jdbcType="VARCHAR" />
 		<result column="points" property="points" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,phone,type,collect_items,judge_items,race_counts,points
+	id,phone,type,collect_items,collect_counts,judge_items,judge_counts,race_counts,points
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TongjiP">
-  	insert into race_tongji_p_#{tbinedex} (phone,type,collect_items,judge_items,race_counts,points) 
-  		values (#{phone},#{type},#{collectItems},#{judgeItems},#{raceCounts},#{points})
+  	insert into race_tongji_p_#{tbinedex} (phone,type,collect_items,collect_counts,judge_items,judge_counts,race_counts,points) 
+  		values (#{phone},#{type},#{collectItems},#{collectCounts},#{judgeItems},#{judgeCounts},#{raceCounts},#{points})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TongjiP">
   	update race_tongji_p_#{tbinedex} set 
   		collect_items = #{collectItems},
+  		collect_counts = #{collectCounts},
   		judge_items = #{judgeItems},
+  		judge_counts = #{judgeCounts},
   		race_counts = #{raceCounts},
   		points = #{points}
   		where phone=#{phone} and type = #{type}

@@ -63,9 +63,11 @@ public class TongjiService {
 	private void setTonji(TongjiP tj) {
 		//球队位置数据项统计
 		Map<Integer,Map<Integer,Double>> positionsCollectionMap = new HashMap<Integer,Map<Integer,Double>>();
+		Map<Integer,Map<Integer,Integer>> positionsCollectionCountsMap = new HashMap<Integer,Map<Integer,Integer>>();
 		//球队位置评判统计
 		Map<Integer,Map<Integer,Double>> positionsJudgeMap = new HashMap<Integer,Map<Integer,Double>>();
-		//总数
+		Map<Integer,Map<Integer,Integer>> positionsJudgeCountsMap = new HashMap<Integer,Map<Integer,Integer>>();
+		//位置比赛总场数
 		Map<Integer,Integer> countsMap = new HashMap<Integer,Integer>();
 		//总分数
 		Double points = 0.00;
@@ -79,12 +81,20 @@ public class TongjiService {
 					Map<Integer,Double> citems= rr.getCollectItemsMap();
 					if ( null != citems) {
 						Map<Integer,Double> collectitems;
+						Map<Integer,Integer> collectcounts;
 						if (positionsCollectionMap.containsKey(rr.getPosition())) {
 							collectitems = (Map<Integer, Double>) positionsCollectionMap.get(rr.getPosition());
 						}else {
 							collectitems = new HashMap<Integer,Double>();
 							positionsCollectionMap.put(rr.getPosition(), collectitems);
 						}
+						if (positionsCollectionCountsMap.containsKey(rr.getPosition())) {
+							collectcounts = (Map<Integer, Integer>) positionsCollectionCountsMap.get(rr.getPosition());
+						}else {
+							collectcounts = new HashMap<Integer,Integer>();
+							positionsCollectionCountsMap.put(rr.getPosition(), collectcounts);
+						}
+						
 						//设置数据收集项
 						for (Iterator<Integer> it = citems.keySet().iterator();it.hasNext();) {
 							Integer itemId = it.next();
@@ -95,17 +105,26 @@ public class TongjiService {
 							}else {
 								collectitems.put(itemId, oldValue+value);
 							}
+							Integer c = collectcounts.get(itemId);
+							collectcounts.put(itemId, c+1);
 						}
 					}
 					//设置评判项
 					Map<Integer,Double> jitems= rr.getJudgeItemsMap();
 					if ( null != jitems) {
 						Map<Integer,Double> judgeitems;
+						Map<Integer,Integer> judgecounts;
 						if (positionsJudgeMap.containsKey(rr.getPosition())) {
 							judgeitems = (Map<Integer, Double>) positionsJudgeMap.get(rr.getPosition());
 						}else {
 							judgeitems = new HashMap<Integer,Double>();
 							positionsJudgeMap.put(rr.getPosition(), judgeitems);
+						}
+						if (positionsJudgeCountsMap.containsKey(rr.getPosition())) {
+							judgecounts = (Map<Integer, Integer>) positionsJudgeCountsMap.get(rr.getPosition());
+						}else {
+							judgecounts = new HashMap<Integer,Integer>();
+							positionsJudgeCountsMap.put(rr.getPosition(), judgecounts);
 						}
 						//设置数据收集项
 						for (Iterator<Integer> it = jitems.keySet().iterator();it.hasNext();) {
@@ -117,6 +136,8 @@ public class TongjiService {
 							}else {
 								judgeitems.put(itemId, oldValue+value);
 							}
+							Integer c = judgecounts.get(itemId);
+							judgecounts.put(itemId, c+1);
 						}
 					}
 					
@@ -135,6 +156,8 @@ public class TongjiService {
 		tj.setCollectItemsMap(positionsCollectionMap);
 		tj.setJudgeItemsMap(positionsJudgeMap);
 		tj.setRaceCountsMap(countsMap);
+		tj.setCollectCountsMap(positionsCollectionCountsMap);
+		tj.setJudgeCountsMap(positionsJudgeCountsMap);
 		tj.setPoints(points);
 	}
 	
