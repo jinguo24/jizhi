@@ -72,10 +72,21 @@
   <select id="queryValidByIds" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from team where status in (1,2) and id in  
+  	from team where status = 1 and id in  
 	 <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">  
 	  #{item}  
 	 </foreach>  
   </select>
+  
+  <select id="queryByNames" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from team where status =1 and name in  
+	 <foreach item="item" index="index" collection="names" open="(" separator="," close=")">  
+	  #{item}  
+	 </foreach>  
+  </select>
+  
+  
   
 </mapper>

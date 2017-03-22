@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.jizhi.dao.TeamDao;
 import com.jizhi.dao.TeamMemberDao;
+import com.jizhi.dao.TeamRaceApplyDao;
 import com.jizhi.model.Team;
 import com.jizhi.model.TeamMembers;
 import com.simple.common.util.PageResult;
@@ -18,6 +19,8 @@ public class TeamService {
 	private TeamDao teamDao;
 	@Autowired
 	private TeamMemberDao teamMemeberDao;
+	@Autowired
+	private TeamRaceApplyDao teamRaceApplyDao;
 	
 	public void addTeam(Team team) {
 		teamDao.addTeam(team);
@@ -59,6 +62,14 @@ public class TeamService {
 		List<Team> teams = queryTeamList(name,status,type,pageIndex,pageSize);
 		int count = queryCount(name,status,type);
 		return new PageResult(count,pageSize,pageIndex,teams);
+	}
+	
+	public List<Team> queryTeamList(int raceId) {
+		List<String> names = teamRaceApplyDao.getTeamNames(raceId);
+		if (null == names || names.size() == 0) {
+			return null;
+		}
+		return teamDao.queryByNames(names);
 	}
 	
 	public List<TeamMembers> queryTeamMembers(String team) {

@@ -46,6 +46,7 @@ public class RaceScheduleController {
 		try {
 			Race race = raceService.queryById(raceSchedule.getRaceId());
 			raceSchedule.setType(race.getType());
+			raceSchedule.setStatus(1);
 			raceScheduleTeamService.addRacePageResult(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {

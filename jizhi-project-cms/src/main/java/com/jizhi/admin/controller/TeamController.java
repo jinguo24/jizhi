@@ -1,6 +1,6 @@
 package com.jizhi.admin.controller;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,13 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.model.Team;
-import com.jizhi.model.TeamMembers;
-import com.jizhi.model.User;
 import com.jizhi.service.TeamService;
 import com.jizhi.service.UserService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
-import com.simple.common.util.PrimaryKeyUtil;
 
 @Controller
 @RequestMapping(value = "/team")
@@ -35,6 +32,17 @@ public class TeamController {
 	public String list(String name,int status,int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			PageResult teams = teamService.getTeamPageResult(name,0, status, page, pageSize);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+	
+	@RequestMapping(value = "raceTeamlist",method=RequestMethod.GET)
+	@ResponseBody
+	public String raceTeamlist(int raceId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<Team> teams = teamService.queryTeamList(raceId);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

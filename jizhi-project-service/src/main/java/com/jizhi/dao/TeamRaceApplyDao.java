@@ -43,6 +43,10 @@ public class TeamRaceApplyDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("teamRaceApply.query",param);
 	}
 	
+	public List<String> getTeamNames(int raceId) {
+		return this.sqlSession.selectList("teamRaceApply.queryTeamNames",raceId);
+	}
+	
 	public Integer getTeamRaceApplyCount(Integer raceId,String raceName,int status,int type,String phone) {
 		Map param = new HashMap();
 		param.put("raceName", raceName);

@@ -55,7 +55,7 @@
   	<if test="teamId != null and teamId != '' " > and (team_one = #{teamId} or team_two = #{teamId})</if>
   	<if test="type > 0 " > and type=#{type}</if>
   	<if test="status > 0 " > and status=#{status}</if>
-  	order by begin_date desc ,sort asc
+  	order by sort asc
   	limit #{begin},#{size}
   </select>
   
