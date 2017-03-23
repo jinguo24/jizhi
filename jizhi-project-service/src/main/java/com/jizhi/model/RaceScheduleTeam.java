@@ -3,6 +3,7 @@ package com.jizhi.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +30,10 @@ public class RaceScheduleTeam implements Serializable{
 	private String teamTwo;//第二队
 	private Team teamTwoObj;
 	private String successTeamId;//获胜球队编号
-	private String collectItemslists="[]";
+	private String collectItemslists="";
 	private String collectItems="{}";//收集数据项json
 	private Map<String,Map<String,String>> collectItemsMap;
-	private String judgeItemslists="[]";
+	private String judgeItemslists="";
 	private String judgeItems="{}";//评判数据项json
 	private Map<String,Map<String,String>> judgeItemsMap;
 	private int type;
@@ -230,42 +231,50 @@ public class RaceScheduleTeam implements Serializable{
 	public String getJudgeItemslists() {
 		return judgeItemslists;
 	}
-	
-	private class Items implements Serializable {
-
-		private static final long serialVersionUID = 1L;
-		private String tid;
-		private List<ItemsValues> data = new ArrayList<ItemsValues>();
-		public String getTid() {
-			return tid;
-		}
-		public void setTid(String tid) {
-			this.tid = tid;
-		}
-		public List<ItemsValues> getData() {
-			return data;
-		}
-		public void setData(List<ItemsValues> data) {
-			this.data = data;
-		}
-	}
-	
-	private class ItemsValues implements Serializable{
-		private static final long serialVersionUID = 1L;
-		private String key="";
-		private String value="";
-		public String getKey() {
-			return key;
-		}
-		public void setKey(String key) {
-			this.key = key;
-		}
-		public String getValue() {
-			return value;
-		}
-		public void setValue(String value) {
-			this.value = value;
+	public void setCollectItemslists(String collectItemslists) {
+		this.collectItemslists = collectItemslists;
+		if (!StringUtils.isEmpty(collectItemslists)) {
+			List<Items> items= (List<Items>) JSONArray.parse(collectItemslists);
+			if ( null != items ) {
+				Map<String,Map<String,String>> cmaps = new HashMap<String,Map<String,String>>();
+				for (int i = 0 ; i < items.size() ; i ++) {
+					Items it = items.get(i);
+					String tid = it.getTid();
+					Map<String,String> vs = new HashMap<String,String>();
+					cmaps.put(tid, vs);
+					List<ItemsValues> ivs= it.getData();
+					if (null != ivs) {
+						for (int j = 0 ; j < ivs.size() ; j ++) {
+							ItemsValues iv = ivs.get(j);
+							vs.put(iv.getKey(), iv.getValue());
+						}
+					}
+				}
+				this.collectItems = JSONObject.toJSONString(cmaps);
+			}
 		}
 	}
-	
+	public void setJudgeItemslists(String judgeItemslists) {
+		this.judgeItemslists = judgeItemslists;
+		if (!StringUtils.isEmpty(judgeItemslists)) {
+			List<Items> items= (List<Items>) JSONArray.parse(judgeItemslists);
+			if ( null != items ) {
+				Map<String,Map<String,String>> cmaps = new HashMap<String,Map<String,String>>();
+				for (int i = 0 ; i < items.size() ; i ++) {
+					Items it = items.get(i);
+					String tid = it.getTid();
+					Map<String,String> vs = new HashMap<String,String>();
+					cmaps.put(tid, vs);
+					List<ItemsValues> ivs= it.getData();
+					if (null != ivs) {
+						for (int j = 0 ; j < ivs.size() ; j ++) {
+							ItemsValues iv = ivs.get(j);
+							vs.put(iv.getKey(), iv.getValue());
+						}
+					}
+				}
+				this.judgeItems = JSONObject.toJSONString(cmaps);
+			}
+		}
+	}
 }

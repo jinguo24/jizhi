@@ -280,6 +280,8 @@ public class TongjiService {
 			tt.setWins(wins);
 			tt.setLoses(loses);
 			tt.setEven(evens);
+			tt.setCollectItemsCountsMap(collectionCountsMap);
+			tt.setJudgeItemsCountsMap(judgeCountsMap);
 		}
 	}
 	
