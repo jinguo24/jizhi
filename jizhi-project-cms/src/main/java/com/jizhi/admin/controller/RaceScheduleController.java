@@ -82,6 +82,17 @@ public class RaceScheduleController {
 		}
 	}
 	
+	@RequestMapping(value = "updateResutls",method=RequestMethod.POST)
+	@ResponseBody
+	public String updateResutls(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			raceScheduleTeamService.updateRaceScheduleTeamResults(raceSchedule);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"添加失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+	
 	@RequestMapping(value = "detail",method=RequestMethod.GET)
 	@ResponseBody
 	public String add(int id,HttpServletRequest request, HttpServletResponse response) {

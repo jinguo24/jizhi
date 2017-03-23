@@ -43,10 +43,10 @@ public class ConstantsController {
 	
 	@RequestMapping(value = "team/collectItems",method=RequestMethod.GET)
 	@ResponseBody
-	public String tcollectItem(int raceId,int position,HttpServletRequest request, HttpServletResponse response) {
+	public String tcollectItem(int raceId,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
-			List<RaceCollectItem> items = constantService.queryRaceCollectItemList(2, race.getType(), 1,position);
+			List<RaceCollectItem> items = constantService.queryRaceCollectItemList(2, race.getType(), 1,0);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", items);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
@@ -67,10 +67,10 @@ public class ConstantsController {
 	
 	@RequestMapping(value = "team/judgeItems",method=RequestMethod.GET)
 	@ResponseBody
-	public String tjudgeItems(int raceId,int position,HttpServletRequest request, HttpServletResponse response) {
+	public String tjudgeItems(int raceId,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
-			List<RaceJudgeItem> items = constantService.queryRaceJudgeItemList(2, race.getType(), 1,position);
+			List<RaceJudgeItem> items = constantService.queryRaceJudgeItemList(2, race.getType(), 1,0);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", items);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

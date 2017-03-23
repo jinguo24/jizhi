@@ -60,4 +60,8 @@ public class RaceScheduleTeamDao extends BaseIbatisDao {
 		param.put("status", status);
 		this.sqlSession.update("raceScheduleTeam.updateStatusByRaceId",param);
 	}
+	
+	public void updateRaceScheduleTeamResults(RaceScheduleTeam raceScheduleTeam) {
+		this.sqlSession.update("raceScheduleTeam.updateResults",raceScheduleTeam);
+	}
 }

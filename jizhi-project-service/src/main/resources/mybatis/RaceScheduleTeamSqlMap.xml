@@ -80,4 +80,8 @@
   	update race_schedule_team set status = #{status} where race_id = #{raceId} 
   </update>
   
+   <update id="updateResults" parameterType="java.util.HashMap">
+  	update race_schedule_team set success_team_id = #{successTeamId},collect_item = #{collectItems},judge_item = #{judgeItems} where id = #{id} 
+  </update>
+  
 </mapper>

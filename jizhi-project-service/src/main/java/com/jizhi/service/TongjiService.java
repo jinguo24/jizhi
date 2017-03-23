@@ -198,32 +198,36 @@ public class TongjiService {
 			for (int i = 0 ; i < rsts.size() ; i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
 				//设置数据收集项
-				Map<Integer,Double> citems= rst.getCollectItemsMap();
-				if ( null != citems) {
-					//设置数据收集项
-					for (Iterator<Integer> it = citems.keySet().iterator();it.hasNext();) {
-						Integer itemId = it.next();
-						Double value = citems.get(itemId);
-						Double oldValue = collectionMap.get(itemId);
-						if ( null == oldValue) {
-							collectionMap.put(itemId, value);
-						}else {
-							collectionMap.put(itemId, oldValue+value);
+				if ( null != rst.getCollectItemsMap()) {
+					Map<Integer,Double> citems= rst.getCollectItemsMap().get(tt.getTeamId());
+					if ( null != citems) {
+						//设置数据收集项
+						for (Iterator<Integer> it = citems.keySet().iterator();it.hasNext();) {
+							Integer itemId = it.next();
+							Double value = citems.get(itemId);
+							Double oldValue = collectionMap.get(itemId);
+							if ( null == oldValue) {
+								collectionMap.put(itemId, value);
+							}else {
+								collectionMap.put(itemId, oldValue+value);
+							}
 						}
 					}
 				}
 				//设置评判项
-				Map<Integer,Double> jitems= rst.getJudgeItemsMap();
-				if ( null != jitems) {
-					//设置数据收集项
-					for (Iterator<Integer> it = jitems.keySet().iterator();it.hasNext();) {
-						Integer itemId = it.next();
-						Double value = citems.get(itemId);
-						Double oldValue = judgeMap.get(itemId);
-						if ( null == oldValue) {
-							judgeMap.put(itemId, value);
-						}else {
-							judgeMap.put(itemId, oldValue+value);
+				if (null != rst.getJudgeItemsMap()) {
+					Map<Integer,Double> jitems= rst.getJudgeItemsMap().get(tt.getTeamId());
+					if ( null != jitems) {
+						//设置数据收集项
+						for (Iterator<Integer> it = jitems.keySet().iterator();it.hasNext();) {
+							Integer itemId = it.next();
+							Double value = jitems.get(itemId);
+							Double oldValue = judgeMap.get(itemId);
+							if ( null == oldValue) {
+								judgeMap.put(itemId, value);
+							}else {
+								judgeMap.put(itemId, oldValue+value);
+							}
 						}
 					}
 				}

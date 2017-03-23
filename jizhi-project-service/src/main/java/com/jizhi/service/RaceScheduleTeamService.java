@@ -47,6 +47,10 @@ public class RaceScheduleTeamService {
 		raceScheduleTeamDao.updateStatus(raceId, status);
 	}
 	
+	public void updateRaceScheduleTeamResults(RaceScheduleTeam race) {
+		raceScheduleTeamDao.updateRaceScheduleTeamResults(race);
+	}
+	
 	
 	public void delete(int id) {
 		raceScheduleTeamDao.deleteById(id);

@@ -34,7 +34,7 @@ public class TongjiController {
 	@ResponseBody
 	public String list(String teamId,int type,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			//PageResult races = raceService.getRacePageResult(name,type, page, pageSize);
+			tongjiService.updateTeamTonji(teamId, type);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", null);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
