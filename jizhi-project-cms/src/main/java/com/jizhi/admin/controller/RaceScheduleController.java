@@ -90,6 +90,8 @@ public class RaceScheduleController {
 			RaceScheduleTeam raceSchedule = raceScheduleTeamService.queryById(id);
 			if (StringUtils.isEmpty(successTeamId)) {
 				raceSchedule.setSuccessTeamId("0");
+			}else {
+				raceSchedule.setSuccessTeamId(successTeamId);
 			}
 			raceSchedule.setCollectItemslists(collectItemslists);
 			raceSchedule.setJudgeItemslists(judgeItemslists);
