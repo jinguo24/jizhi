@@ -85,11 +85,14 @@ public class RaceScheduleController {
 	
 	@RequestMapping(value = "updateResutls",method=RequestMethod.POST)
 	@ResponseBody
-	public String updateResutls(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
+	public String updateResutls(int id,String successTeamId,String collectItemslists,String judgeItemslists,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (StringUtils.isEmpty(raceSchedule.getSuccessTeamId())) {
+			RaceScheduleTeam raceSchedule = raceScheduleTeamService.queryById(id);
+			if (StringUtils.isEmpty(successTeamId)) {
 				raceSchedule.setSuccessTeamId("0");
 			}
+			raceSchedule.setCollectItemslists(collectItemslists);
+			raceSchedule.setJudgeItemslists(judgeItemslists);
 			raceScheduleTeamService.updateRaceScheduleTeamResults(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {

@@ -234,19 +234,19 @@ public class RaceScheduleTeam implements Serializable{
 	public void setCollectItemslists(String collectItemslists) {
 		this.collectItemslists = collectItemslists;
 		if (!StringUtils.isEmpty(collectItemslists)) {
-			List<Items> items= (List<Items>) JSONArray.parse(collectItemslists);
+			List<JSONObject> items= (List<JSONObject>) JSONArray.parse(collectItemslists);
 			if ( null != items ) {
 				Map<String,Map<String,String>> cmaps = new HashMap<String,Map<String,String>>();
 				for (int i = 0 ; i < items.size() ; i ++) {
-					Items it = items.get(i);
-					String tid = it.getTid();
+					JSONObject it = items.get(i);
+					String tid = (String)it.get("tid");
 					Map<String,String> vs = new HashMap<String,String>();
 					cmaps.put(tid, vs);
-					List<ItemsValues> ivs= it.getData();
-					if (null != ivs) {
-						for (int j = 0 ; j < ivs.size() ; j ++) {
-							ItemsValues iv = ivs.get(j);
-							vs.put(iv.getKey(), iv.getValue());
+					JSONArray datas = (JSONArray) it.get("data");
+					if (null != datas) {
+						for (int j = 0 ; j < datas.size() ; j ++) {
+							JSONObject iv = (JSONObject) datas.get(j);
+							vs.put(iv.get("key").toString(), iv.get("value").toString());
 						}
 					}
 				}
@@ -257,19 +257,19 @@ public class RaceScheduleTeam implements Serializable{
 	public void setJudgeItemslists(String judgeItemslists) {
 		this.judgeItemslists = judgeItemslists;
 		if (!StringUtils.isEmpty(judgeItemslists)) {
-			List<Items> items= (List<Items>) JSONArray.parse(judgeItemslists);
+			List<JSONObject> items= (List<JSONObject>) JSONArray.parse(judgeItemslists);
 			if ( null != items ) {
 				Map<String,Map<String,String>> cmaps = new HashMap<String,Map<String,String>>();
 				for (int i = 0 ; i < items.size() ; i ++) {
-					Items it = items.get(i);
-					String tid = it.getTid();
+					JSONObject it = items.get(i);
+					String tid = (String)it.get("tid");
 					Map<String,String> vs = new HashMap<String,String>();
 					cmaps.put(tid, vs);
-					List<ItemsValues> ivs= it.getData();
-					if (null != ivs) {
-						for (int j = 0 ; j < ivs.size() ; j ++) {
-							ItemsValues iv = ivs.get(j);
-							vs.put(iv.getKey(), iv.getValue());
+					JSONArray datas = (JSONArray) it.get("data");
+					if (null != datas) {
+						for (int j = 0 ; j < datas.size() ; j ++) {
+							JSONObject iv = (JSONObject) datas.get(j);
+							vs.put(iv.get("key").toString(), iv.get("value").toString());
 						}
 					}
 				}
