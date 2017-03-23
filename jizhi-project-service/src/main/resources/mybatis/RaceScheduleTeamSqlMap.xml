@@ -16,14 +16,15 @@
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="address" property="address" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="tags" property="tags" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status
+	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status,tags
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceScheduleTeam">
-  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status) 
-  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{type},#{address},#{status})
+  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status,tags) 
+  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{type},#{address},#{status},#{tags})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceScheduleTeam">
@@ -38,7 +39,8 @@
   		collect_item = #{collectItems},
   		judge_item = #{judgeItems},
   		type = #{type},
-  		address = #{address}
+  		address = #{address},
+  		tags = #{tags}
   		where id = #{id} and race_id = #{raceId} 
   </update>
   

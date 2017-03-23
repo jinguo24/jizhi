@@ -17,12 +17,12 @@ public class ConstantsService {
 	@Autowired
 	private RaceJudgeItemDao raceJudgeItemDao;
 	
-	public List<RaceCollectItem> queryRaceCollectItemList(int scale,int type,int status) {
-		return raceCollectItemDao.queryList(scale, type, status);
+	public List<RaceCollectItem> queryRaceCollectItemList(int scale,int type,int status,int position) {
+		return raceCollectItemDao.queryList(scale, type, status,position);
 	}
 	
-	public List<RaceJudgeItem> queryRaceJudgeItemList(int scale,int type,int status) {
-		return raceJudgeItemDao.queryList(scale, type, status);
+	public List<RaceJudgeItem> queryRaceJudgeItemList(int scale,int type,int status,int position) {
+		return raceJudgeItemDao.queryList(scale, type, status,position);
 	}
 	
 }

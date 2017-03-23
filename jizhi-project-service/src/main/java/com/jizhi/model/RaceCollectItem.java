@@ -12,6 +12,7 @@ public class RaceCollectItem implements Serializable{
 	private int scale;
 	private int type;
 	private int position;
+	private Double defaultValue;
 	public int getId() {
 		return id;
 	}
@@ -47,5 +48,11 @@ public class RaceCollectItem implements Serializable{
 	}
 	public void setPosition(int position) {
 		this.position = position;
+	}
+	public Double getDefaultValue() {
+		return defaultValue;
+	}
+	public void setDefaultValue(Double defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 }

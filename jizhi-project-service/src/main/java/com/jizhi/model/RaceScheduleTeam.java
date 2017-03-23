@@ -33,6 +33,7 @@ public class RaceScheduleTeam implements Serializable{
 	private int type;
 	private String address;
 	private int status ;
+	private String tags;
 	public int getId() {
 		return id;
 	}
@@ -152,5 +153,11 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public void setTeamTwoObj(Team teamTwoObj) {
 		this.teamTwoObj = teamTwoObj;
+	}
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 }

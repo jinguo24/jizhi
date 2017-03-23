@@ -28,15 +28,16 @@ public class RaceCollectItemDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("raceCollectItem.queryById",id);
 	}
 	
-	public List<RaceCollectItem> queryList(int scale,int type,int status) {
+	public List<RaceCollectItem> queryList(int scale,int type,int status,int position) {
 		Map param = new HashMap();
 		param.put("scale", scale);
 		param.put("type", type);
 		param.put("status", status);
+		param.put("position", position);
 		return this.sqlSession.selectList("raceCollectItem.query",param);
 	}
 	
-	public void updateStatus(int raceId,int status) {
+	public void updateStatus(int raceId,int status,int position) {
 		Map param = new HashMap();
 		param.put("raceId", raceId);
 		param.put("status", status);
