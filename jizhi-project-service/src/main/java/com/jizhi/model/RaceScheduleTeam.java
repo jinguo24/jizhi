@@ -1,7 +1,10 @@
 package com.jizhi.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.util.StringUtils;
@@ -26,12 +29,12 @@ public class RaceScheduleTeam implements Serializable{
 	private String teamTwo;//第二队
 	private Team teamTwoObj;
 	private String successTeamId;//获胜球队编号
-	private String collectItemslists;
-	private String collectItems;//收集数据项json
-	private Map<String,Map<Integer,Double>> collectItemsMap;
-	private String judgetItemslists;
-	private String judgeItems;//评判数据项json
-	private Map<String,Map<Integer,Double>> judgeItemsMap;
+	private String collectItemslists="[]";
+	private String collectItems="{}";//收集数据项json
+	private Map<String,Map<String,String>> collectItemsMap;
+	private String judgeItemslists="[]";
+	private String judgeItems="{}";//评判数据项json
+	private Map<String,Map<String,String>> judgeItemsMap;
 	private int type;
 	private String address;
 	private int status ;
@@ -78,18 +81,75 @@ public class RaceScheduleTeam implements Serializable{
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
 		if (!StringUtils.isEmpty(collectItems)) {
-			this.collectItemsMap = (Map<String,Map<Integer,Double>>) JSONArray.parse(collectItems);
+			this.collectItemsMap = (Map<String,Map<String,String>>) JSONArray.parse(collectItems);
+			setcollectitemlist();
 		}
 	}
+	
+	private void setcollectitemlist() {
+		if ( null != this.collectItemsMap) {
+			List<Items> items = new ArrayList<Items>();
+			for (Iterator<String> it = this.collectItemsMap.keySet().iterator(); it.hasNext();) {
+				String tid = it.next();
+				Items its = new Items();
+				its.setTid(tid);
+				List<ItemsValues> ivs = new ArrayList<ItemsValues>();
+				its.setData(ivs);
+				Map<String,String> vs = this.collectItemsMap.get(tid);
+				if ( null != vs ) {
+					for (Iterator<String> vit = vs.keySet().iterator();vit.hasNext();) {
+						String siid = vit.next();
+						String iv = vs.get(siid);
+						ItemsValues isv = new ItemsValues();
+						isv.setKey(siid);
+						isv.setValue(iv);
+						ivs.add(isv);
+					}
+				}
+				items.add(its);
+			}
+			this.collectItemslists = JSONArray.toJSONString(items);
+		}
+	}
+	
 	public String getJudgeItems() {
 		return judgeItems;
 	}
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
 		if (!StringUtils.isEmpty(judgeItems)) {
-			this.judgeItemsMap = (Map<String,Map<Integer,Double>>) JSONArray.parse(judgeItems);
+			this.judgeItemsMap = (Map<String,Map<String,String>>) JSONArray.parse(judgeItems);
+			setjudgeitemslists();
 		}
 	}
+	
+	private void setjudgeitemslists() {
+		if ( null != this.judgeItemsMap) {
+			List<Items> items = new ArrayList<Items>();
+			for (Iterator<String> it = this.judgeItemsMap.keySet().iterator(); it.hasNext();) {
+				String tid = it.next();
+				Items its = new Items();
+				its.setTid(tid);
+				List<ItemsValues> ivs = new ArrayList<ItemsValues>();
+				its.setData(ivs);
+				Map<String,String> vs = this.judgeItemsMap.get(tid);
+				if ( null != vs ) {
+					for (Iterator<String> vit = vs.keySet().iterator();vit.hasNext();) {
+						String siid = vit.next();
+						String iv = vs.get(siid);
+						ItemsValues isv = new ItemsValues();
+						isv.setKey(siid);
+						isv.setValue(iv);
+						ivs.add(isv);
+						ivs.add(isv);
+					}
+				}
+				items.add(its);
+			}
+			this.judgeItemslists = JSONArray.toJSONString(items);
+		}
+	}
+	
 	public Date getBeginDate() {
 		return beginDate;
 	}
@@ -114,23 +174,25 @@ public class RaceScheduleTeam implements Serializable{
 	public void setType(int type) {
 		this.type = type;
 	}
-	public Map<String,Map<Integer, Double>> getCollectItemsMap() {
+	public Map<String,Map<String, String>> getCollectItemsMap() {
 		return collectItemsMap;
 	}
-	public void setCollectItemsMap(Map<String,Map<Integer, Double>> collectItemsMap) {
+	public void setCollectItemsMap(Map<String,Map<String, String>> collectItemsMap) {
 		this.collectItemsMap = collectItemsMap;
 		if ( null != collectItemsMap) {
 			this.collectItems = JSONObject.toJSONString(collectItemsMap);
 		}
+		setcollectitemlist();
 	}
-	public Map<String,Map<Integer, Double>> getJudgeItemsMap() {
+	public Map<String,Map<String, String>> getJudgeItemsMap() {
 		return judgeItemsMap;
 	}
-	public void setJudgeItemsMap(Map<String,Map<Integer, Double>> judgeItemsMap) {
+	public void setJudgeItemsMap(Map<String,Map<String, String>> judgeItemsMap) {
 		this.judgeItemsMap = judgeItemsMap;
 		if ( null != judgeItemsMap) {
 			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
 		}
+		setjudgeitemslists();
 	}
 	public String getAddress() {
 		return address;
@@ -165,13 +227,45 @@ public class RaceScheduleTeam implements Serializable{
 	public String getCollectItemslists() {
 		return collectItemslists;
 	}
-	public void setCollectItemslists(String collectItemslists) {
-		this.collectItemslists = collectItemslists;
+	public String getJudgeItemslists() {
+		return judgeItemslists;
 	}
-	public String getJudgetItemslists() {
-		return judgetItemslists;
+	
+	private class Items implements Serializable {
+
+		private static final long serialVersionUID = 1L;
+		private String tid;
+		private List<ItemsValues> data = new ArrayList<ItemsValues>();
+		public String getTid() {
+			return tid;
+		}
+		public void setTid(String tid) {
+			this.tid = tid;
+		}
+		public List<ItemsValues> getData() {
+			return data;
+		}
+		public void setData(List<ItemsValues> data) {
+			this.data = data;
+		}
 	}
-	public void setJudgetItemslists(String judgetItemslists) {
-		this.judgetItemslists = judgetItemslists;
+	
+	private class ItemsValues implements Serializable{
+		private static final long serialVersionUID = 1L;
+		private String key="";
+		private String value="";
+		public String getKey() {
+			return key;
+		}
+		public void setKey(String key) {
+			this.key = key;
+		}
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
 	}
+	
 }

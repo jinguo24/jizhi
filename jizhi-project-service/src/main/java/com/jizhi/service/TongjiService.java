@@ -109,7 +109,11 @@ public class TongjiService {
 								collectitems.put(itemId, oldValue+value);
 							}
 							Integer c = collectcounts.get(itemId);
-							collectcounts.put(itemId, c+1);
+							if ( null != c) {
+							    collectcounts.put(itemId, c+1);
+							}else {
+								collectcounts.put(itemId, 1);
+							}
 						}
 					}
 					//设置评判项
@@ -140,7 +144,11 @@ public class TongjiService {
 								judgeitems.put(itemId, oldValue+value);
 							}
 							Integer c = judgecounts.get(itemId);
-							judgecounts.put(itemId, c+1);
+							if ( null != c) {
+								judgecounts.put(itemId, c+1);
+							}else {
+								judgecounts.put(itemId, 1);
+							}
 						}
 					}
 					
@@ -187,8 +195,10 @@ public class TongjiService {
 		if ( null != rsts) {
 			//球队位置数据项统计
 			Map<Integer,Double> collectionMap = new HashMap<Integer,Double>();
+			Map<Integer,Integer> collectionCountsMap = new HashMap<Integer,Integer>();
 			//球队位置评判统计
 			Map<Integer,Double> judgeMap = new HashMap<Integer,Double>();
+			Map<Integer,Integer> judgeCountsMap = new HashMap<Integer,Integer>();
 			//总分数
 			Double points = 0.00;
 			//胜
@@ -199,34 +209,50 @@ public class TongjiService {
 				RaceScheduleTeam rst = rsts.get(i);
 				//设置数据收集项
 				if ( null != rst.getCollectItemsMap()) {
-					Map<Integer,Double> citems= rst.getCollectItemsMap().get(tt.getTeamId());
+					Map<String,String> citems= rst.getCollectItemsMap().get(tt.getTeamId());
 					if ( null != citems) {
 						//设置数据收集项
-						for (Iterator<Integer> it = citems.keySet().iterator();it.hasNext();) {
-							Integer itemId = it.next();
-							Double value = citems.get(itemId);
+						for (Iterator<String> it = citems.keySet().iterator();it.hasNext();) {
+							String itemids = it.next();
+							Integer itemId = Integer.parseInt(itemids);
+							String svalue = citems.get(itemids);
+							Double value = Double.valueOf(svalue);
 							Double oldValue = collectionMap.get(itemId);
 							if ( null == oldValue) {
 								collectionMap.put(itemId, value);
 							}else {
 								collectionMap.put(itemId, oldValue+value);
 							}
+							Integer counts = collectionCountsMap.get(itemId);
+							if (null != counts ) {
+								collectionCountsMap.put(itemId, counts+1);
+							}else {
+								collectionCountsMap.put(itemId, 1);
+							}
 						}
 					}
 				}
 				//设置评判项
 				if (null != rst.getJudgeItemsMap()) {
-					Map<Integer,Double> jitems= rst.getJudgeItemsMap().get(tt.getTeamId());
+					Map<String,String> jitems= rst.getJudgeItemsMap().get(tt.getTeamId());
 					if ( null != jitems) {
 						//设置数据收集项
-						for (Iterator<Integer> it = jitems.keySet().iterator();it.hasNext();) {
-							Integer itemId = it.next();
-							Double value = jitems.get(itemId);
+						for (Iterator<String> it = jitems.keySet().iterator();it.hasNext();) {
+							String itemids = it.next();
+							Integer itemId = Integer.parseInt(itemids);
+							String svalue = jitems.get(itemids);
+							Double value = Double.valueOf(svalue);
 							Double oldValue = judgeMap.get(itemId);
 							if ( null == oldValue) {
 								judgeMap.put(itemId, value);
 							}else {
 								judgeMap.put(itemId, oldValue+value);
+							}
+							Integer counts = judgeCountsMap.get(itemId);
+							if (null != counts ) {
+								judgeCountsMap.put(itemId, counts+1);
+							}else {
+								judgeCountsMap.put(itemId, 1);
 							}
 						}
 					}

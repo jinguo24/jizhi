@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -86,6 +87,9 @@ public class RaceScheduleController {
 	@ResponseBody
 	public String updateResutls(RaceScheduleTeam raceSchedule,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			if (StringUtils.isEmpty(raceSchedule.getSuccessTeamId())) {
+				raceSchedule.setSuccessTeamId("0");
+			}
 			raceScheduleTeamService.updateRaceScheduleTeamResults(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {
