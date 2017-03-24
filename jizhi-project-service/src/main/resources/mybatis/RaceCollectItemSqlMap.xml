@@ -9,13 +9,14 @@
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="position" property="position" jdbcType="INTEGER" />
 		<result column="default_value" property="defaultValue" jdbcType="DOUBLE" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,item_name,status,scale,type,position,default_value
+	id,item_name,status,scale,type,position,default_value,sort
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceCollectItem">
-  	insert into race_collect_item (item_name,status,scale,type,position,default_value) values (#{itemName},#{status},#{scale},#{type},#{position},#{defaultValue})
+  	insert into race_collect_item (item_name,status,scale,type,position,default_value,sort) values (#{itemName},#{status},#{scale},#{type},#{position},#{defaultValue},#{sort})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceCollectItem">
@@ -24,7 +25,8 @@
   		scale = #{scale},
   		type = #{type},
   		position = #{position},
-  		default_value = #{defaultValue}
+  		default_value = #{defaultValue},
+  		sort = #{sort}
   		 where id=#{id}
   </update>
   
@@ -36,6 +38,7 @@
   	<if test="type > 0 " > and type=#{type}</if>
   	<if test="status > 0 " > and status=#{status}</if>
   	<if test="position > 0 " > and position=#{position}</if>
+  	order by sort
   </select>
   
   <update id="updateStatus" parameterType="java.util.HashMap">

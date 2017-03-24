@@ -13,6 +13,7 @@ public class RaceCollectItem implements Serializable{
 	private int type;
 	private int position;
 	private Double defaultValue;
+	private int sort;
 	public int getId() {
 		return id;
 	}
@@ -54,5 +55,11 @@ public class RaceCollectItem implements Serializable{
 	}
 	public void setDefaultValue(Double defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+	public int getSort() {
+		return sort;
+	}
+	public void setSort(int sort) {
+		this.sort = sort;
 	}
 }
