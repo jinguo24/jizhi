@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class RaceJudgeItem implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-
-	private int id;
+	private int lid;
+	private String id;
 	private String itemName;
 	private int status = 1;
 	private int scale;
@@ -15,10 +15,16 @@ public class RaceJudgeItem implements Serializable{
 	private int position;
 	private Double defaultValue;
 	private int sort;
-	public int getId() {
+	public int getLid() {
+		return lid;
+	}
+	public void setLid(int lid) {
+		this.lid = lid;
+	}
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getItemName() {
