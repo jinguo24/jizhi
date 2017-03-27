@@ -199,4 +199,8 @@ public class TeamApplyService {
 		return new PageResult(count,pageSize,pageIndex,rejectlist);
 	}
 	
+	public void deleteTeamApplyPerson(int raceId,int id) {
+		racePersonApplyDao.delete(raceId, id);
+	}
+	
 }

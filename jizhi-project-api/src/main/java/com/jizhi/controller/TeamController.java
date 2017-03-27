@@ -78,6 +78,16 @@ public class TeamController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
 			}
 			
+			Integer count = teamApplyService.getTeamRaceApplyCount(raceId, null, 0, type, phone);
+			if ( null != count && count > 0 ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			}
+			
+			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(raceId, phone);
+			if ( null != rpapply ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			}
+			
 			teamapply = new TeamRaceApply();
 			teamapply.setId(PrimaryKeyUtil.getUUID());
 			teamapply.setRaceId(raceId);
@@ -180,7 +190,12 @@ public class TeamController {
 			}
 			
 			if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"手机号已被占用", null);
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			}
+			//所有
+			Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
+			if ( null != count && count > 0 ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
 			}
 			
 			Race race  = raceService.queryById(teamapply.getRaceId());
@@ -190,7 +205,7 @@ public class TeamController {
 			
 			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
 			if ( null != rpapply ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", rpapply);
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","只允许注册一个队伍", rpapply);
 			}
 			
 			rpapply = new RacePersonApply();

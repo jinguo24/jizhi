@@ -122,4 +122,15 @@ public class TeamApplyController {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
 		}
 	}
+	
+	@RequestMapping(value = "deletePerson",method=RequestMethod.POST)
+	@ResponseBody
+	public String deletePerson(Integer raceId,int id,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			teamApplyService.deleteTeamApplyPerson(raceId, id);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"删除成功", null);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"删除失败:"+e.getLocalizedMessage(), null);
+		}
+	}
 }
