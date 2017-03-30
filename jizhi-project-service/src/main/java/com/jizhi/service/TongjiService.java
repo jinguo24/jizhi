@@ -1,5 +1,6 @@
 package com.jizhi.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -65,13 +66,13 @@ public class TongjiService {
 	
 	private void setTonji(TongjiP tj) {
 		//球队位置数据项统计
-		Map<Integer,Map<Integer,Double>> positionsCollectionMap = new HashMap<Integer,Map<Integer,Double>>();
-		Map<Integer,Map<Integer,Integer>> positionsCollectionCountsMap = new HashMap<Integer,Map<Integer,Integer>>();
+		Map<String,Map<String,Double>> positionsCollectionMap = new HashMap<String,Map<String,Double>>();
+		Map<String,Map<String,Integer>> positionsCollectionCountsMap = new HashMap<String,Map<String,Integer>>();
 		//球队位置评判统计
-		Map<Integer,Map<Integer,Double>> positionsJudgeMap = new HashMap<Integer,Map<Integer,Double>>();
-		Map<Integer,Map<Integer,Integer>> positionsJudgeCountsMap = new HashMap<Integer,Map<Integer,Integer>>();
+		Map<String,Map<String,Double>> positionsJudgeMap = new HashMap<String,Map<String,Double>>();
+		Map<String,Map<String,Integer>> positionsJudgeCountsMap = new HashMap<String,Map<String,Integer>>();
 		//位置比赛总场数
-		Map<Integer,Integer> countsMap = new HashMap<Integer,Integer>();
+		Map<String,Integer> countsMap = new HashMap<String,Integer>();
 		//总分数
 		Double points = 0.00;
 		//查询用户所有的统计数据，根据type分类，然后把统计项和评判项的对应值相加
@@ -80,87 +81,117 @@ public class TongjiService {
 			if ( null != rrlist ) {
 				for (int j = 0 ; j < rrlist.size(); j ++) {
 					RaceResults rr = rrlist.get(j);
+					List<String> positions = new ArrayList<>();
 					//设置数据收集项
-					Map<Integer,Double> citems= rr.getCollectItemsMap();
-					if ( null != citems) {
-						Map<Integer,Double> collectitems;
-						Map<Integer,Integer> collectcounts;
-						if (positionsCollectionMap.containsKey(rr.getPosition())) {
-							collectitems = (Map<Integer, Double>) positionsCollectionMap.get(rr.getPosition());
-						}else {
-							collectitems = new HashMap<Integer,Double>();
-							positionsCollectionMap.put(rr.getPosition(), collectitems);
-						}
-						if (positionsCollectionCountsMap.containsKey(rr.getPosition())) {
-							collectcounts = (Map<Integer, Integer>) positionsCollectionCountsMap.get(rr.getPosition());
-						}else {
-							collectcounts = new HashMap<Integer,Integer>();
-							positionsCollectionCountsMap.put(rr.getPosition(), collectcounts);
-						}
-						
-						//设置数据收集项
-						for (Iterator<Integer> it = citems.keySet().iterator();it.hasNext();) {
-							Integer itemId = it.next();
-							Double value = citems.get(itemId);
-							Double oldValue = collectitems.get(itemId);
-							if ( null == oldValue) {
-								collectitems.put(itemId, value);
-							}else {
-								collectitems.put(itemId, oldValue+value);
+					Map<String,Map<String,String>> pitems= rr.getCollectItemsMap();
+					if (null != pitems ) {
+						for (Iterator<String> pit = pitems.keySet().iterator();pit.hasNext();) {
+							String position = pit.next();
+							Map<String,String> citems = pitems.get(position);
+							if ( null != citems) {
+								Map<String,Double> collectitems;
+								Map<String,Integer> collectcounts;
+								if (positionsCollectionMap.containsKey(position)) {
+									collectitems = (Map<String,Double>) positionsCollectionMap.get(position);
+								}else {
+									collectitems = new HashMap<String,Double>();
+									positionsCollectionMap.put(position, collectitems);
+								}
+								if (positionsCollectionCountsMap.containsKey(position)) {
+									collectcounts = (Map<String, Integer>) positionsCollectionCountsMap.get(position);
+								}else {
+									collectcounts = new HashMap<String,Integer>();
+									positionsCollectionCountsMap.put(position, collectcounts);
+								}
+								
+								//设置数据收集项
+								for (Iterator<String> it = citems.keySet().iterator();it.hasNext();) {
+									String itemId = it.next();
+									String sv = citems.get(itemId);
+									try {
+										Double value = Double.parseDouble(sv);
+										Double oldValue = collectitems.get(itemId);
+										if ( null == oldValue) {
+											collectitems.put(itemId, value);
+										}else {
+											collectitems.put(itemId, oldValue+value);
+										}
+										Integer c = collectcounts.get(itemId);
+										if ( null != c) {
+										    collectcounts.put(itemId, c+1);
+										}else {
+											collectcounts.put(itemId, 1);
+										}
+									}catch(Exception e) {
+									}
+								}
 							}
-							Integer c = collectcounts.get(itemId);
-							if ( null != c) {
-							    collectcounts.put(itemId, c+1);
-							}else {
-								collectcounts.put(itemId, 1);
-							}
-						}
-					}
-					//设置评判项
-					Map<Integer,Double> jitems= rr.getJudgeItemsMap();
-					if ( null != jitems) {
-						Map<Integer,Double> judgeitems;
-						Map<Integer,Integer> judgecounts;
-						if (positionsJudgeMap.containsKey(rr.getPosition())) {
-							judgeitems = (Map<Integer, Double>) positionsJudgeMap.get(rr.getPosition());
-						}else {
-							judgeitems = new HashMap<Integer,Double>();
-							positionsJudgeMap.put(rr.getPosition(), judgeitems);
-						}
-						if (positionsJudgeCountsMap.containsKey(rr.getPosition())) {
-							judgecounts = (Map<Integer, Integer>) positionsJudgeCountsMap.get(rr.getPosition());
-						}else {
-							judgecounts = new HashMap<Integer,Integer>();
-							positionsJudgeCountsMap.put(rr.getPosition(), judgecounts);
-						}
-						//设置数据收集项
-						for (Iterator<Integer> it = jitems.keySet().iterator();it.hasNext();) {
-							Integer itemId = it.next();
-							Double value = citems.get(itemId);
-							Double oldValue = judgeitems.get(itemId);
-							if ( null == oldValue) {
-								judgeitems.put(itemId, value);
-							}else {
-								judgeitems.put(itemId, oldValue+value);
-							}
-							Integer c = judgecounts.get(itemId);
-							if ( null != c) {
-								judgecounts.put(itemId, c+1);
-							}else {
-								judgecounts.put(itemId, 1);
+							if (!positions.contains(position)) {
+								positions.add(position);
 							}
 						}
 					}
 					
-					//设置总数
-					if (countsMap.containsKey(rr.getPosition())) {
-						int counts = countsMap.get(rr.getPosition())+1;
-						countsMap.put(rr.getPosition(), counts);
-					}else {
-						countsMap.put(rr.getPosition(), 1);
+					//设置评判项
+					Map<String,Map<String,String>> pjitems=rr.getJudgeItemsMap();
+					if (null != pjitems) {
+						for (Iterator<String> pji = pjitems.keySet().iterator();pji.hasNext();) {
+							String pjposition = pji.next();
+							Map<String,String> jitems= pjitems.get(pjposition);
+							if ( null != jitems) {
+								Map<String,Double> judgeitems;
+								Map<String,Integer> judgecounts;
+								if (positionsJudgeMap.containsKey(pjposition)) {
+									judgeitems = (Map<String, Double>) positionsJudgeMap.get(pjposition);
+								}else {
+									judgeitems = new HashMap<String,Double>();
+									positionsJudgeMap.put(pjposition, judgeitems);
+								}
+								if (positionsJudgeCountsMap.containsKey(pjposition)) {
+									judgecounts = (Map<String, Integer>) positionsJudgeCountsMap.get(pjposition);
+								}else {
+									judgecounts = new HashMap<String,Integer>();
+									positionsJudgeCountsMap.put(pjposition, judgecounts);
+								}
+								//设置数据收集项
+								for (Iterator<String> it = jitems.keySet().iterator();it.hasNext();) {
+									String itemId = it.next();
+									String psv = jitems.get(itemId);
+									try {
+										Double value = Double.parseDouble(psv);
+										Double oldValue = judgeitems.get(itemId);
+										if ( null == oldValue) {
+											judgeitems.put(itemId, value);
+										}else {
+											judgeitems.put(itemId, oldValue+value);
+										}
+										Integer c = judgecounts.get(itemId);
+										if ( null != c) {
+											judgecounts.put(itemId, c+1);
+										}else {
+											judgecounts.put(itemId, 1);
+										}
+									}catch(Exception e) {
+									}
+								}
+							}
+							if (!positions.contains(pjposition)) {
+								positions.add(pjposition);
+							}
+						}
 					}
-					//总分数
-					points = points + rr.getPoints();
+					
+					for (int k = 0 ;k < positions.size();k++) {
+						//设置总数
+						String pkposiont = positions.get(k);
+						if (countsMap.containsKey(pkposiont)) {
+							int counts = countsMap.get(pkposiont)+1;
+							countsMap.put(pkposiont, counts);
+						}else {
+							countsMap.put(pkposiont, 1);
+						}
+					}
+					//TODO 设置分数
 				}
 			}
 		}

@@ -8,7 +8,7 @@ public class Items implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String tid;
+	private String tid;//球队编号
 	private List<ItemsValues> data = new ArrayList<ItemsValues>();
 	public String getTid() {
 		return tid;

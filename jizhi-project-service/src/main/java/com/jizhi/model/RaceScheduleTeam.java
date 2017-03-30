@@ -32,7 +32,7 @@ public class RaceScheduleTeam implements Serializable{
 	private String successTeamId;//获胜球队编号
 	private String collectItemslists="";
 	private String collectItems="{}";//收集数据项json
-	private Map<String,Map<String,String>> collectItemsMap;
+	private Map<String,Map<String,String>> collectItemsMap;//
 	private String judgeItemslists="";
 	private String judgeItems="{}";//评判数据项json
 	private Map<String,Map<String,String>> judgeItemsMap;

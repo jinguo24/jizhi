@@ -24,12 +24,10 @@ public class RaceResults implements Serializable{
 	private String teamId;//队编号
 	private String phone;//队员电话
 	private int number;//号码
-	private int position;//场上位置
-	private String collectItems;//收集数据项json
-	private Map<Integer,Double> collectItemsMap;
-	private String judgeItems;//评判数据项json
-	private Map<Integer,Double> judgeItemsMap;
-	private Double points;
+	private String collectItems;//位置收集数据项json
+	private Map<String,Map<String,String>> collectItemsMap;
+	private String judgeItems;//位置评判数据项json
+	private Map<String,Map<String,String>> judgeItemsMap;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -73,19 +71,13 @@ public class RaceResults implements Serializable{
 	public void setTeamId(String teamId) {
 		this.teamId = teamId;
 	}
-	public int getPosition() {
-		return position;
-	}
-	public void setPosition(int position) {
-		this.position = position;
-	}
 	public String getCollectItems() {
 		return collectItems;
 	}
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
 		if (!StringUtils.isEmpty(collectItems)) {
-			this.collectItemsMap = (Map<Integer,Double>) JSONArray.parse(collectItems);
+			this.collectItemsMap = (Map<String,Map<String,String>>) JSONArray.parse(collectItems);
 		}
 	}
 	public String getJudgeItems() {
@@ -94,22 +86,22 @@ public class RaceResults implements Serializable{
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
 		if (!StringUtils.isEmpty(judgeItems)) {
-			this.judgeItemsMap = (Map<Integer,Double>) JSONArray.parse(judgeItems);
+			this.judgeItemsMap = (Map<String,Map<String,String>>) JSONArray.parse(judgeItems);
 		}
 	}
-	public Map<Integer, Double> getCollectItemsMap() {
+	public Map<String,Map<String,String>> getCollectItemsMap() {
 		return collectItemsMap;
 	}
-	public void setCollectItemsMap(Map<Integer, Double> collectItemsMap) {
+	public void setCollectItemsMap(Map<String,Map<String,String>> collectItemsMap) {
 		this.collectItemsMap = collectItemsMap;
 		if ( null != collectItemsMap) {
 			this.collectItems = JSONObject.toJSONString(collectItemsMap);
 		}
 	}
-	public Map<Integer, Double> getJudgeItemsMap() {
+	public Map<String,Map<String,String>> getJudgeItemsMap() {
 		return judgeItemsMap;
 	}
-	public void setJudgeItemsMap(Map<Integer, Double> judgeItemsMap) {
+	public void setJudgeItemsMap(Map<String,Map<String,String>> judgeItemsMap) {
 		this.judgeItemsMap = judgeItemsMap;
 		if ( null != judgeItemsMap) {
 			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
@@ -120,11 +112,5 @@ public class RaceResults implements Serializable{
 	}
 	public void setType(int type) {
 		this.type = type;
-	}
-	public Double getPoints() {
-		return points;
-	}
-	public void setPoints(Double points) {
-		this.points = points;
 	}
 }

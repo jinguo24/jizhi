@@ -31,20 +31,20 @@ public class RaceEnums {
 	}
 	
 	public enum RacePositions {
-		ZUQIU_QIANFENG(1,"前锋",RaceTypes.ZUQIU.id);
+		ZUQIU_QIANFENG("zuqiu_qianfeng","前锋",RaceTypes.ZUQIU.id);
 		
-		private RacePositions(int id, String name, int type) {
+		private RacePositions(String id, String name, int type) {
 			this.id = id;
 			this.name = name;
 			this.type = type;
 		}
-		private int id;
+		private String id;
 		private String name;
 		private int type;
-		public int getId() {
+		public String getId() {
 			return id;
 		}
-		public void setId(int id) {
+		public void setId(String id) {
 			this.id = id;
 		}
 		public String getName() {

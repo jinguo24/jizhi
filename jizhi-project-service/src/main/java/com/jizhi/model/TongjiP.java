@@ -17,17 +17,17 @@ public class TongjiP implements Serializable{
 	private int type;
 	//位置统计项
 	private String collectItems;
-	private Map<Integer,Map<Integer,Double>> collectItemsMap = new HashMap<Integer,Map<Integer,Double>>();
+	private Map<String,Map<String,Double>> collectItemsMap = new HashMap<String,Map<String,Double>>();
 	//位置统计项-统计次数
 	private String collectCounts;
-	private Map<Integer,Map<Integer,Integer>> collectCountsMap = new HashMap<Integer,Map<Integer,Integer>>();
+	private Map<String,Map<String,Integer>> collectCountsMap = new HashMap<String,Map<String,Integer>>();
 	//位置评分项
 	private String judgeItems;
-	private Map<Integer,Map<Integer,Double>> judgeItemsMap = new HashMap<Integer,Map<Integer,Double>>();
+	private Map<String,Map<String,Double>> judgeItemsMap = new HashMap<String,Map<String,Double>>();
 	private String judgeCounts;
-	private Map<Integer,Map<Integer,Integer>> judgeCountsMap = new HashMap<Integer,Map<Integer,Integer>>(); 
+	private Map<String,Map<String,Integer>> judgeCountsMap = new HashMap<String,Map<String,Integer>>(); 
 	private String raceCounts;//赛事总数
-	private Map<Integer,Integer> raceCountsMap;
+	private Map<String,Integer> raceCountsMap;
 	private Double points;
 	private int tbinedex;
 	public int getId() {
@@ -60,7 +60,7 @@ public class TongjiP implements Serializable{
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
 		if (!StringUtils.isEmpty(collectItems)) {
-			this.collectItemsMap  = (Map<Integer, Map<Integer, Double>>) JSONObject.parse(collectItems);
+			this.collectItemsMap  = (Map<String, Map<String, Double>>) JSONObject.parse(collectItems);
 		}
 	}
 	public String getJudgeItems() {
@@ -69,25 +69,25 @@ public class TongjiP implements Serializable{
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
 		if (!StringUtils.isEmpty(judgeItems)) {
-			this.judgeItemsMap = (Map<Integer, Map<Integer, Double>>) JSONObject.parse(judgeItems);
+			this.judgeItemsMap = (Map<String, Map<String, Double>>) JSONObject.parse(judgeItems);
 		}
 	}
-	public void setCollectItemsMap(Map<Integer, Map<Integer, Double>> collectItemsMap) {
+	public void setCollectItemsMap(Map<String, Map<String, Double>> collectItemsMap) {
 		this.collectItemsMap = collectItemsMap;
 		if (null != collectItemsMap) {
 			this.collectItems = JSONObject.toJSONString(collectItemsMap);
 		}
 	}
-	public void setJudgeItemsMap(Map<Integer, Map<Integer, Double>> judgeItemsMap) {
+	public void setJudgeItemsMap(Map<String, Map<String, Double>> judgeItemsMap) {
 		this.judgeItemsMap = judgeItemsMap;
 		if ( null != judgeItemsMap) {
 			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
 		}
 	}
-	public Map<Integer, Map<Integer, Double>> getCollectItemsMap() {
+	public Map<String, Map<String, Double>> getCollectItemsMap() {
 		return collectItemsMap;
 	}
-	public Map<Integer, Map<Integer, Double>> getJudgeItemsMap() {
+	public Map<String, Map<String, Double>> getJudgeItemsMap() {
 		return judgeItemsMap;
 	}
 	public String getRaceCounts() {
@@ -96,13 +96,13 @@ public class TongjiP implements Serializable{
 	public void setRaceCounts(String raceCounts) {
 		this.raceCounts = raceCounts;
 		if (!StringUtils.isEmpty(raceCounts)) {
-			this.raceCountsMap = (Map<Integer, Integer>) JSONObject.parse(raceCounts);
+			this.raceCountsMap = (Map<String, Integer>) JSONObject.parse(raceCounts);
 		}
 	}
-	public Map<Integer, Integer> getRaceCountsMap() {
+	public Map<String, Integer> getRaceCountsMap() {
 		return raceCountsMap;
 	}
-	public void setRaceCountsMap(Map<Integer, Integer> raceCountsMap) {
+	public void setRaceCountsMap(Map<String, Integer> raceCountsMap) {
 		this.raceCountsMap = raceCountsMap;
 		if ( null != raceCountsMap) {
 			this.raceCounts = JSONObject.toJSONString(raceCountsMap);
@@ -120,14 +120,14 @@ public class TongjiP implements Serializable{
 	public void setCollectCounts(String collectCounts) {
 		this.collectCounts = collectCounts;
 		if (!StringUtils.isEmpty(collectCounts)) {
-			this.collectCountsMap = (Map<Integer, Map<Integer, Integer>>) JSONObject.parse(collectCounts);
+			this.collectCountsMap = (Map<String, Map<String, Integer>>) JSONObject.parse(collectCounts);
 		}
 	}
-	public Map<Integer, Map<Integer, Integer>> getCollectCountsMap() {
+	public Map<String, Map<String, Integer>> getCollectCountsMap() {
 		return collectCountsMap;
 	}
 	public void setCollectCountsMap(
-			Map<Integer, Map<Integer, Integer>> collectCountsMap) {
+			Map<String, Map<String, Integer>> collectCountsMap) {
 		this.collectCountsMap = collectCountsMap;
 		if ( null != collectCountsMap) {
 			this.collectCounts = JSONObject.toJSONString(collectCountsMap);
@@ -139,13 +139,13 @@ public class TongjiP implements Serializable{
 	public void setJudgeCounts(String judgeCounts) {
 		this.judgeCounts = judgeCounts;
 		if (!StringUtils.isEmpty(judgeCounts)) {
-			this.judgeCountsMap = (Map<Integer, Map<Integer, Integer>>) JSONObject.parse(judgeCounts);
+			this.judgeCountsMap = (Map<String, Map<String, Integer>>) JSONObject.parse(judgeCounts);
 		}
 	}
-	public Map<Integer, Map<Integer, Integer>> getJudgeCountsMap() {
+	public Map<String, Map<String, Integer>> getJudgeCountsMap() {
 		return judgeCountsMap;
 	}
-	public void setJudgeCountsMap(Map<Integer, Map<Integer, Integer>> judgeCountsMap) {
+	public void setJudgeCountsMap(Map<String, Map<String, Integer>> judgeCountsMap) {
 		this.judgeCountsMap = judgeCountsMap;
 		if ( null != judgeCountsMap) {
 			this.judgeCounts = JSONObject.toJSONString(judgeCountsMap);
