@@ -9,7 +9,7 @@
 		<result column="scale" property="scale" jdbcType="INTEGER" />
 		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="weight" property="weight" jdbcType="DOUBLE" />
-		<result column="position" property="position" jdbcType="INTEGER" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
 		<result column="default_value" property="defaultValue" jdbcType="DOUBLE" />
 		<result column="sort" property="sort" jdbcType="INTEGER" />
   </resultMap>
@@ -41,12 +41,12 @@
   	<if test="scale > 0 " > and scale=#{scale}</if>
   	<if test="type > 0 " > and type=#{type}</if>
   	<if test="status > 0 " > and status=#{status}</if>
-  	<if test="position > 0 " > and position=#{position}</if>
+  	<if test="position != null and position != '' " > and (position=#{position} or position is null or position = '')</if>
   	order by sort
   </select>
   
   <update id="updateStatus" parameterType="java.util.HashMap">
-  	update race_judge_item set status = #{status} where id = #{id}
+  	update race_judge_item set status = #{status} where lid = #{id}
   </update>
   
 </mapper>

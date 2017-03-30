@@ -12,7 +12,7 @@ public class RaceCollectItem implements Serializable{
 	private int status = 1;
 	private int scale;
 	private int type;
-	private int position;
+	private String position;
 	private Double defaultValue;
 	private int sort;
 	public int getLid() {
@@ -51,10 +51,10 @@ public class RaceCollectItem implements Serializable{
 	public void setType(int type) {
 		this.type = type;
 	}
-	public int getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	public void setPosition(int position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 	public Double getDefaultValue() {

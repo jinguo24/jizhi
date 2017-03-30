@@ -28,6 +28,8 @@ public class RaceResults implements Serializable{
 	private Map<String,Map<String,String>> collectItemsMap;
 	private String judgeItems;//位置评判数据项json
 	private Map<String,Map<String,String>> judgeItemsMap;
+	private String points;//位置综合分数
+	private Map<String,Double> pointsMap;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -112,5 +114,23 @@ public class RaceResults implements Serializable{
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public String getPoints() {
+		return points;
+	}
+	public void setPoints(String points) {
+		this.points = points;
+		if (!StringUtils.isEmpty(points)) {
+			pointsMap = (Map<String, Double>) JSONObject.parse(points);
+		}
+	}
+	public Map<String, Double> getPointsMap() {
+		return pointsMap;
+	}
+	public void setPointsMap(Map<String, Double> pointsMap) {
+		this.pointsMap = pointsMap;
+		if ( null != pointsMap) {
+			this.points = JSONObject.toJSONString(pointsMap);
+		}
 	}
 }

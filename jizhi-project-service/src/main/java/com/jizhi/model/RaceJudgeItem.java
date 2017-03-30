@@ -12,7 +12,7 @@ public class RaceJudgeItem implements Serializable{
 	private int scale;
 	private int type;
 	private double weight;
-	private int position;
+	private String position;
 	private Double defaultValue;
 	private int sort;
 	public int getLid() {
@@ -57,10 +57,10 @@ public class RaceJudgeItem implements Serializable{
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-	public int getPosition() {
+	public String getPosition() {
 		return position;
 	}
-	public void setPosition(int position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 	public Double getDefaultValue() {

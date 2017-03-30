@@ -13,10 +13,12 @@ import com.jizhi.dao.RaceResultsDao;
 import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiPDao;
 import com.jizhi.dao.TongjiTDao;
+import com.jizhi.dao.UserDao;
 import com.jizhi.model.RaceResults;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.TongjiP;
 import com.jizhi.model.TongjiT;
+import com.jizhi.model.User;
 @Service
 public class TongjiService {
 
@@ -28,6 +30,8 @@ public class TongjiService {
 	private RaceScheduleTeamDao raceScheduleTeamDao;
 	@Autowired
 	private TongjiTDao tongjitDao;
+	@Autowired
+	private UserDao userDao;
 	
 	public void addTongjiPerson(TongjiP tongjip) {
 		tongjipDao.addTongjiPerson(tongjip);
@@ -71,10 +75,13 @@ public class TongjiService {
 		//球队位置评判统计
 		Map<String,Map<String,Double>> positionsJudgeMap = new HashMap<String,Map<String,Double>>();
 		Map<String,Map<String,Integer>> positionsJudgeCountsMap = new HashMap<String,Map<String,Integer>>();
+		//总评判项
+		Map<String,Double> allJudgeMap = new HashMap<String,Double>();
+		Map<String,Integer> allJudgeCountsMap = new HashMap<String,Integer>();
 		//位置比赛总场数
 		Map<String,Integer> countsMap = new HashMap<String,Integer>();
 		//总分数
-		Double points = 0.00;
+		Map<String,Double> points = new HashMap<String,Double>();
 		//查询用户所有的统计数据，根据type分类，然后把统计项和评判项的对应值相加
 		for (int i = 0 ;i < 10 ; i ++) {
 			List<RaceResults> rrlist = raceResultsDao.queryByPhone(i, tj.getPhone(),tj.getType());
@@ -171,6 +178,17 @@ public class TongjiService {
 										}else {
 											judgecounts.put(itemId, 1);
 										}
+										
+										if (allJudgeMap.containsKey(itemId)) {
+											allJudgeMap.put(itemId, allJudgeMap.get(itemId)+value);
+										}else {
+											allJudgeMap.put(itemId, value);
+										}
+										if (allJudgeCountsMap.containsKey(itemId)) {
+											allJudgeCountsMap.put(itemId, allJudgeCountsMap.get(itemId)+1);
+										}else {
+											allJudgeCountsMap.put(itemId,1);
+										}
 									}catch(Exception e) {
 									}
 								}
@@ -191,16 +209,60 @@ public class TongjiService {
 							countsMap.put(pkposiont, 1);
 						}
 					}
-					//TODO 设置分数
+					
+					//设置分数
+					Map<String,Double> ptmaps = rr.getPointsMap();
+					if ( null != ptmaps) {
+						for (Iterator<String> ptit = ptmaps.keySet().iterator();ptit.hasNext();) {
+							String pposition = ptit.next();
+							Double value = ptmaps.get(pposition);
+							if (points.containsKey(pposition)) {
+								Double oldvalue = points.get(pposition);
+								points.put(pposition, oldvalue+value);
+							}else {
+								points.put(pposition, value);
+							}
+						}
+					}
 				}
 			}
 		}
+		//擅长位置
+//		User user = userDao.getUserByPhone(tj.getPhone());
+//		List<String> vplist = user.getPositionsList();
+//		if (null != vplist) {
+//			for (int h = 0 ; h < vplist.size() ; h ++ ) {
+//				String pt = vplist.get(h);
+//				
+//			}
+//		}
 		tj.setCollectItemsMap(positionsCollectionMap);
-		tj.setJudgeItemsMap(positionsJudgeMap);
-		tj.setRaceCountsMap(countsMap);
-		tj.setCollectCountsMap(positionsCollectionCountsMap);
-		tj.setJudgeCountsMap(positionsJudgeCountsMap);
-		tj.setPoints(points);
+		//用统计项总分数除以统计项次数
+		Map<String,Double> perjpoints = new HashMap<String,Double>();
+		for (Iterator<String> jit = allJudgeMap.keySet().iterator();jit.hasNext();) {
+			String jposition = jit.next();
+			Double alljps = allJudgeMap.get(jposition);
+			Integer acounts = allJudgeCountsMap.get(jposition);
+			if (null != alljps && null != acounts) {
+				perjpoints.put(jposition, alljps/acounts);
+			}
+		}
+		tj.setAllJudgeItemsMap(perjpoints);
+		//tj.setJudgeItemsMap(positionsJudgeMap);
+		//tj.setRaceCountsMap(countsMap);
+		//tj.setCollectCountsMap(positionsCollectionCountsMap);
+		//tj.setJudgeCountsMap(positionsJudgeCountsMap);
+		//用分数总数除以次数
+		Map<String,Double> perpoints = new HashMap<String,Double>();
+		for (Iterator<String> poit = points.keySet().iterator();poit.hasNext();) {
+			String poposition = poit.next();
+			Double popoints = points.get(poposition);
+			Integer count = countsMap.get(poposition);
+			if ( null != popoints && null != count && count > 0 ) {
+				perpoints.put(poposition, popoints/count);
+			}
+		}
+		tj.setPointsMap(perpoints);
 	}
 	
 	public void updateTeamTonji(String teamId,int type) {

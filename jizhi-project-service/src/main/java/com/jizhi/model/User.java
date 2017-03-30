@@ -2,8 +2,11 @@ package com.jizhi.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.util.StringUtils;
+
+import com.alibaba.fastjson.JSONArray;
 
 public class User implements Serializable{
 
@@ -17,6 +20,7 @@ public class User implements Serializable{
 	private Date createTime;
 	private int tbinedex;
 	private String positions;
+	private List<String> positionsList;
 	public String getPhone() {
 		return phone;
 	}
@@ -64,5 +68,14 @@ public class User implements Serializable{
 	}
 	public void setPositions(String positions) {
 		this.positions = positions;
+		if (!StringUtils.isEmpty(positions)) {
+			this.positionsList = (List<String>) JSONArray.parse(positions);
+		}
+	}
+	public List<String> getPositionsList() {
+		return positionsList;
+	}
+	public void setPositionsList(List<String> positionsList) {
+		this.positionsList = positionsList;
 	}
 }

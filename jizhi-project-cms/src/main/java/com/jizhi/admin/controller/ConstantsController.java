@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.constant.RaceEnums;
-import com.jizhi.constant.RaceEnums.RacePositions;
 import com.jizhi.model.Race;
 import com.jizhi.model.RaceCollectItem;
 import com.jizhi.model.RaceJudgeItem;
@@ -32,7 +31,7 @@ public class ConstantsController {
 	
 	@RequestMapping(value = "person/collectItems",method=RequestMethod.GET)
 	@ResponseBody
-	public String pcollectItem(int raceId,int position,HttpServletRequest request, HttpServletResponse response) {
+	public String pcollectItem(int raceId,String position,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
 			List<RaceCollectItem> items = constantService.queryRaceCollectItemList(1, race.getType(), 1,position);
@@ -47,7 +46,7 @@ public class ConstantsController {
 	public String tcollectItem(int raceId,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
-			List<RaceCollectItem> items = constantService.queryRaceCollectItemList(2, race.getType(), 1,0);
+			List<RaceCollectItem> items = constantService.queryRaceCollectItemList(2, race.getType(), 1,null);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", items);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
@@ -56,7 +55,7 @@ public class ConstantsController {
 	
 	@RequestMapping(value = "person/judgeItems",method=RequestMethod.GET)
 	@ResponseBody
-	public String pjudgeItems(int raceId,int position,HttpServletRequest request, HttpServletResponse response) {
+	public String pjudgeItems(int raceId,String position,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
 			List<RaceJudgeItem> items = constantService.queryRaceJudgeItemList(1, race.getType(), 1,position);
@@ -71,7 +70,7 @@ public class ConstantsController {
 	public String tjudgeItems(int raceId,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
-			List<RaceJudgeItem> items = constantService.queryRaceJudgeItemList(2, race.getType(), 1,0);
+			List<RaceJudgeItem> items = constantService.queryRaceJudgeItemList(2, race.getType(), 1,null);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", items);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

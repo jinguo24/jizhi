@@ -28,7 +28,7 @@ public class RaceCollectItemDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("raceCollectItem.queryById",id);
 	}
 	
-	public List<RaceCollectItem> queryList(int scale,int type,int status,int position) {
+	public List<RaceCollectItem> queryList(int scale,int type,int status,String position) {
 		Map param = new HashMap();
 		param.put("scale", scale);
 		param.put("type", type);
@@ -37,9 +37,9 @@ public class RaceCollectItemDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("raceCollectItem.query",param);
 	}
 	
-	public void updateStatus(int raceId,int status,int position) {
+	public void updateStatus(int id,int status) {
 		Map param = new HashMap();
-		param.put("raceId", raceId);
+		param.put("id", id);
 		param.put("status", status);
 		this.sqlSession.update("raceCollectItem.updateStatus",param);
 	}

@@ -30,7 +30,7 @@ public class RaceJudgeItemDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("raceJudgeItem.queryById",id);
 	}
 	
-	public List<RaceJudgeItem> queryList(int scale,int type,int status,int position) {
+	public List<RaceJudgeItem> queryList(int scale,int type,int status,String position) {
 		Map param = new HashMap();
 		param.put("scale", scale);
 		param.put("type", type);
@@ -39,9 +39,9 @@ public class RaceJudgeItemDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("raceJudgeItem.query",param);
 	}
 	
-	public void updateStatus(int raceId,int status) {
+	public void updateStatus(int id,int status) {
 		Map param = new HashMap();
-		param.put("raceId", raceId);
+		param.put("id", id);
 		param.put("status", status);
 		this.sqlSession.update("raceJudgeItem.updateStatus",param);
 	}

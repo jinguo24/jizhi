@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 public class TongjiP implements Serializable{
@@ -26,9 +27,16 @@ public class TongjiP implements Serializable{
 	private Map<String,Map<String,Double>> judgeItemsMap = new HashMap<String,Map<String,Double>>();
 	private String judgeCounts;
 	private Map<String,Map<String,Integer>> judgeCountsMap = new HashMap<String,Map<String,Integer>>(); 
+	//平均评分项
+	private String allJudges;
+	private Map<String,Double> allJudgeItemsMap = new HashMap<String,Double>();
 	private String raceCounts;//赛事总数
 	private Map<String,Integer> raceCountsMap;
-	private Double points;
+	private String points;
+	private Map<String,Double> pointsMap;
+	//擅长位置
+	private String gpositions;
+	private Map<String,Double> gpositionsMap = new HashMap<String,Double>();
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -108,12 +116,6 @@ public class TongjiP implements Serializable{
 			this.raceCounts = JSONObject.toJSONString(raceCountsMap);
 		}
 	}
-	public Double getPoints() {
-		return points;
-	}
-	public void setPoints(Double points) {
-		this.points = points;
-	}
 	public String getCollectCounts() {
 		return collectCounts;
 	}
@@ -151,6 +153,60 @@ public class TongjiP implements Serializable{
 			this.judgeCounts = JSONObject.toJSONString(judgeCountsMap);
 		}
 	}
+	public String getPoints() {
+		return points;
+	}
+	public void setPoints(String points) {
+		this.points = points;
+		if (StringUtils.isEmpty(points)) {
+			this.pointsMap = (Map<String, Double>) JSONObject.parse(points);
+		}
+	}
+	public Map<String, Double> getPointsMap() {
+		return pointsMap;
+	}
+	public void setPointsMap(Map<String, Double> pointsMap) {
+		this.pointsMap = pointsMap;
+		if (null != pointsMap) {
+			this.points = JSONObject.toJSONString(pointsMap);
+		}
+	}
+	public String getAllJudges() {
+		return allJudges;
+	}
+	public void setAllJudges(String allJudges) {
+		this.allJudges = allJudges;
+		if (!StringUtils.isEmpty(allJudges)) {
+			this.allJudgeItemsMap = (Map<String, Double>) JSONObject.parse(allJudges);
+		}
+	}
+	public Map<String, Double> getAllJudgeItemsMap() {
+		return allJudgeItemsMap;
+	}
+	public void setAllJudgeItemsMap(Map<String, Double> allJudgeItemsMap) {
+		this.allJudgeItemsMap = allJudgeItemsMap;
+		if (null != allJudgeItemsMap) {
+			this.allJudges = JSONObject.toJSONString(allJudgeItemsMap);
+		}
+	}
+	public String getGpositions() {
+		return gpositions;
+	}
+	public void setGpositions(String gpositions) {
+		this.gpositions = gpositions;
+		if (StringUtils.isEmpty(gpositions)) {
+			this.gpositionsMap = (Map<String, Double>) JSONObject.parse(gpositions);
+		}
+	}
+	public Map<String, Double> getGpositionsMap() {
+		return gpositionsMap;
+	}
+	public void setGpositionsMap(Map<String, Double> gpositionsMap) {
+		this.gpositionsMap = gpositionsMap;
+		if ( null != gpositionsMap) {
+			this.gpositions = JSONObject.toJSONString(gpositionsMap);
+		}
+	}
 	public void clearItems() {
 		this.collectItems = null;
 		this.collectItemsMap = null;
@@ -162,5 +218,11 @@ public class TongjiP implements Serializable{
 		this.judgeCountsMap = null;
 		this.collectCounts = null;
 		this.collectCountsMap = null;
+		this.allJudgeItemsMap = null;
+		this.allJudges = null;
+		this.pointsMap = null;
+		this.points = null;
+		this.gpositions = null;
+		this.gpositionsMap = null;
 	}
 }
