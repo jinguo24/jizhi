@@ -17,6 +17,7 @@ public class RacePersonApply implements Serializable{
 	private String name;
 	private int leader;
 	private int tbinedex;
+	private String positions;
 	public int getId() {
 		return id;
 	}
@@ -74,5 +75,11 @@ public class RacePersonApply implements Serializable{
 	}
 	public void setLeader(int leader) {
 		this.leader = leader;
+	}
+	public String getPositions() {
+		return positions;
+	}
+	public void setPositions(String positions) {
+		this.positions = positions;
 	}
 }

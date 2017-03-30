@@ -1,6 +1,7 @@
 package com.jizhi.admin.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,7 +83,7 @@ public class ConstantsController {
 	public String positions(int raceId,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
-			List<RacePositions> ps = RaceEnums.RacePositions.getPositions(race.getType());
+			Map<String,String> ps = RaceEnums.RacePositions.getPositions(race.getType());
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", ps);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

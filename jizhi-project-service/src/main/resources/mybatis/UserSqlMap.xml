@@ -8,14 +8,15 @@
 		<result column="weichat_no" property="weiChatNo" jdbcType="VARCHAR" />
 		<result column="weichat_image" property="weiChatImage" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="DATE" />
+		<result column="positions" property="positions" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	phone,name,nick_name,weichat_no,weichat_image,create_time
+	phone,name,nick_name,weichat_no,weichat_image,create_time,positions
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.User">
-  	insert into user_#{tbinedex} (phone,name,nick_name,weichat_no,weichat_image,create_time) 
-  		values (#{phone},#{name},#{nickName},#{weiChatNo},#{weiChatImage},#{createTime})
+  	insert into user_#{tbinedex} (phone,name,nick_name,weichat_no,weichat_image,create_time,positions) 
+  		values (#{phone},#{name},#{nickName},#{weiChatNo},#{weiChatImage},#{createTime},#{positions})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.User">
@@ -23,7 +24,8 @@
   	set weichat_no = #{weiChatNo}, 
   	weichat_image = #{weiChatImage} ,
   	name = #{name},
-  	nick_name = #{nickName}
+  	nick_name = #{nickName},
+  	positions = #{positions}
   	where phone=#{phone} 
   </update>
   

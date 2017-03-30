@@ -1,7 +1,7 @@
 package com.jizhi.constant;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RaceEnums {
 
@@ -59,15 +59,18 @@ public class RaceEnums {
 		public void setType(int type) {
 			this.type = type;
 		}
-		public static List<RacePositions> getPositions(int type) {
-			List<RacePositions> rps = new ArrayList<RacePositions>();
+		public static Map<String,String> getPositions(int type) {
+			Map<String,String> rps = new HashMap<String,String>();
 			for (RacePositions rp : RacePositions.values()) {
 				if (rp.getType() == type) {
-					rps.add(rp);
+					rps.put("id", rp.getId());
+					rps.put("name", rp.getName());
 				}
 			}
 			return rps;
 		}
+		
+		
 		
 		
 	}

@@ -10,14 +10,16 @@
 		<result column="race_name" property="raceName" jdbcType="VARCHAR" />
 		<result column="team_apply_id" property="teamApplyId" jdbcType="VARCHAR" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="positions" property="positions" jdbcType="VARCHAR" />
+		
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,phone,create_time,team_name,race_name,team_apply_id,name
+	id,race_id,phone,create_time,team_name,race_name,team_apply_id,name,positions
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RacePersonApply">
-  	insert into race_person_apply_#{tbinedex} (race_id,phone,create_time,team_name,race_name,team_apply_id,name) 
-  		values (#{raceId},#{phone},#{createTime},#{teamName},#{raceName},#{teamApplyId},#{name})
+  	insert into race_person_apply_#{tbinedex} (race_id,phone,create_time,team_name,race_name,team_apply_id,name,positions) 
+  		values (#{raceId},#{phone},#{createTime},#{teamName},#{raceName},#{teamApplyId},#{name},#{positions})
   </insert>
   
   <select id="queryByPhoneAndRace" resultMap="BaseResultMap" parameterType="java.util.HashMap">

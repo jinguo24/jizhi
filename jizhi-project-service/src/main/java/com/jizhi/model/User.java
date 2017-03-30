@@ -16,6 +16,7 @@ public class User implements Serializable{
 	private String weiChatImage;
 	private Date createTime;
 	private int tbinedex;
+	private String positions;
 	public String getPhone() {
 		return phone;
 	}
@@ -57,5 +58,11 @@ public class User implements Serializable{
 	}
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+	public String getPositions() {
+		return positions;
+	}
+	public void setPositions(String positions) {
+		this.positions = positions;
 	}
 }

@@ -7,16 +7,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.jizhi.dao.RacePersonApplyDao;
 import com.jizhi.dao.TeamDao;
 import com.jizhi.dao.TeamMemberDao;
 import com.jizhi.dao.TeamRaceApplyDao;
 import com.jizhi.dao.TeamRaceApplyRejectDao;
+import com.jizhi.dao.UserDao;
 import com.jizhi.model.RacePersonApply;
 import com.jizhi.model.Team;
 import com.jizhi.model.TeamMembers;
 import com.jizhi.model.TeamRaceApply;
 import com.jizhi.model.TeamRaceApplyReject;
+import com.jizhi.model.User;
 import com.simple.common.util.PageResult;
 import com.simple.common.util.PrimaryKeyUtil;
 @Service
@@ -32,6 +35,8 @@ public class TeamApplyService {
 	private TeamMemberDao teamMembersDao;
 	@Autowired
 	private TeamRaceApplyRejectDao teamRaceApplyRejectDao;
+	@Autowired
+	private UserDao userDao;
 	
 	public TeamRaceApply queryTeamApply(String teamName,int raceId) {
 		return teamRaceApplyDao.getByRaceAndTeam(raceId, teamName);
@@ -124,6 +129,20 @@ public class TeamApplyService {
 						tm.setLeader(1);
 					}
 					teamMembersDao.updateTeamMembers(tm);
+				}
+				//设置用户的最佳位置
+				User user = userDao.getUserByPhone(ra.getPhone());
+				String positions = user.getPositions();
+				if (null != ra.getPositions()) {
+					List<String> plist = new ArrayList<String>();
+					if ( null != positions) {
+						plist = (List<String>) JSONArray.parse(positions);
+					}
+					if (!plist.contains(ra.getPositions())) {
+						plist.add(ra.getPositions());
+					}
+					user.setPositions(JSONArray.toJSONString(plist));
+					userDao.update(user);
 				}
 			}
 		}
