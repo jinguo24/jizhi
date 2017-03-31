@@ -88,6 +88,9 @@ public class RaceScheduleController {
 	public String updateResutls(int id,String successTeamId,String collectItemslists,String judgeItemslists,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			RaceScheduleTeam raceSchedule = raceScheduleTeamService.queryById(id);
+			if (null == raceSchedule || raceSchedule.getUdefined()==1) {
+				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"该赛程无效，不能录入数据", null);
+			}
 			if (StringUtils.isEmpty(successTeamId)) {
 				raceSchedule.setSuccessTeamId("0");
 			}else {
