@@ -44,6 +44,18 @@ public class RacePersonApplyDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("racePersonApply.query",param);
 	}
 	
+	public List<RacePersonApply> queryListByTeamNames(int raceId,List<String> teamNames,int begin,int size) {
+		RacePersonApply u = new RacePersonApply();
+		u.setRaceId(raceId);
+		Map param = new HashMap();
+		param.put("tbinedex", u.getTbinedex());
+		param.put("teamNames", teamNames);
+		param.put("raceId", raceId);
+		param.put("begin", begin);
+		param.put("size", size);
+		return this.sqlSession.selectList("racePersonApply.queryByTeamNames",param);
+	}
+	
 	public void delete(int raceId,int id) {
 		RacePersonApply u = new RacePersonApply();
 		u.setRaceId(raceId);

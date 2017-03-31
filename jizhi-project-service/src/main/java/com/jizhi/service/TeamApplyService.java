@@ -182,6 +182,10 @@ public class TeamApplyService {
 		return racePersonApplyDao.queryList(raceId, teamApplyId, 0, 500);
 	}
 	
+	public List<RacePersonApply> queryPersonApplysByTeamName(int raceId,List<String> teamNames) {
+		return racePersonApplyDao.queryListByTeamNames(raceId, teamNames, 0, 500);
+	}
+	
 	public List<TeamRaceApply> queryTeamApplyList(String phone) {
 		//查询所有的leader
 		List<TeamRaceApply> alls = new ArrayList<TeamRaceApply>();
