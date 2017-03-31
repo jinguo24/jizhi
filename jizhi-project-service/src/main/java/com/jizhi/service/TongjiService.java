@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jizhi.constant.RaceEnums.RacePositions;
 import com.jizhi.dao.RaceResultsDao;
 import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiPDao;
@@ -227,15 +228,6 @@ public class TongjiService {
 				}
 			}
 		}
-		//擅长位置
-//		User user = userDao.getUserByPhone(tj.getPhone());
-//		List<String> vplist = user.getPositionsList();
-//		if (null != vplist) {
-//			for (int h = 0 ; h < vplist.size() ; h ++ ) {
-//				String pt = vplist.get(h);
-//				
-//			}
-//		}
 		tj.setCollectItemsMap(positionsCollectionMap);
 		//用统计项总分数除以统计项次数
 		Map<String,Double> perjpoints = new HashMap<String,Double>();
@@ -252,7 +244,7 @@ public class TongjiService {
 		//tj.setRaceCountsMap(countsMap);
 		//tj.setCollectCountsMap(positionsCollectionCountsMap);
 		//tj.setJudgeCountsMap(positionsJudgeCountsMap);
-		//用分数总数除以次数
+		//用分数总数除以次数,擅长位置如果没有分数，则为位置默认分数
 		Map<String,Double> perpoints = new HashMap<String,Double>();
 		for (Iterator<String> poit = points.keySet().iterator();poit.hasNext();) {
 			String poposition = poit.next();
@@ -260,6 +252,20 @@ public class TongjiService {
 			Integer count = countsMap.get(poposition);
 			if ( null != popoints && null != count && count > 0 ) {
 				perpoints.put(poposition, popoints/count);
+			}
+		}
+		//擅长位置
+		User user = userDao.getUserByPhone(tj.getPhone());
+		List<String> vplist = user.getPositionsList();
+		if (null != vplist) {
+			for (int h = 0 ; h < vplist.size() ; h ++ ) {
+				String pt = vplist.get(h);
+				if (!perpoints.containsKey(pt)) {
+					Double v = RacePositions.getDValue(pt);
+					if ( null != v ) {
+						perpoints.put(pt, v);	
+					}
+				}
 			}
 		}
 		tj.setPointsMap(perpoints);
