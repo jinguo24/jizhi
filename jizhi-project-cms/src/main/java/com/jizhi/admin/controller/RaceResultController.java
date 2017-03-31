@@ -96,6 +96,9 @@ public class RaceResultController {
 			if (null == rsteam) {
 				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"赛程不存在", null);
 			}
+			if (rsteam.getUdefined()==1) {
+				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"赛程信息为自定义，不是真实队伍，无法查询", null);
+			}
 			String teamOne = rsteam.getTeamOne();
 			String teamTwo = rsteam.getTeamTwo();
 			Team tone = teamService.getByName(teamOne);

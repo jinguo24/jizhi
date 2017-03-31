@@ -17,14 +17,15 @@
 		<result column="address" property="address" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="tags" property="tags" jdbcType="VARCHAR" />
+		<result column="udefined" property="udefined" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status,tags
+	id,race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status,tags,udefined
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceScheduleTeam">
-  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status,tags) 
-  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{type},#{address},#{status},#{tags})
+  	insert into race_schedule_team (race_id,sort,begin_date,begin_time,end_time,team_one,team_two,success_team_id,collect_item,judge_item,type,address,status,tags,udefined) 
+  		values (#{raceId},#{sort},#{beginDate},#{beginTime},#{endTime},#{teamOne},#{teamTwo},#{successTeamId},#{collectItems},#{judgeItems},#{type},#{address},#{status},#{tags},#{udefined})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceScheduleTeam">
@@ -40,7 +41,8 @@
   		judge_item = #{judgeItems},
   		type = #{type},
   		address = #{address},
-  		tags = #{tags}
+  		tags = #{tags},
+  		udefined = #{udefined}
   		where id = #{id} and race_id = #{raceId} 
   </update>
   
@@ -52,6 +54,7 @@
   	<if test="teamId != null and teamId != '' " > and (team_one = #{teamId} or team_two = #{teamId})</if>
   	<if test="type > 0 " > and type=#{type}</if>
   	<if test="status > 0 " > and status=#{status}</if>
+  	<if test="status = 999 " > and status in (2,3)</if>
   	order by sort asc
   	limit #{begin},#{size}
   </select>

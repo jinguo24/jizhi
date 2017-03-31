@@ -40,6 +40,7 @@ public class RaceScheduleTeam implements Serializable{
 	private String address;
 	private int status ;
 	private String tags="";
+	private int udefined;//是否自定义 0-否 1-是
 	public int getId() {
 		return id;
 	}
@@ -230,6 +231,12 @@ public class RaceScheduleTeam implements Serializable{
 	}
 	public String getJudgeItemslists() {
 		return judgeItemslists;
+	}
+	public int getUdefined() {
+		return udefined;
+	}
+	public void setUdefined(int udefined) {
+		this.udefined = udefined;
 	}
 	public void setCollectItemslists(String collectItemslists) {
 		this.collectItemslists = collectItemslists;

@@ -290,7 +290,7 @@ public class TongjiService {
 	}
 	
 	private void updateTeamTonji(TongjiT tt,int type) {
-		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, tt.getTeamId(), type,2, 0, 10000);
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, tt.getTeamId(), type,999, 0, 10000);
 		if ( null != rsts) {
 			//球队位置数据项统计
 			Map<Integer,Double> collectionMap = new HashMap<Integer,Double>();
@@ -306,6 +306,9 @@ public class TongjiService {
 			int evens = 0;
 			for (int i = 0 ; i < rsts.size() ; i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
+				if (rst.getUdefined()==1) {
+					continue;
+				}
 				//设置数据收集项
 				if ( null != rst.getCollectItemsMap()) {
 					Map<String,String> citems= rst.getCollectItemsMap().get(tt.getTeamId());
