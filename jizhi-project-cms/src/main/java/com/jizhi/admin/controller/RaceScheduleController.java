@@ -98,6 +98,7 @@ public class RaceScheduleController {
 			}
 			raceSchedule.setCollectItemslists(collectItemslists);
 			raceSchedule.setJudgeItemslists(judgeItemslists);
+			raceSchedule.setStatus(3);
 			raceScheduleTeamService.updateRaceScheduleTeamResults(raceSchedule);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null);
 		}catch(Exception e) {
