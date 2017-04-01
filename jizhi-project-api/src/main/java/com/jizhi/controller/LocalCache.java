@@ -25,5 +25,4 @@ public class LocalCache {
 		String ocode = validateCode.get(phone);
 		return code.equals(ocode);
 	}
-	
 }
