@@ -101,18 +101,19 @@ public class RaceResultController {
 			}
 			String teamOne = rsteam.getTeamOne();
 			String teamTwo = rsteam.getTeamTwo();
-			Team tone = teamService.getByName(teamOne);
+			Team tone = teamService.getById(teamOne);
 			if (null == tone) {
 				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"球队["+teamOne+"]不存在", null);
 			}
-			Team ttwo = teamService.getByName(teamTwo);
+			Team ttwo = teamService.getById(teamTwo);
 			if (null == ttwo) {
 				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"球队["+teamTwo+"]不存在", null);
 			}
 			List<String> names = new ArrayList<String>();
 			names.add(tone.getName());
 			names.add(ttwo.getName());
-			List<RacePersonApply> persons = teamApplyService.queryPersonApplysByTeamName(rsteam.getRaceId(), names);
+			List<RacePersonApply> persons = teamApplyService.queryPersonApplysByTeamName(rsteam, names);
+			
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", persons);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);

@@ -49,8 +49,10 @@ public class RaceScheduleController {
 			if ( null != teams ) {
 				for (int i =0; i < teams.size() ; i ++) {
 					RaceScheduleTeam rst = teams.get(i);
-					rst.setTeamOneObj(teamService.getById(rst.getTeamOne()));
-					rst.setTeamTwoObj(teamService.getById(rst.getTeamTwo()));
+					if (rst.getUdefined()!=1) {
+						rst.setTeamOneObj(teamService.getById(rst.getTeamOne()));
+						rst.setTeamTwoObj(teamService.getById(rst.getTeamTwo()));
+					}
 				}
 			}
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", races);
