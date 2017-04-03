@@ -78,6 +78,17 @@ public class RaceResultController {
 		}
 	}
 	
+	@RequestMapping(value = "detail",method=RequestMethod.GET)
+	@ResponseBody
+	public String detail(int scheduleId,String phone,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			RaceResults rr = raceResultService.queryPersonResult(scheduleId, phone);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", rr);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+	
 	@RequestMapping(value = "delete",method=RequestMethod.POST)
 	@ResponseBody
 	public String delete(int scheduleId,int id,HttpServletRequest request, HttpServletResponse response) {

@@ -25,6 +25,10 @@ public class RaceResultService {
 		return raceResultsDao.queryCount(scheduleTeamId);
 	}
 	
+	public RaceResults queryPersonResult(int scheduleTeamId,String phone) {
+		return raceResultsDao.queryPersonResult(scheduleTeamId, phone);
+	}
+	
 	public PageResult getRaceResultsPageResult(int scheduleTeamId,int pageIndex,int pageSize) {
 		List<RaceResults> raceSchedules = queryRaceResultsList(scheduleTeamId,pageIndex,pageSize);
 		int count = queryCount(scheduleTeamId);

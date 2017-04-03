@@ -18,6 +18,7 @@ public class TeamMembers implements Serializable{
 	private String remark;//备注
 	private int main;//主力球员 1-是 0-不是
 	private int leader;//领队 1-是 0-不是
+	private String flag;
 	private int tbinedex;
 	public int getId() {
 		return id;
@@ -66,5 +67,11 @@ public class TeamMembers implements Serializable{
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getFlag() {
+		return flag;
+	}
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 }

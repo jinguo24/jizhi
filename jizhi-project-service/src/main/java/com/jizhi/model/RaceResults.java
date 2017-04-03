@@ -217,7 +217,6 @@ public class RaceResults implements Serializable{
 						isv.setKey(siid);
 						isv.setValue(iv);
 						ivs.add(isv);
-						ivs.add(isv);
 					}
 				}
 				items.add(its);

@@ -55,6 +55,16 @@ public class RaceResultsDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("raceResults.queryCount",param);
 	}
 	
+	public RaceResults queryPersonResult(int scheduleTeamId,String phone){
+		Map param = new HashMap();
+		RaceResults rr = new RaceResults();
+		rr.setRaceScheduleTeamId(scheduleTeamId);
+		param.put("raceScheduleTeamId", scheduleTeamId);
+		param.put("tbinedex", rr.getTbinedex());
+		param.put("phone", phone);
+		return this.sqlSession.selectOne("raceResults.queryPersonResult",param);
+	}
+	
 	public RaceResults queryById(int scheduleTeamId, int id) {
 		Map param = new HashMap();
 		RaceResults rr = new RaceResults();

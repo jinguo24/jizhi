@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.model.Race;
 import com.jizhi.model.RacePersonApply;
+import com.jizhi.model.RaceResults;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.Team;
 import com.jizhi.model.TeamMembers;
 import com.jizhi.model.TeamRaceApply;
+import com.jizhi.service.RaceResultService;
 import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamApplyService;
@@ -43,6 +45,8 @@ public class RaceScheduleController {
 	private TeamService teamService;
 	@Autowired
 	private TeamApplyService teamApplyService;
+	@Autowired
+	private RaceResultService raceResultService;
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
@@ -71,6 +75,13 @@ public class RaceScheduleController {
 							t1leader.setName(ta1.getLeaderName());
 							t1leader.setPhone(ta1.getLeaderPhone());
 							t1leader.setTeamId(toneObj.getId());
+							//查询是否配置了数据
+							RaceResults rr = raceResultService.queryPersonResult(rst.getId(), ta1.getLeaderPhone());
+							if ( null == rr) {
+								t1leader.setFlag("0");
+							}else {
+								t1leader.setFlag("1");
+							}
 							t1list.add(t1leader);
 							List<String> t1names = new ArrayList<String>();
 							t1names.add(toneObj.getName());
@@ -83,6 +94,12 @@ public class RaceScheduleController {
 									tm.setName(pp.getName());
 									tm.setPhone(pp.getPhone());
 									tm.setTeamId(toneObj.getId());
+									RaceResults rrp = raceResultService.queryPersonResult(rst.getId(), pp.getPhone());
+									if ( null == rrp) {
+										tm.setFlag("0");
+									}else {
+										tm.setFlag("1");
+									}
 									t1list.add(tm);
 								}
 								toneObj.setMembers(t1list);
@@ -95,6 +112,12 @@ public class RaceScheduleController {
 							t2leader.setName(ta2.getLeaderName());
 							t2leader.setPhone(ta2.getLeaderPhone());
 							t2leader.setTeamId(ttwoObj.getId());
+							RaceResults rr2 = raceResultService.queryPersonResult(rst.getId(), ta2.getLeaderPhone());
+							if ( null == rr2) {
+								t2leader.setFlag("0");
+							}else {
+								t2leader.setFlag("1");
+							}
 							t2list.add(t2leader);
 							List<String> t2names = new ArrayList<String>();
 							t2names.add(ttwoObj.getName());
@@ -107,6 +130,12 @@ public class RaceScheduleController {
 									tm.setName(pp.getName());
 									tm.setPhone(pp.getPhone());
 									tm.setTeamId(ttwoObj.getId());
+									RaceResults rrp = raceResultService.queryPersonResult(rst.getId(), pp.getPhone());
+									if ( null == rrp) {
+										tm.setFlag("0");
+									}else {
+										tm.setFlag("1");
+									}
 									t2list.add(tm);
 								}
 								ttwoObj.setMembers(t2list);
