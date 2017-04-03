@@ -23,6 +23,7 @@ import com.jizhi.model.RacePersonApply;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.Team;
 import com.jizhi.model.TeamMembers;
+import com.jizhi.model.TeamRaceApply;
 import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamApplyService;
@@ -63,11 +64,18 @@ public class RaceScheduleController {
 						rst.setTeamTwoObj(ttwoObj);
 						String dys = request.getParameter("dys");
 						if ("1".equals(dys)) {
+							List<TeamMembers> t1list = new ArrayList<TeamMembers>();
+							TeamMembers t1leader = new TeamMembers();
+							t1leader.setLeader(1);
+							TeamRaceApply ta1 = teamApplyService.queryTeamApply(toneObj.getName(), raceId);
+							t1leader.setName(ta1.getLeaderName());
+							t1leader.setPhone(ta1.getLeaderPhone());
+							t1leader.setTeamId(toneObj.getId());
+							t1list.add(t1leader);
 							List<String> t1names = new ArrayList<String>();
 							t1names.add(toneObj.getName());
 							List<RacePersonApply> persons = teamApplyService.queryPersonApplysByTeamName(raceId, t1names);
 							if ( null != persons) {
-								List<TeamMembers> t1list = new ArrayList<TeamMembers>();
 								for (int j = 0 ; j < persons.size(); j ++) {
 									RacePersonApply pp = persons.get(j);
 									TeamMembers tm = new TeamMembers();
@@ -80,11 +88,18 @@ public class RaceScheduleController {
 								toneObj.setMembers(t1list);
 							}
 							
+							List<TeamMembers> t2list = new ArrayList<TeamMembers>();
+							TeamMembers t2leader = new TeamMembers();
+							t2leader.setLeader(1);
+							TeamRaceApply ta2 = teamApplyService.queryTeamApply(ttwoObj.getName(), raceId);
+							t2leader.setName(ta2.getLeaderName());
+							t2leader.setPhone(ta2.getLeaderPhone());
+							t2leader.setTeamId(ttwoObj.getId());
+							t2list.add(t2leader);
 							List<String> t2names = new ArrayList<String>();
 							t2names.add(ttwoObj.getName());
 							List<RacePersonApply> t2persons = teamApplyService.queryPersonApplysByTeamName(raceId, t2names);
 							if ( null != t2persons) {
-								List<TeamMembers> t2list = new ArrayList<TeamMembers>();
 								for (int j = 0 ; j < t2persons.size(); j ++) {
 									RacePersonApply pp = t2persons.get(j);
 									TeamMembers tm = new TeamMembers();
