@@ -183,15 +183,8 @@ public class TeamApplyService {
 		return racePersonApplyDao.queryList(raceId, teamApplyId, 0, 500);
 	}
 	
-	public List<RacePersonApply> queryPersonApplysByTeamName(RaceScheduleTeam rsteam,List<String> teamNames) {
-		//添加队长
-		List<RacePersonApply> alist = new ArrayList<RacePersonApply>();
-		RacePersonApply t1 = new RacePersonApply();
-		t1.setLeader(1);
-		//t1.setName(rsteam.get);
-		//teamRaceApplyDao.getByRaceAndTeam(raceId, teamName)
-		
-		return racePersonApplyDao.queryListByTeamNames(rsteam.getRaceId(), teamNames, 0, 500);
+	public List<RacePersonApply> queryPersonApplysByTeamName(int raceId,List<String> teamNames) {
+		return racePersonApplyDao.queryListByTeamNames(raceId, teamNames, 0, 500);
 	}
 	
 	public List<TeamRaceApply> queryTeamApplyList(String phone) {

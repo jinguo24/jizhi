@@ -1,6 +1,7 @@
 package com.jizhi.admin.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.model.Race;
+import com.jizhi.model.RacePersonApply;
 import com.jizhi.model.RaceScheduleTeam;
+import com.jizhi.model.Team;
+import com.jizhi.model.TeamMembers;
 import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
+import com.jizhi.service.TeamApplyService;
 import com.jizhi.service.TeamService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
@@ -35,6 +40,8 @@ public class RaceScheduleController {
 	private RaceService raceService;
 	@Autowired
 	private TeamService teamService;
+	@Autowired
+	private TeamApplyService teamApplyService;
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
@@ -50,8 +57,46 @@ public class RaceScheduleController {
 				for (int i =0; i < teams.size() ; i ++) {
 					RaceScheduleTeam rst = teams.get(i);
 					if (rst.getUdefined()!=1) {
-						rst.setTeamOneObj(teamService.getById(rst.getTeamOne()));
-						rst.setTeamTwoObj(teamService.getById(rst.getTeamTwo()));
+						Team toneObj = teamService.getById(rst.getTeamOne());
+						rst.setTeamOneObj(toneObj);
+						Team ttwoObj = teamService.getById(rst.getTeamTwo());
+						rst.setTeamTwoObj(ttwoObj);
+						String dys = request.getParameter("dys");
+						if ("1".equals(dys)) {
+							List<String> t1names = new ArrayList<String>();
+							t1names.add(toneObj.getName());
+							List<RacePersonApply> persons = teamApplyService.queryPersonApplysByTeamName(raceId, t1names);
+							if ( null != persons) {
+								List<TeamMembers> t1list = new ArrayList<TeamMembers>();
+								for (int j = 0 ; j < persons.size(); j ++) {
+									RacePersonApply pp = persons.get(j);
+									TeamMembers tm = new TeamMembers();
+									tm.setLeader(pp.getLeader());
+									tm.setName(pp.getName());
+									tm.setPhone(pp.getPhone());
+									tm.setTeamId(toneObj.getId());
+									t1list.add(tm);
+								}
+								toneObj.setMembers(t1list);
+							}
+							
+							List<String> t2names = new ArrayList<String>();
+							t2names.add(ttwoObj.getName());
+							List<RacePersonApply> t2persons = teamApplyService.queryPersonApplysByTeamName(raceId, t2names);
+							if ( null != t2persons) {
+								List<TeamMembers> t2list = new ArrayList<TeamMembers>();
+								for (int j = 0 ; j < t2persons.size(); j ++) {
+									RacePersonApply pp = t2persons.get(j);
+									TeamMembers tm = new TeamMembers();
+									tm.setLeader(pp.getLeader());
+									tm.setName(pp.getName());
+									tm.setPhone(pp.getPhone());
+									tm.setTeamId(ttwoObj.getId());
+									t2list.add(tm);
+								}
+								ttwoObj.setMembers(t2list);
+							}
+						}
 					}
 				}
 			}

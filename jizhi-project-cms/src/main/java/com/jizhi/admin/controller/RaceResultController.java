@@ -17,6 +17,7 @@ import com.jizhi.model.RacePersonApply;
 import com.jizhi.model.RaceResults;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.Team;
+import com.jizhi.model.TeamRaceApply;
 import com.jizhi.service.RaceResultService;
 import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
@@ -87,37 +88,4 @@ public class RaceResultController {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"删除失败:"+e.getLocalizedMessage(), null);
 		}
 	}
-	
-	@RequestMapping(value = "persons",method=RequestMethod.GET)
-	@ResponseBody
-	public String persons(int scheduleId,HttpServletRequest request, HttpServletResponse response) {
-		try {
-			RaceScheduleTeam rsteam = raceScheduleService.queryById(scheduleId);
-			if (null == rsteam) {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"赛程不存在", null);
-			}
-			if (rsteam.getUdefined()==1) {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"赛程信息为自定义，不是真实队伍，无法查询", null);
-			}
-			String teamOne = rsteam.getTeamOne();
-			String teamTwo = rsteam.getTeamTwo();
-			Team tone = teamService.getById(teamOne);
-			if (null == tone) {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"球队["+teamOne+"]不存在", null);
-			}
-			Team ttwo = teamService.getById(teamTwo);
-			if (null == ttwo) {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"球队["+teamTwo+"]不存在", null);
-			}
-			List<String> names = new ArrayList<String>();
-			names.add(tone.getName());
-			names.add(ttwo.getName());
-			List<RacePersonApply> persons = teamApplyService.queryPersonApplysByTeamName(rsteam, names);
-			
-			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", persons);
-		}catch(Exception e) {
-			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), null);
-		}
-	}
-	
 }
