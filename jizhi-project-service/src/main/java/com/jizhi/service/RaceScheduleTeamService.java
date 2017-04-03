@@ -1,6 +1,7 @@
 package com.jizhi.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,10 @@ public class RaceScheduleTeamService {
 		raceScheduleTeamDao.updateRaceScheduleTeamResults(race);
 	}
 	
+	public void calucatePoints(RaceScheduleTeam race) {
+		Map<String, Map<String, String>> collectItems = race.getCollectItemsMap();
+		
+	}
 	
 	public void delete(int id) {
 		raceScheduleTeamDao.deleteById(id);

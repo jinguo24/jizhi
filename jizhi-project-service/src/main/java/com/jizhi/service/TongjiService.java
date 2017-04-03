@@ -15,6 +15,7 @@ import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiPDao;
 import com.jizhi.dao.TongjiTDao;
 import com.jizhi.dao.UserDao;
+import com.jizhi.model.ItemsValues;
 import com.jizhi.model.RaceResults;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.TongjiP;
@@ -212,11 +213,11 @@ public class TongjiService {
 					}
 					
 					//设置分数
-					Map<String,Double> ptmaps = rr.getPointsMap();
+					Map<String,String> ptmaps = rr.getPointsMap();
 					if ( null != ptmaps) {
 						for (Iterator<String> ptit = ptmaps.keySet().iterator();ptit.hasNext();) {
 							String pposition = ptit.next();
-							Double value = ptmaps.get(pposition);
+							Double value = Double.parseDouble(ptmaps.get(pposition));
 							if (points.containsKey(pposition)) {
 								Double oldvalue = points.get(pposition);
 								points.put(pposition, oldvalue+value);

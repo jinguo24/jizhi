@@ -1,6 +1,8 @@
 package com.jizhi.constant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RaceEnums {
@@ -31,7 +33,11 @@ public class RaceEnums {
 	}
 	
 	public enum RacePositions {
-		ZUQIU_QIANFENG("zuqiu_qianfeng","前锋",RaceTypes.ZUQIU.id,60.0);
+		ZUQIU_QIANFENG("zuqiu_qianfeng","前锋",RaceTypes.ZUQIU.id,50.0),
+		ZUQIU_ZHONGCHANG("zuqiu_zhongchang","中场",RaceTypes.ZUQIU.id,50.0),
+		ZUQIU_HOUYAO("zuqiu_houyao","后腰",RaceTypes.ZUQIU.id,50.0),
+		ZUQIU_HOUWEI("zuqiu_houwei","后卫",RaceTypes.ZUQIU.id,50.0),
+		ZUQIU_SHOUMENYUAN("zuqiu_shoumenyuan","守门员",RaceTypes.ZUQIU.id,50.0);
 		
 		private RacePositions(String id, String name, int type,Double value) {
 			this.id = id;
@@ -67,15 +73,17 @@ public class RaceEnums {
 		public void setDefaultValue(Double defaultValue) {
 			this.defaultValue = defaultValue;
 		}
-		public static Map<String,String> getPositions(int type) {
-			Map<String,String> rps = new HashMap<String,String>();
+		public static List<Map<String,String>> getPositions(int type) {
+			List<Map<String,String>> list = new ArrayList<Map<String,String>>();
 			for (RacePositions rp : RacePositions.values()) {
 				if (rp.getType() == type) {
+					Map<String,String> rps = new HashMap<String,String>();
 					rps.put("id", rp.getId());
 					rps.put("name", rp.getName());
+					list.add(rps);
 				}
 			}
-			return rps;
+			return list;
 		}
 		public static Double getDValue(String id) {
 			for (RacePositions rp : RacePositions.values()) {
