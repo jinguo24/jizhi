@@ -15,6 +15,7 @@ public class RaceCollectItem implements Serializable{
 	private String position;
 	private Double defaultValue;
 	private int sort;
+	private Double weight;
 	public int getLid() {
 		return lid;
 	}
@@ -68,5 +69,11 @@ public class RaceCollectItem implements Serializable{
 	}
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+	public Double getWeight() {
+		return weight;
+	}
+	public void setWeight(Double weight) {
+		this.weight = weight;
 	}
 }

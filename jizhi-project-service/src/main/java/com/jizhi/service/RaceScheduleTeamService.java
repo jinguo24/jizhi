@@ -52,11 +52,6 @@ public class RaceScheduleTeamService {
 		raceScheduleTeamDao.updateRaceScheduleTeamResults(race);
 	}
 	
-	public void calucatePoints(RaceScheduleTeam race) {
-		Map<String, Map<String, String>> collectItems = race.getCollectItemsMap();
-		
-	}
-	
 	public void delete(int id) {
 		raceScheduleTeamDao.deleteById(id);
 	}

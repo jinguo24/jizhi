@@ -3,8 +3,8 @@
 <mapper namespace="userResults" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.UserResults" >
 		<id column="phone" property="phone" jdbcType="VARCHAR" />
-		<id column="collection_items" property="collectItems" jdbcType="VARCHAR" />
-		<id column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+		<result column="collection_items" property="collectItems" jdbcType="VARCHAR" />
+		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
 	phone,collection_items,judge_items

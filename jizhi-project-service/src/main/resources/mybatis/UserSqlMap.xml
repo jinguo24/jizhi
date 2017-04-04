@@ -3,8 +3,8 @@
 <mapper namespace="user" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.User" >
 		<id column="phone" property="phone" jdbcType="VARCHAR" />
-		<id column="name" property="name" jdbcType="VARCHAR" />
-		<id column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
 		<result column="weichat_no" property="weiChatNo" jdbcType="VARCHAR" />
 		<result column="weichat_image" property="weiChatImage" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="DATE" />

@@ -10,16 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jizhi.constant.RaceEnums.RacePositions;
+import com.jizhi.dao.RaceDao;
 import com.jizhi.dao.RaceResultsDao;
 import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiPDao;
 import com.jizhi.dao.TongjiTDao;
+import com.jizhi.dao.TongjiTRaceDao;
 import com.jizhi.dao.UserDao;
-import com.jizhi.model.ItemsValues;
+import com.jizhi.model.Race;
+import com.jizhi.model.RaceCollectItem;
 import com.jizhi.model.RaceResults;
 import com.jizhi.model.RaceScheduleTeam;
 import com.jizhi.model.TongjiP;
 import com.jizhi.model.TongjiT;
+import com.jizhi.model.TongjiTRace;
 import com.jizhi.model.User;
 @Service
 public class TongjiService {
@@ -34,6 +38,13 @@ public class TongjiService {
 	private TongjiTDao tongjitDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private RaceDao raceDao;
+	@Autowired
+	private TongjiTRaceDao tongjiTRaceDao;
+	@Autowired
+	private ConstantsService constantService;
+	
 	
 	public void addTongjiPerson(TongjiP tongjip) {
 		tongjipDao.addTongjiPerson(tongjip);
@@ -385,6 +396,138 @@ public class TongjiService {
 			tt.setEven(evens);
 			tt.setCollectItemsCountsMap(collectionCountsMap);
 			tt.setJudgeItemsCountsMap(judgeCountsMap);
+		}
+	}
+	
+	public void updateTeamRaceTongji(int raceId) {
+		Race race = raceDao.queryById(raceId);
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(raceId, null, race.getType(), 0, 1, 100);
+		//球队数据统计
+		Map<String,Map<String,Double>> teamCollectsMap = new HashMap<String,Map<String,Double>>();
+		//赢的场次
+		Map<String,Integer> wins = new HashMap<String,Integer>();
+		//输的场次
+		Map<String,Integer> loses = new HashMap<String,Integer>();
+		//平的场次
+		Map<String,Integer> evens = new HashMap<String,Integer>();
+		if ( null != rsts) {
+			Map<String,RaceCollectItem> rcmap = new HashMap<String,RaceCollectItem>();
+			//查询出来所有的数据项
+			List<RaceCollectItem> rcis = constantService.queryRaceCollectItemList(2, race.getType(), 1, null);
+			if ( null != rcis) {
+				for (int i = 0 ; i < rcis.size(); i ++) {
+					RaceCollectItem rci = rcis.get(i);
+					rcmap.put(rci.getId(), rci);
+				}
+			}
+			//按队伍统计每个数据项的集合
+			for (int i = 0 ; i < rsts.size(); i ++) {
+				RaceScheduleTeam rst = rsts.get(i);
+				String teamOneId = rst.getTeamOne();
+				String teamTwoId = rst.getTeamTwo();
+				Map<String, Map<String, String>> rmap = rst.getCollectItemsMap();
+				if (null != rmap) {
+					//队伍1
+					Map<String,String> teamOneCollections = rmap.get(teamOneId);
+					Map<String,Double> teamOneMap = teamCollectsMap.get(teamOneId);
+					setTeamCollections(teamOneCollections,teamOneMap);
+					
+					//队伍2
+					Map<String,String> teamTwoCollections = rmap.get(teamTwoId);
+					Map<String,Double> teamTwoMap = teamCollectsMap.get(teamTwoId);
+					setTeamCollections(teamTwoCollections,teamTwoMap);
+				}
+				//统计胜负平
+				String succTeamId = rst.getSuccessTeamId();
+				if (teamOneId.equals(succTeamId)) {
+					 if (wins.containsKey(teamOneId)) {
+						 wins.put(teamOneId, wins.get(teamOneId)+1);
+					 }else {
+						 wins.put(teamOneId, 1);
+					 }
+					 if (loses.containsKey(teamTwoId)) {
+						 loses.put(teamTwoId, loses.get(teamTwoId)+1);
+					 }else {
+						 loses.put(teamTwoId, 1);
+					 }
+				}else if (teamTwoId.equals(succTeamId)) {
+					if (wins.containsKey(teamTwoId)) {
+						 wins.put(teamTwoId, wins.get(teamTwoId)+1);
+					 }else {
+						 wins.put(teamTwoId, 1);
+					 }
+					 if (loses.containsKey(teamOneId)) {
+						 loses.put(teamOneId, loses.get(teamOneId)+1);
+					 }else {
+						 loses.put(teamOneId, 1);
+					 }
+				}else {
+					if (evens.containsKey(teamTwoId)) {
+						evens.put(teamTwoId, evens.get(teamTwoId)+1);
+					 }else {
+						 evens.put(teamTwoId, 1);
+					 }
+					 if (evens.containsKey(teamOneId)) {
+						 evens.put(teamOneId, evens.get(teamOneId)+1);
+					 }else {
+						 evens.put(teamOneId, 1);
+					 }
+				}
+				
+			}
+			
+			//添加或者更新数据
+			for (Iterator<String> tit = teamCollectsMap.keySet().iterator();tit.hasNext();) {
+				TongjiTRace ttr = new TongjiTRace();
+				String teamId = tit.next();
+				ttr.setTeamId(teamId);
+				Map<String,Double> tclls = teamCollectsMap.get(teamId);
+				ttr.setCollectItemsMap(tclls);
+				if ( null != tclls) {
+					Double points = 0.00;
+					for (Iterator<String> tck = tclls.keySet().iterator();tck.hasNext();) {
+						String key = tck.next();
+						Double value = tclls.get(key);
+						RaceCollectItem rci = rcmap.get(key);
+						points = points + rci.getWeight()*value;
+					}
+					ttr.setPoints(Integer.parseInt(points.toString()));
+				}
+				ttr.setWins(wins.get(teamId));
+				ttr.setLoses(loses.get(teamId));
+				ttr.setEvens(evens.get(teamId));
+				TongjiTRace ttre = tongjiTRaceDao.getByTeamAndRace(teamId, raceId);
+				if ( null == ttre) {
+					tongjiTRaceDao.addTongjiTeamRace(ttre);
+				}else {
+					tongjiTRaceDao.update(ttre);
+				}
+			}
+		}
+	}
+	
+	private void setTeamCollections(Map<String,String> teamRaceCollections,Map<String,Double> teamCollectionsMap) {
+		if (null == teamCollectionsMap) {
+			teamCollectionsMap = new HashMap<String,Double>();
+		}
+		if ( null != teamRaceCollections) {
+			for (Iterator<String> oit = teamRaceCollections.keySet().iterator();oit.hasNext();) {
+				String iname = oit.next();
+				String ivalue = teamRaceCollections.get(iname);
+				if (teamCollectionsMap.containsKey(ivalue)) {
+					try {
+						Double v = teamCollectionsMap.get(iname)+Double.parseDouble(ivalue);
+						teamCollectionsMap.put(iname, v);
+					}catch(Exception e) {
+					}
+				}else {
+					try {
+						teamCollectionsMap.put(iname, Double.parseDouble(ivalue));
+					}catch(Exception e) {
+					}
+				}
+				
+			}
 		}
 	}
 	

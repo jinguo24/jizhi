@@ -11,13 +11,14 @@
 		<result column="position" property="position" jdbcType="VARCHAR" />
 		<result column="default_value" property="defaultValue" jdbcType="DOUBLE" />
 		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="weight" property="weight" jdbcType="DOUBLE" />
   </resultMap>
   <sql id="Base_Column_List" >
-	lid,id,item_name,status,scale,type,position,default_value,sort
+	lid,id,item_name,status,scale,type,position,default_value,sort,weight
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.RaceCollectItem">
-  	insert into race_collect_item (id,item_name,status,scale,type,position,default_value,sort) values (#{id},#{itemName},#{status},#{scale},#{type},#{position},#{defaultValue},#{sort})
+  	insert into race_collect_item (id,item_name,status,scale,type,position,default_value,sort,weight) values (#{id},#{itemName},#{status},#{scale},#{type},#{position},#{defaultValue},#{sort},#{weight})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.RaceCollectItem">
@@ -28,7 +29,8 @@
   		type = #{type},
   		position = #{position},
   		default_value = #{defaultValue},
-  		sort = #{sort}
+  		sort = #{sort},
+  		weight = #{weight}
   		 where lid=#{lid}
   </update>
   
