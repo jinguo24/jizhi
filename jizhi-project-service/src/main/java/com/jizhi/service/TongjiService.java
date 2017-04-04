@@ -302,21 +302,13 @@ public class TongjiService {
 	}
 	
 	private void updateTeamTonji(TongjiT tt,int type) {
-		List<TongjiTRace> ttrlist = tongjiTRaceDao.getByTeam(tt.getTeamId());
-		if ( null != ttrlist) {
-			
-		}
-	}
-	
-//	private void updateTeamTonji(TongjiT tt,int type) {
 //		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, tt.getTeamId(), type,999, 0, 10000);
 //		if ( null != rsts) {
 //			//球队位置数据项统计
-//			Map<Integer,Double> collectionMap = new HashMap<Integer,Double>();
-//			Map<Integer,Integer> collectionCountsMap = new HashMap<Integer,Integer>();
+//			Map<String,Double> collectionMap = new HashMap<String,Double>();
+//			Map<String,Integer> collectionCountsMap = new HashMap<String,Integer>();
 //			//球队位置评判统计
 //			Map<Integer,Double> judgeMap = new HashMap<Integer,Double>();
-//			Map<Integer,Integer> judgeCountsMap = new HashMap<Integer,Integer>();
 //			//总分数
 //			Double points = 0.00;
 //			//胜
@@ -369,12 +361,6 @@ public class TongjiService {
 //							}else {
 //								judgeMap.put(itemId, oldValue+value);
 //							}
-//							Integer counts = judgeCountsMap.get(itemId);
-//							if (null != counts ) {
-//								judgeCountsMap.put(itemId, counts+1);
-//							}else {
-//								judgeCountsMap.put(itemId, 1);
-//							}
 //						}
 //					}
 //				}
@@ -404,47 +390,24 @@ public class TongjiService {
 //			tt.setCollectItemsCountsMap(collectionCountsMap);
 //			tt.setJudgeItemsCountsMap(judgeCountsMap);
 //		}
-//	}
+	}
 	
 	public void updateTeamRaceTongji(int raceId) {
 		Race race = raceDao.queryById(raceId);
-		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(raceId, null, race.getType(), 0, 1, 100);
-		//球队数据统计
-		Map<String,Map<String,Double>> teamCollectsMap = new HashMap<String,Map<String,Double>>();
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(raceId, null, race.getType(), 3, 0, 100);
 		//赢的场次
 		Map<String,Integer> wins = new HashMap<String,Integer>();
 		//输的场次
 		Map<String,Integer> loses = new HashMap<String,Integer>();
 		//平的场次
 		Map<String,Integer> evens = new HashMap<String,Integer>();
+		List<String> teamIds = new ArrayList<String>();
 		if ( null != rsts) {
-			Map<String,RaceCollectItem> rcmap = new HashMap<String,RaceCollectItem>();
-			//查询出来所有的数据项
-			List<RaceCollectItem> rcis = constantService.queryRaceCollectItemList(2, race.getType(), 1, null);
-			if ( null != rcis) {
-				for (int i = 0 ; i < rcis.size(); i ++) {
-					RaceCollectItem rci = rcis.get(i);
-					rcmap.put(rci.getId(), rci);
-				}
-			}
 			//按队伍统计每个数据项的集合
 			for (int i = 0 ; i < rsts.size(); i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
 				String teamOneId = rst.getTeamOne();
 				String teamTwoId = rst.getTeamTwo();
-				//数据收集项
-				Map<String, Map<String, String>> rmap = rst.getCollectItemsMap();
-				if (null != rmap) {
-					//队伍1
-					Map<String,String> teamOneCollections = rmap.get(teamOneId);
-					Map<String,Double> teamOneMap = teamCollectsMap.get(teamOneId);
-					setTeamCollections(teamOneCollections,teamOneMap);
-					
-					//队伍2
-					Map<String,String> teamTwoCollections = rmap.get(teamTwoId);
-					Map<String,Double> teamTwoMap = teamCollectsMap.get(teamTwoId);
-					setTeamCollections(teamTwoCollections,teamTwoMap);
-				}
 				//统计胜负平
 				String succTeamId = rst.getSuccessTeamId();
 				if (teamOneId.equals(succTeamId)) {
@@ -481,46 +444,40 @@ public class TongjiService {
 						 evens.put(teamOneId, 1);
 					 }
 				}
+				if (!teamIds.contains(teamOneId)) {
+					teamIds.add(teamOneId);
+				}
+				if (!teamIds.contains(teamTwoId)) {
+					teamIds.add(teamTwoId);
+				}
 				
 			}
 			
-			//添加或者更新数据
-			for (Iterator<String> tit = teamCollectsMap.keySet().iterator();tit.hasNext();) {
+			for (int j = 0 ; j < teamIds.size(); j ++) {
 				TongjiTRace ttr = new TongjiTRace();
-				String teamId = tit.next();
+				String teamId = teamIds.get(j);
 				ttr.setRaceId(raceId);
 				ttr.setTeamId(teamId);
-				Map<String,Double> tclls = teamCollectsMap.get(teamId);
-				ttr.setCollectItemsMap(tclls);
-				if ( null != tclls) {
-					Double points = 0.00;
-//					for (Iterator<String> tck = tclls.keySet().iterator();tck.hasNext();) {
-//						String key = tck.next();
-//						Double value = tclls.get(key);
-//						RaceCollectItem rci = rcmap.get(key);
-//						points = points + rci.getWeight()*value;
-//					}
-					Integer win = wins.get(teamId);
-					int iwin = 0;
-					if ( null != win) {
-						iwin = win.intValue();
-					}
-					Integer even = evens.get(teamId);
-					int ieven = 0;
-					if ( null != even) {
-						ieven = even.intValue();
-					}
-					ttr.setPoints(3*iwin+1*ieven);
+				ttr.setWins(null==wins.get(teamId)?0:wins.get(teamId));
+				ttr.setLoses(null==loses.get(teamId)?0:loses.get(teamId));
+				ttr.setEvens(null==evens.get(teamId)?0:evens.get(teamId));
+				Integer win = wins.get(teamId);
+				int iwin = 0;
+				if ( null != win) {
+					iwin = win.intValue();
 				}
-				
-				ttr.setWins(wins.get(teamId));
-				ttr.setLoses(loses.get(teamId));
-				ttr.setEvens(evens.get(teamId));
+				Integer even = evens.get(teamId);
+				int ieven = 0;
+				if ( null != even) {
+					ieven = even.intValue();
+				}
+				ttr.setPoints(3*iwin+1*ieven);
 				TongjiTRace ttre = tongjiTRaceDao.getByTeamAndRace(teamId, raceId);
 				if ( null == ttre) {
-					tongjiTRaceDao.addTongjiTeamRace(ttre);
+					tongjiTRaceDao.addTongjiTeamRace(ttr);
 				}else {
-					tongjiTRaceDao.update(ttre);
+					ttr.setId(ttre.getId());
+					tongjiTRaceDao.update(ttr);
 				}
 			}
 		}

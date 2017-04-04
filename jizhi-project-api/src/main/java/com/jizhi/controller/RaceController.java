@@ -31,10 +31,37 @@ public class RaceController {
 	private TeamService teamService;
 	@Autowired
 	private RaceService raceService;
+	@Autowired
 	
 	@RequestMapping(value = "schedules",method=RequestMethod.GET)
 	@ResponseBody
 	public String get(int raceId, int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Race race = raceService.queryById(raceId);
+			Map re = new HashMap();
+			PageResult pr = scheduleService.getRacePageResult(raceId, null, 0, 2, page, pageSize);
+			List<RaceScheduleTeam> teams = pr.getDatas();
+			if ( null != teams ) {
+				for (int i =0; i < teams.size() ; i ++) {
+					RaceScheduleTeam rst = teams.get(i);
+					if (rst.getUdefined()!=1) {
+						rst.setTeamOneObj(teamService.getById(rst.getTeamOne()));
+						rst.setTeamTwoObj(teamService.getById(rst.getTeamTwo()));
+					}
+				}
+			}
+			re.put("list", pr);
+			re.put("race", race);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", re);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "teamResuts",method=RequestMethod.GET)
+	@ResponseBody
+	public String teamResuts(int raceId, int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			Race race = raceService.queryById(raceId);
 			Map re = new HashMap();

@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.springframework.util.StringUtils;
 
+import com.jizhi.model.TongjiT;
+
 public class TongjiHelper {
 
 	
@@ -81,6 +83,17 @@ public class TongjiHelper {
 				}
 			}
 		}
-		
 	}
+	
+	public static Double getTeamPoints(TongjiT tongjit) {
+		Map<String,Double> judgeMaps = tongjit.getJudgeItemsMap();
+		if ( null == judgeMaps) {
+			return 0.00;
+		}
+		Double jingong = judgeMaps.get("t_jingong");
+		Double fangshou = judgeMaps.get("t_fangshou");
+		Double peihe = judgeMaps.get("t_peihe");
+		return (jingong+fangshou+peihe)/3;
+	}
+	
 }

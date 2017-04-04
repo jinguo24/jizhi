@@ -30,6 +30,7 @@ import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamApplyService;
 import com.jizhi.service.TeamService;
+import com.jizhi.service.TongjiService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
 
@@ -47,6 +48,8 @@ public class RaceScheduleController {
 	private TeamApplyService teamApplyService;
 	@Autowired
 	private RaceResultService raceResultService;
+	@Autowired
+	private TongjiService tongjiService;
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
@@ -241,6 +244,17 @@ public class RaceScheduleController {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"删除成功", null);
 		}catch(Exception e) {
 			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"删除失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+	
+	@RequestMapping(value = "freshScheduleTeamResults",method=RequestMethod.POST)
+	@ResponseBody
+	public String freshScheduleTeamResults(int raceId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			tongjiService.updateTeamRaceTongji(raceId);
+			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", null);
+		}catch(Exception e) {
+			return  AjaxWebUtil.sendAjaxResponse(request, response, false,"更新失败:"+e.getLocalizedMessage(), null);
 		}
 	}
 	

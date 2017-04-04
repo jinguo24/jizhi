@@ -64,7 +64,7 @@ public class TongjiTRace implements Serializable{
 	public void setTeamId(String teamId) {
 		this.teamId = teamId;
 		if (!StringUtils.isEmpty(teamId)) {
-			this.tbindex = teamId.hashCode()%10;
+			this.tbindex = Math.abs(teamId.hashCode()%10);
 		}
 	}
 	public Map<String, Double> getCollectItemsMap() {

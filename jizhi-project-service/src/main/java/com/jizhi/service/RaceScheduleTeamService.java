@@ -101,6 +101,7 @@ public class RaceScheduleTeamService {
 			tongjit.setCollectItemsMap(csmaps);
 			//设置评分项
 			tongjit.setJudgeItemsMap(jdmaps);
+			tongjit.setPoints(TongjiHelper.getTeamPoints(tongjit));
 		}
 		if (isnew) {
 			tongjiTDao.addTongjiTeam(tongjit);
