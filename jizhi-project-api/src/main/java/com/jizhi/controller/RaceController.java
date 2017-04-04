@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.model.Race;
 import com.jizhi.model.RaceScheduleTeam;
+import com.jizhi.model.TongjiTRace;
 import com.jizhi.service.RaceScheduleTeamService;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamService;
+import com.jizhi.service.TongjiService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
 
@@ -32,6 +34,7 @@ public class RaceController {
 	@Autowired
 	private RaceService raceService;
 	@Autowired
+	private TongjiService tongjiService;
 	
 	@RequestMapping(value = "schedules",method=RequestMethod.GET)
 	@ResponseBody
@@ -61,24 +64,10 @@ public class RaceController {
 	
 	@RequestMapping(value = "teamResuts",method=RequestMethod.GET)
 	@ResponseBody
-	public String teamResuts(int raceId, int page,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String teamResuts(int raceId,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Race race = raceService.queryById(raceId);
-			Map re = new HashMap();
-			PageResult pr = scheduleService.getRacePageResult(raceId, null, 0, 2, page, pageSize);
-			List<RaceScheduleTeam> teams = pr.getDatas();
-			if ( null != teams ) {
-				for (int i =0; i < teams.size() ; i ++) {
-					RaceScheduleTeam rst = teams.get(i);
-					if (rst.getUdefined()!=1) {
-						rst.setTeamOneObj(teamService.getById(rst.getTeamOne()));
-						rst.setTeamTwoObj(teamService.getById(rst.getTeamTwo()));
-					}
-				}
-			}
-			re.put("list", pr);
-			re.put("race", race);
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", re);
+			List<TongjiTRace> tts = tongjiService.getTongjiTRaces(raceId);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", tts);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());

@@ -40,10 +40,10 @@
   	from race_tongji_t_race_#{tbindex} where team_id=#{teamId} and race_id = #{raceId}
   </select>
   
-    <select id="queryByTeam" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+    <select id="queryByRace" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_tongji_t_race_#{tbindex} where team_id=#{teamId}
+  	from race_tongji_t_race_#{tbindex} where race_id = #{raceId} order by points,wins desc 
   </select>
   
 </mapper>

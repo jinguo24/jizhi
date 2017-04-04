@@ -28,7 +28,7 @@ public class TongjiTRaceDao extends BaseIbatisDao {
 	
 	public TongjiTRace getByTeamAndRace(String teamId,int raceId) {
 		TongjiTRace u = new TongjiTRace();
-		u.setTeamId(teamId);
+		u.setRaceId(raceId);
 		Map param = new HashMap();
 		param.put("tbindex", u.getTbindex());
 		param.put("teamId", teamId);
@@ -36,12 +36,12 @@ public class TongjiTRaceDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("tongjitrace.queryByTeamAndRace",param);
 	}
 	
-	public List<TongjiTRace> getByTeam(String teamId) {
-		TongjiTRace u = new TongjiTRace();
-		u.setTeamId(teamId);
+	public List<TongjiTRace> getByRaceId(int raceId) {
 		Map param = new HashMap();
+		TongjiTRace u = new TongjiTRace();
+		u.setRaceId(raceId);
 		param.put("tbindex", u.getTbindex());
-		param.put("teamId", teamId);
-		return this.sqlSession.selectList("tongjitrace.queryByTeam",param);
+		param.put("raceId", raceId);
+		return this.sqlSession.selectList("tongjitrace.queryByRace",param);
 	}
 }

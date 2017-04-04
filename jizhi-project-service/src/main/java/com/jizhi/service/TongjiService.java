@@ -508,4 +508,8 @@ public class TongjiService {
 		}
 	}
 	
+	public List<TongjiTRace> getTongjiTRaces(int raceId) {
+		return tongjiTRaceDao.getByRaceId(raceId);
+	}
+	
 }
