@@ -5,6 +5,8 @@
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="race_id" property="raceId" jdbcType="INTEGER" />
 		<result column="collect_items" property="collectItems" jdbcType="VARCHAR" />
+		<result column="judge_items" property="judgeItems" jdbcType="VARCHAR" />
+		<result column="judge_counts" property="judgeCounts" jdbcType="VARCHAR" />
 		<result column="points" property="points" jdbcType="INTEGER" />
 		<result column="team_id" property="teamId" jdbcType="VARCHAR" />
 		<result column="wins" property="wins" jdbcType="INTEGER" />
@@ -12,17 +14,19 @@
 		<result column="evens" property="evens" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,collect_items,points,team_id,wins,loses,evens
+	id,race_id,collect_items,judge_items,judge_counts,points,team_id,wins,loses,evens
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TongjiTRace">
-  	insert into race_tongji_t_race_#{tbindex} (race_id,collect_items,points,team_id,wins,loses,evens) 
-  		values (#{raceId},#{collectItems},#{points},#{teamId},#{wins},#{loses},#{evens})
+  	insert into race_tongji_t_race_#{tbindex} (race_id,collect_items,judge_items,judge_counts,points,team_id,wins,loses,evens) 
+  		values (#{raceId},#{collectItems},#{judgeItems},#{judgeCounts},#{points},#{teamId},#{wins},#{loses},#{evens})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TongjiTRace">
   	update race_tongji_t_race_#{tbindex} 
   	set collect_items = #{collectItems}, 
+  	judge_items = #{judgeItems},
+  	judge_counts = #{judgeCounts},
   	points = #{points},
   	wins = #{wins},
   	loses = #{loses},
@@ -34,6 +38,12 @@
   	select 
   	<include refid="Base_Column_List"></include>
   	from race_tongji_t_race_#{tbindex} where team_id=#{teamId} and race_id = #{raceId}
+  </select>
+  
+    <select id="queryByTeam" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_tongji_t_race_#{tbindex} where team_id=#{teamId}
   </select>
   
 </mapper>

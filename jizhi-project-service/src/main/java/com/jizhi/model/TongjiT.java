@@ -20,13 +20,13 @@ public class TongjiT implements Serializable{
 	private int loses;
 	private int even;
 	private String collectItems;
-	private Map<Integer,Double> collectItemsMap = new HashMap<Integer,Double>();
+	private Map<String,Double> collectItemsMap = new HashMap<String,Double>();
 	private String collectItemsCounts;
-	private Map<Integer,Integer> collectItemsCountsMap = new HashMap<Integer,Integer>();
+	private Map<String,Integer> collectItemsCountsMap = new HashMap<String,Integer>();
 	private String judgeItems;
-	private Map<Integer,Double> judgeItemsMap = new HashMap<Integer,Double>();
+	private Map<String,Double> judgeItemsMap = new HashMap<String,Double>();
 	private String judgeItemsCounts;
-	private Map<Integer,Integer> judgeItemsCountsMap = new HashMap<Integer,Integer>();
+	private Map<String,Integer> judgeItemsCountsMap = new HashMap<String,Integer>();
 	public String getTeamId() {
 		return teamId;
 	}
@@ -57,7 +57,7 @@ public class TongjiT implements Serializable{
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
 		if (!StringUtils.isEmpty(collectItems)) {
-			this.collectItemsMap  = (Map<Integer, Double>) JSONObject.parse(collectItems);
+			this.collectItemsMap  = (Map<String, Double>) JSONObject.parse(collectItems);
 		}
 	}
 	public String getJudgeItems() {
@@ -66,16 +66,16 @@ public class TongjiT implements Serializable{
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
 		if (!StringUtils.isEmpty(judgeItems)) {
-			this.judgeItemsMap = (Map<Integer, Double>) JSONObject.parse(judgeItems);
+			this.judgeItemsMap = (Map<String, Double>) JSONObject.parse(judgeItems);
 		}
 	}
-	public void setCollectItemsMap(Map<Integer, Double> collectItemsMap) {
+	public void setCollectItemsMap(Map<String, Double> collectItemsMap) {
 		this.collectItemsMap = collectItemsMap;
 		if (null != collectItemsMap) {
 			this.collectItems = JSONObject.toJSONString(collectItemsMap);
 		}
 	}
-	public void setJudgeItemsMap(Map<Integer, Double> judgeItemsMap) {
+	public void setJudgeItemsMap(Map<String, Double> judgeItemsMap) {
 		this.judgeItemsMap = judgeItemsMap;
 		if ( null != judgeItemsMap) {
 			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
@@ -87,13 +87,13 @@ public class TongjiT implements Serializable{
 	public void setCollectItemsCounts(String collectItemsCounts) {
 		this.collectItemsCounts = collectItemsCounts;
 		if (StringUtils.isEmpty(collectItemsCounts)) {
-			this.collectItemsCountsMap = (Map<Integer, Integer>) JSONObject.parse(collectItemsCounts);
+			this.collectItemsCountsMap = (Map<String, Integer>) JSONObject.parse(collectItemsCounts);
 		}
 	}
-	public Map<Integer, Integer> getCollectItemsCountsMap() {
+	public Map<String, Integer> getCollectItemsCountsMap() {
 		return collectItemsCountsMap;
 	}
-	public void setCollectItemsCountsMap(Map<Integer, Integer> collectItemsCountsMap) {
+	public void setCollectItemsCountsMap(Map<String, Integer> collectItemsCountsMap) {
 		this.collectItemsCountsMap = collectItemsCountsMap;
 		if ( null != collectItemsCountsMap) {
 			this.collectItemsCounts = JSONObject.toJSONString(collectItemsCountsMap);
@@ -105,22 +105,22 @@ public class TongjiT implements Serializable{
 	public void setJudgeItemsCounts(String judgeItemsCounts) {
 		this.judgeItemsCounts = judgeItemsCounts;
 		if (StringUtils.isEmpty(judgeItemsCounts)) {
-			this.judgeItemsCountsMap = (Map<Integer, Integer>) JSONObject.parse(judgeItemsCounts);
+			this.judgeItemsCountsMap = (Map<String, Integer>) JSONObject.parse(judgeItemsCounts);
 		}
 	}
-	public Map<Integer, Integer> getJudgeItemsCountsMap() {
+	public Map<String, Integer> getJudgeItemsCountsMap() {
 		return judgeItemsCountsMap;
 	}
-	public void setJudgeItemsCountsMap(Map<Integer, Integer> judgeItemsCountsMap) {
+	public void setJudgeItemsCountsMap(Map<String, Integer> judgeItemsCountsMap) {
 		this.judgeItemsCountsMap = judgeItemsCountsMap;
 		if ( null != judgeItemsCountsMap) {
 			this.judgeItemsCounts = JSONObject.toJSONString(judgeItemsCountsMap);
 		}
 	}
-	public Map<Integer, Double> getCollectItemsMap() {
+	public Map<String, Double> getCollectItemsMap() {
 		return collectItemsMap;
 	}
-	public Map<Integer, Double> getJudgeItemsMap() {
+	public Map<String, Double> getJudgeItemsMap() {
 		return judgeItemsMap;
 	}
 	public int getWins() {

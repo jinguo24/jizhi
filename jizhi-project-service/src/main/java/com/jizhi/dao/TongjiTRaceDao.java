@@ -1,10 +1,13 @@
 package com.jizhi.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
 import com.jizhi.model.TongjiTRace;
 import com.simple.common.mybatis.annotation.DatabaseTemplate;
 import com.simple.common.mybatis.dao.BaseIbatisDao;
@@ -31,5 +34,14 @@ public class TongjiTRaceDao extends BaseIbatisDao {
 		param.put("teamId", teamId);
 		param.put("raceId", raceId);
 		return this.sqlSession.selectOne("tongjitrace.queryByTeamAndRace",param);
+	}
+	
+	public List<TongjiTRace> getByTeam(String teamId) {
+		TongjiTRace u = new TongjiTRace();
+		u.setTeamId(teamId);
+		Map param = new HashMap();
+		param.put("tbindex", u.getTbindex());
+		param.put("teamId", teamId);
+		return this.sqlSession.selectList("tongjitrace.queryByTeam",param);
 	}
 }
