@@ -370,7 +370,7 @@ public class TongjiService {
 	
 	public void updateTeamRaceTongji(int raceId) {
 		Race race = raceDao.queryById(raceId);
-		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(raceId, null, race.getType(), 3, 0, 100);
+		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(raceId, null, race.getType(), 999, 0, 100);
 		//赢的场次
 		Map<String,Integer> wins = new HashMap<String,Integer>();
 		//输的场次
@@ -382,6 +382,9 @@ public class TongjiService {
 			//按队伍统计每个数据项的集合
 			for (int i = 0 ; i < rsts.size(); i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
+				if (rst.getUdefined()==1) {
+					continue;
+				}
 				String teamOneId = rst.getTeamOne();
 				String teamTwoId = rst.getTeamTwo();
 				//统计胜负平
