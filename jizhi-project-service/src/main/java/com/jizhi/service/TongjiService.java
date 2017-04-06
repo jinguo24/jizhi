@@ -377,6 +377,13 @@ public class TongjiService {
 		Map<String,Integer> loses = new HashMap<String,Integer>();
 		//平的场次
 		Map<String,Integer> evens = new HashMap<String,Integer>();
+		//进球次数
+		Map<String,Integer> jinqius = new HashMap<String,Integer>();
+		//失球数
+		Map<String,Integer> shiqius = new HashMap<String,Integer>();
+		//总场次
+		Map<String,Integer> countsMap = new HashMap<String,Integer>();
+		//场次
 		List<String> teamIds = new ArrayList<String>();
 		if ( null != rsts) {
 			//按队伍统计每个数据项的集合
@@ -411,7 +418,7 @@ public class TongjiService {
 					 }else {
 						 loses.put(teamOneId, 1);
 					 }
-				}else {
+				}else if ("0".equals(succTeamId)) {
 					if (evens.containsKey(teamTwoId)) {
 						evens.put(teamTwoId, evens.get(teamTwoId)+1);
 					 }else {
@@ -422,6 +429,27 @@ public class TongjiService {
 					 }else {
 						 evens.put(teamOneId, 1);
 					 }
+				}
+				//设置进球数，失球数
+				Map<String,Map<String,String>> collectMaps = rst.getCollectItemsMap();
+				if ( null != collectMaps) {
+					setTeamJinqiuAndShiqiu(teamOneId,TongjiHelper.key_c_t_jinqiu,collectMaps.get(teamOneId),jinqius);
+					setTeamJinqiuAndShiqiu(teamOneId,TongjiHelper.key_c_t_shiqiu,collectMaps.get(teamOneId),shiqius);
+					setTeamJinqiuAndShiqiu(teamTwoId,TongjiHelper.key_c_t_jinqiu,collectMaps.get(teamTwoId),jinqius);
+					setTeamJinqiuAndShiqiu(teamTwoId,TongjiHelper.key_c_t_shiqiu,collectMaps.get(teamTwoId),shiqius);
+				}
+				//设置场次
+				if (rst.getStatus()==3) {
+					if(!countsMap.containsKey(teamOneId)) {
+						countsMap.put(teamOneId, 1);
+					}else {
+						countsMap.put(teamOneId, countsMap.get(teamOneId)+1);
+					}
+					if(!countsMap.containsKey(teamTwoId)) {
+						countsMap.put(teamTwoId, 1);
+					}else {
+						countsMap.put(teamTwoId, countsMap.get(teamTwoId)+1);
+					}
 				}
 				if (!teamIds.contains(teamOneId)) {
 					teamIds.add(teamOneId);
@@ -451,12 +479,30 @@ public class TongjiService {
 					ieven = even.intValue();
 				}
 				ttr.setPoints(3*iwin+1*ieven);
+				
+				ttr.setJinqius(null ==jinqius.get(teamId)?0:jinqius.get(teamId));
+				ttr.setShiqius(null ==shiqius.get(teamId)?0:shiqius.get(teamId));
+				ttr.setJingshengqiu(ttr.getJinqius()-ttr.getShiqius());
+				ttr.setCounts(null==countsMap.get(teamId)?0:countsMap.get(teamId));
 				TongjiTRace ttre = tongjiTRaceDao.getByTeamAndRace(teamId, raceId);
 				if ( null == ttre) {
 					tongjiTRaceDao.addTongjiTeamRace(ttr);
 				}else {
 					ttr.setId(ttre.getId());
 					tongjiTRaceDao.update(ttr);
+				}
+			}
+		}
+	}
+	
+	private void setTeamJinqiuAndShiqiu(String teamId,String key,Map<String,String> collectMaps,Map<String,Integer> maps) {
+		if (null != collectMaps) {
+			Integer teamcount = TongjiHelper.getTeamCollects(collectMaps, key);
+			if (null != teamcount) {
+				if (!maps.containsKey(teamId)) {
+					maps.put(teamId, teamcount);
+				}else {
+					maps.put(teamId, maps.get(teamId)+teamcount);
 				}
 			}
 		}

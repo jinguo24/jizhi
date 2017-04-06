@@ -24,6 +24,10 @@ public class TongjiTRace implements Serializable{
 	private int wins;
 	private int loses;
 	private int evens;
+	private int jinqius;
+	private int shiqius;
+	private int counts;
+	private int jingshengqiu;
 	private int tbindex;
 	public int getId() {
 		return id;
@@ -129,5 +133,29 @@ public class TongjiTRace implements Serializable{
 	}
 	public void setEvens(int evens) {
 		this.evens = evens;
+	}
+	public int getJinqius() {
+		return jinqius;
+	}
+	public void setJinqius(int jinqius) {
+		this.jinqius = jinqius;
+	}
+	public int getShiqius() {
+		return shiqius;
+	}
+	public void setShiqius(int shiqius) {
+		this.shiqius = shiqius;
+	}
+	public int getCounts() {
+		return counts;
+	}
+	public void setCounts(int counts) {
+		this.counts = counts;
+	}
+	public int getJingshengqiu() {
+		return jingshengqiu;
+	}
+	public void setJingshengqiu(int jingshengqiu) {
+		this.jingshengqiu = jingshengqiu;
 	}
 }

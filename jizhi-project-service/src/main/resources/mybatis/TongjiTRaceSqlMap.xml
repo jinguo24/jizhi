@@ -12,14 +12,18 @@
 		<result column="wins" property="wins" jdbcType="INTEGER" />
 		<result column="loses" property="loses" jdbcType="INTEGER" />
 		<result column="evens" property="evens" jdbcType="INTEGER" />
+		<result column="jinqius" property="jinqius" jdbcType="INTEGER" />
+		<result column="shiqius" property="shiqius" jdbcType="INTEGER" />
+		<result column="counts" property="counts" jdbcType="INTEGER" />
+		<result column="jingshengqiu" property="jingshengqiu" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,collect_items,judge_items,judge_counts,points,team_id,wins,loses,evens
+	id,race_id,collect_items,judge_items,judge_counts,points,team_id,wins,loses,evens,jinqius,shiqius,counts,jingshengqiu
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TongjiTRace">
-  	insert into race_tongji_t_race_#{tbindex} (race_id,collect_items,judge_items,judge_counts,points,team_id,wins,loses,evens) 
-  		values (#{raceId},#{collectItems},#{judgeItems},#{judgeCounts},#{points},#{teamId},#{wins},#{loses},#{evens})
+  	insert into race_tongji_t_race_#{tbindex} (race_id,collect_items,judge_items,judge_counts,points,team_id,wins,loses,evens,jinqius,shiqius,counts,jingshengqiu) 
+  		values (#{raceId},#{collectItems},#{judgeItems},#{judgeCounts},#{points},#{teamId},#{wins},#{loses},#{evens},#{jinqius},#{shiqius},#{counts},#{jingshengqiu})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.TongjiTRace">
@@ -30,7 +34,11 @@
   	points = #{points},
   	wins = #{wins},
   	loses = #{loses},
-  	evens = #{evens}
+  	evens = #{evens},
+  	jinqius = #{jinqius},
+  	shiqius = #{shiqius},
+  	counts = #{counts},
+  	jingshengqiu = #{jingshengqiu}
   	where team_id=#{teamId} and race_id = #{raceId}
   </update>
   
@@ -43,7 +51,7 @@
     <select id="queryByRace" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from race_tongji_t_race_#{tbindex} where race_id = #{raceId} order by points,wins desc 
+  	from race_tongji_t_race_#{tbindex} where race_id = #{raceId} ORDER BY points DESC,jingshengqiu DESC 
   </select>
   
 </mapper>

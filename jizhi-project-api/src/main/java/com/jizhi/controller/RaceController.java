@@ -42,7 +42,7 @@ public class RaceController {
 		try {
 			Race race = raceService.queryById(raceId);
 			Map re = new HashMap();
-			PageResult pr = scheduleService.getRacePageResult(raceId, null, 0, 2, page, pageSize);
+			PageResult pr = scheduleService.getRacePageResult(raceId, null, 0, 999, page, pageSize);
 			List<RaceScheduleTeam> teams = pr.getDatas();
 			if ( null != teams ) {
 				for (int i =0; i < teams.size() ; i ++) {

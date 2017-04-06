@@ -10,6 +10,12 @@ public class TongjiHelper {
 	private static final double Default_jingong = 600.00;
 	private static final double Default_fangshou = 600.00;
 	private static final double Default_peihe = 600.00;
+	public static final String key_c_t_jinqiu = "t_jinqiu";
+	public static final String key_c_t_shiqiu = "t_shiqiu";
+	private static final String key_c_t_kongqiulv = "t_kongqiulv";
+	private static final String key_j_t_jingong= "t_jingong";
+	private static final String key_j_t_fangshou = "t_fangshou";
+	private static final String key_j_t_peihe = "t_peihe";
 	
 	public static Double getTeamJinGongByJinQiu(Double currentValue,Double oldVaule,Double lastPerValue) {
 		if (currentValue >= lastPerValue) {
@@ -51,7 +57,7 @@ public class TongjiHelper {
 		if ( null == countsMap) {
 			countsMap = new HashMap<String,Integer>();
 		}
-		if ("t_jinqiu".equals(collectKey)) {
+		if (key_c_t_jinqiu.equals(collectKey)) {
 			//场均进球
 			Double oldjinqiucounts = oldCollectsMap.get(collectKey);
 			if ( null == oldjinqiucounts) {
@@ -63,17 +69,17 @@ public class TongjiHelper {
 			}
 			Double perjinqiucounts = oldjinqiucounts/counts;
 			Double cvalue = Double.parseDouble(collectValue);
-			Double oldValue = judgeMap.get("t_jingong");
+			Double oldValue = judgeMap.get(key_j_t_jingong);
 			if ( null == oldValue) {
 				oldValue = Default_jingong;
 			}
-			judgeMap.put("t_jingong", getTeamJinGongByJinQiu(cvalue,oldValue,perjinqiucounts));
+			judgeMap.put(key_j_t_jingong, getTeamJinGongByJinQiu(cvalue,oldValue,perjinqiucounts));
 		}
 		/*
 		 * 防守能力，规则跟攻击能力相反
 		 * 规则：这一场的失球数大于之前统计的场均失球数，则减去（多余失球数）*5, 如果比场均小，则加上(少于失球数)*5
 		 */
-		if ("t_shiqiu".equals(collectKey)) {
+		if (key_c_t_shiqiu.equals(collectKey)) {
 			Double oldshiqiucounts = oldCollectsMap.get(collectKey);
 			if (null == oldshiqiucounts) {
 				oldshiqiucounts = 0.0;
@@ -84,18 +90,18 @@ public class TongjiHelper {
 			}
 			Double pershiqiucounts = oldshiqiucounts/counts;
 			Double cvalue = Double.parseDouble(collectValue);
-			Double oldValue = judgeMap.get("t_fangshou");
+			Double oldValue = judgeMap.get(key_j_t_fangshou);
 			if ( null == oldValue) {
 				oldValue = Default_fangshou;
 			}
-			judgeMap.put("t_fangshou", getTeamFangShouByShiQiu(cvalue,oldValue,pershiqiucounts));
+			judgeMap.put(key_j_t_fangshou, getTeamFangShouByShiQiu(cvalue,oldValue,pershiqiucounts));
 		}
 		
 		/*
 		 * 配合能力，规则跟攻击能力相反
 		 * 规则：这一场的失球数大于之前统计的场均失球数，则减去（多余失球数）*5, 如果比场均小，则加上(少于失球数)*5
 		 */
-		if ("t_kongqiulv".equals(collectKey)) {
+		if (key_c_t_kongqiulv.equals(collectKey)) {
 			Double oldpeihecounts = oldCollectsMap.get(collectKey);
 			if ( null == oldpeihecounts) {
 				oldpeihecounts = 0.0;
@@ -106,31 +112,48 @@ public class TongjiHelper {
 			}
 			Double perpeihecounts = oldpeihecounts/counts;
 			Double cvalue = Double.parseDouble(collectValue);
-			Double oldValue = judgeMap.get("t_peihe");
+			Double oldValue = judgeMap.get(key_j_t_peihe);
 			if ( null == oldValue) {
 				oldValue = Default_peihe;
 			}
-			judgeMap.put("t_peihe", getTeamPeiHeByKongQiuLv(cvalue,oldValue,perpeihecounts));
+			judgeMap.put(key_j_t_peihe, getTeamPeiHeByKongQiuLv(cvalue,oldValue,perpeihecounts));
 		}
 	}
+	
+	
 	
 	public static Double getTeamPoints(Map<String,Double> judgeMaps) {
 		if ( null == judgeMaps) {
 			return 0.00;
 		}
-		Double jingong = judgeMaps.get("t_jingong");
+		Double jingong = judgeMaps.get(key_j_t_jingong);
 		if ( null == jingong) {
 			jingong = Default_jingong;
 		}
-		Double fangshou = judgeMaps.get("t_fangshou");
+		Double fangshou = judgeMaps.get(key_j_t_fangshou);
 		if ( null == fangshou) {
 			fangshou = Default_fangshou;
 		}
-		Double peihe = judgeMaps.get("t_peihe");
+		Double peihe = judgeMaps.get(key_j_t_peihe);
 		if ( null == peihe) {
 			peihe = Default_peihe;
 		}
 		return (jingong+fangshou+peihe)/3;
+	}
+	
+	public static Integer getTeamCollects(Map<String,String> collectMaps,String key) {
+		if ( null == collectMaps) {
+			return null;
+		}
+		String jinqiu = collectMaps.get(key);
+		if (StringUtils.isEmpty(jinqiu)) {
+			return null;
+		}
+		try {
+			return Integer.parseInt(jinqiu);
+		}catch(Exception e) {
+			return null;
+		}
 	}
 	
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.constant.ChouQianCache;
+import com.jizhi.constant.RaceEnums;
 import com.jizhi.model.Race;
 import com.jizhi.model.RacePersonApply;
 import com.jizhi.model.TeamChouQianDetail;
@@ -50,8 +51,8 @@ public class TeamController {
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
 	public String applyTeam(Integer raceId,String raceName,String phone,String name,String teamname,String image,HttpServletRequest request, HttpServletResponse response) {
-		return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
-		//return applyTeam(raceId,raceName,RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, teamname, image, request, response);
+		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
+		return applyTeam(raceId,raceName,RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, teamname, image, request, response);
 	}
 	
 	private String applyTeam(int raceId,String raceName,int type,String phone,String name,String teamname,String image,HttpServletRequest request, HttpServletResponse response) {
@@ -119,21 +120,21 @@ public class TeamController {
 	@RequestMapping(value = "teamInfoToMemberAdd",method=RequestMethod.GET)
 	@ResponseBody
 	public String teamInfoToMemberAdd(String token,HttpServletRequest request, HttpServletResponse response) {
-		return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
-//		try {
-//			String taid = LocalUtil.decryLeader(token);
-//			if ("_jz_unkownphone".equals(taid)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
-//			}
-//			TeamRaceApply teamapply = queryTeamApply(taid,request);
-//			if  (null == teamapply) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队审核未通过", null);
-//			}
-//			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证通过", teamapply); 
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
-//		}
+		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
+		try {
+			String taid = LocalUtil.decryLeader(token);
+			if ("_jz_unkownphone".equals(taid)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+			}
+			TeamRaceApply teamapply = queryTeamApply(taid,request);
+			if  (null == teamapply) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队审核未通过", null);
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"验证通过", teamapply); 
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
 	}
 	
 	private TeamRaceApply queryTeamApply(String taid,HttpServletRequest request) {
@@ -169,69 +170,69 @@ public class TeamController {
 	@RequestMapping(value = "teamMemberAdd",method=RequestMethod.POST)
 	@ResponseBody
 	public String teamMemberAdd(String token,String name,String nickName,String phone,HttpServletRequest request, HttpServletResponse response) {
-		return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
-		//		try {
-//			if (StringUtils.isEmpty(phone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
-//			}
-//			
-//			if (StringUtils.isEmpty(name)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
-//			}
-//			
-//			String taid = LocalUtil.decryLeader(token);
-//			if ("_jz_unkownphone".equals(taid)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
-//			}
-//			//判断用户是否存在，不存在则新增用户
-//			User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
-//			if ( null == user ) {
-//				user = new User();
-//				user.setCreateTime(new Date());
-//				user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
-//				user.setNickName(org.apache.commons.lang.StringUtils.trimToEmpty(nickName));
-//				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
-//				userService.addUser(user);
-//			}
-//			
-//			TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(taid);
-//			if  (null == teamapply) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
-//			}
-//			
-//			if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
-//			}
-//			//所有
-//			Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
-//			if ( null != count && count > 0 ) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
-//			}
-//			
-//			Race race  = raceService.queryById(teamapply.getRaceId());
-//			if (null == race || race.getStatus() != 1) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
-//			}
-//			
-//			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
-//			if ( null != rpapply ) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","只允许注册一个队伍", rpapply);
-//			}
-//			
-//			rpapply = new RacePersonApply();
-//			rpapply.setCreateTime(new Date());
-//			rpapply.setName(StringUtils.trimToEmpty(name));
-//			rpapply.setPhone(StringUtils.trimToEmpty(phone));
-//			rpapply.setRaceId(teamapply.getRaceId());
-//			rpapply.setRaceName(teamapply.getRaceName());
-//			rpapply.setTeamApplyId(teamapply.getId());
-//			rpapply.setTeamName(teamapply.getTeamName());
-//			teamApplyService.addPersonApply(rpapply);
-//			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
-//		}
+		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
+		try {
+			if (StringUtils.isEmpty(phone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
+			}
+			
+			if (StringUtils.isEmpty(name)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
+			}
+			
+			String taid = LocalUtil.decryLeader(token);
+			if ("_jz_unkownphone".equals(taid)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+			}
+			//判断用户是否存在，不存在则新增用户
+			User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+			if ( null == user ) {
+				user = new User();
+				user.setCreateTime(new Date());
+				user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
+				user.setNickName(org.apache.commons.lang.StringUtils.trimToEmpty(nickName));
+				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+				userService.addUser(user);
+			}
+			
+			TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(taid);
+			if  (null == teamapply) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+			}
+			
+			if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			}
+			//所有
+			Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
+			if ( null != count && count > 0 ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			}
+			
+			Race race  = raceService.queryById(teamapply.getRaceId());
+			if (null == race || race.getStatus() != 1) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			}
+			
+			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
+			if ( null != rpapply ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","只允许注册一个队伍", rpapply);
+			}
+			
+			rpapply = new RacePersonApply();
+			rpapply.setCreateTime(new Date());
+			rpapply.setName(StringUtils.trimToEmpty(name));
+			rpapply.setPhone(StringUtils.trimToEmpty(phone));
+			rpapply.setRaceId(teamapply.getRaceId());
+			rpapply.setRaceName(teamapply.getRaceName());
+			rpapply.setTeamApplyId(teamapply.getId());
+			rpapply.setTeamName(teamapply.getTeamName());
+			teamApplyService.addPersonApply(rpapply);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
+		}
 	}
 	
 	@RequestMapping(value = "myApplyTeam",method=RequestMethod.GET)
