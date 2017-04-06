@@ -53,7 +53,7 @@
   	<if test="raceId > 0 " > and race_id=#{raceId}</if>
   	<if test="teamId != null and teamId != '' " > and (team_one = #{teamId} or team_two = #{teamId})</if>
   	<if test="type > 0 " > and type=#{type}</if>
-  	<if test="status > 0 " > and status=#{status}</if>
+  	<if test="status > 0 and  status != 999" > and status=#{status}</if>
   	<if test="status == 999 " > and status in (2,3)</if>
   	order by sort asc
   	limit #{begin},#{size}

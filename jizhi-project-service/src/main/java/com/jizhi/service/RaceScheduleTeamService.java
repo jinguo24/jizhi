@@ -96,12 +96,12 @@ public class RaceScheduleTeamService {
 					}catch(Exception e) {
 					}
 				}
-				TongjiHelper.calculateTeamJudge(ikey,iv,tongjit.getCollectItemsMap(),tongjit.getCounts(),jdmaps);
+				TongjiHelper.calculateTeamJudge(ikey,iv,tongjit.getCollectItemsMap(),tongjit.getCollectItemsCountsMap(),jdmaps);
 			}
 			tongjit.setCollectItemsMap(csmaps);
 			//设置评分项
 			tongjit.setJudgeItemsMap(jdmaps);
-			tongjit.setPoints(TongjiHelper.getTeamPoints(tongjit));
+			tongjit.setPoints(TongjiHelper.getTeamPoints(tongjit.getJudgeItemsMap()));
 		}
 		if (isnew) {
 			tongjiTDao.addTongjiTeam(tongjit);
