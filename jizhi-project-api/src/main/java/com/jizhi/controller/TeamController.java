@@ -74,6 +74,15 @@ public class TeamController {
 				userService.addUser(user);
 			}
 			
+			Race race  = raceService.queryById(raceId);
+			if (null == race || race.getStatus() == 2) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			}
+			
+			if (race.getStatus() == 3) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+			}
+			
 			if (StringUtils.isEmpty(teamname)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"队名不能为空", "队名不能为空");
 			}
@@ -82,10 +91,7 @@ public class TeamController {
 			if ( null != teamapply) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"球队名称已被占用", "球队名称已被占用");
 			}
-			Race race  = raceService.queryById(raceId);
-			if (null == race || race.getStatus() != 1) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
-			}
+			
 			
 			Integer count = teamApplyService.getTeamRaceApplyCount(raceId, null, 0, type, phone);
 			if ( null != count && count > 0 ) {
@@ -200,6 +206,15 @@ public class TeamController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
 			
+			Race race  = raceService.queryById(teamapply.getRaceId());
+			if (null == race || race.getStatus() == 2) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			}
+			
+			if (race.getStatus() == 3) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+			}
+			
 			if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
 			}
@@ -207,11 +222,6 @@ public class TeamController {
 			Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
 			if ( null != count && count > 0 ) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
-			}
-			
-			Race race  = raceService.queryById(teamapply.getRaceId());
-			if (null == race || race.getStatus() != 1) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
 			}
 			
 			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);

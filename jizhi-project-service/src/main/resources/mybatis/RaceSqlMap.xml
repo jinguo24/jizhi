@@ -43,7 +43,8 @@
   	from race where 1=1
   	<if test="name != null and name != ''" > and name LIKE CONCAT('%',#{name},'%')</if>
   	<if test="type > 0 " > and type=#{type}</if>
-  	<if test="status > 0 " > and status=#{status}</if>
+  	<if test="status > 0 and status != 999 " > and status=#{status}</if>
+  	<if test="status == 999 " > and status in (1,3)</if>
   	limit #{begin},#{size}
   </select>
   
