@@ -56,7 +56,7 @@ public class TongjiHelper {
 	 * @param countsMap
 	 * @param judgeMap
 	 */
-	public static void calculateTeamJudge(String collectKey,String collectValue,Map<String,Double> oldCollectsMap,Map<String,Integer> countsMap,Map<String,Double> judgeMap) {
+	public static void calculateTeamJudge(String collectKey,String collectValue,Map<String,String> oldCollectsMap,Map<String,Integer> countsMap,Map<String,String> judgeMap) {
 		if (StringUtils.isEmpty(collectValue)) {
 			return;
 		}
@@ -64,49 +64,43 @@ public class TongjiHelper {
 		 * 根据进球数算出攻击能力，规则：这一场的进球数大于之前统计的场均进球数，则加上（多余进球数）*10, 如果比场均小，则减去(少于进球数)*5
 		 */
 		if ( null == oldCollectsMap ) {
-			oldCollectsMap = new HashMap<String,Double>();
+			oldCollectsMap = new HashMap<String,String>();
 		}
 		if ( null == countsMap) {
 			countsMap = new HashMap<String,Integer>();
 		}
 		if (key_c_t_jinqiu.equals(collectKey)) {
 			//场均进球
-			Double oldjinqiucounts = oldCollectsMap.get(collectKey);
-			if ( null == oldjinqiucounts) {
-				oldjinqiucounts = 0.0;
-			}
 			Integer counts = countsMap.get(collectKey);
 			if ( null == counts) {
 				counts = 1;
 			}
+			Double oldjinqiucounts = getDouble(oldCollectsMap.get(collectKey)) ;
 			Double perjinqiucounts = oldjinqiucounts/counts;
-			Double cvalue = Double.parseDouble(collectValue);
-			Double oldValue = judgeMap.get(key_j_t_jingong);
+			Double cvalue = getDouble(collectValue);
+			Double oldValue = getDouble(judgeMap.get(key_j_t_jingong));
 			if ( null == oldValue) {
 				oldValue = Default_jingong;
 			}
-			judgeMap.put(key_j_t_jingong, getTeamJinGongByJinQiu(cvalue,oldValue,perjinqiucounts));
+			judgeMap.put(key_j_t_jingong, String.valueOf(getTeamJinGongByJinQiu(cvalue,oldValue,perjinqiucounts)));
 		}
 		/*
 		 * 防守能力，规则跟攻击能力相反
 		 * 规则：这一场的失球数大于之前统计的场均失球数，则减去（多余失球数）*5, 如果比场均小，则加上(少于失球数)*5
 		 */
 		if (key_c_t_shiqiu.equals(collectKey)) {
-			Double oldshiqiucounts = oldCollectsMap.get(collectKey);
-			if (null == oldshiqiucounts) {
-				oldshiqiucounts = 0.0;
-			}
 			Integer counts = countsMap.get(collectKey);
 			if ( null == counts) {
 				counts = 1;
 			}
+			Double oldshiqiucounts = getDouble(oldCollectsMap.get(collectKey));
 			Double pershiqiucounts = oldshiqiucounts/counts;
-			Double cvalue = Double.parseDouble(collectValue);
-			Double oldValue = judgeMap.get(key_j_t_fangshou);
+			Double cvalue = getDouble(collectValue);
+			Double oldValue = getDouble(judgeMap.get(key_j_t_fangshou));
 			if ( null == oldValue) {
 				oldValue = Default_fangshou;
 			}
-			judgeMap.put(key_j_t_fangshou, getTeamFangShouByShiQiu(cvalue,oldValue,pershiqiucounts));
+			judgeMap.put(key_j_t_fangshou, String.valueOf(getTeamFangShouByShiQiu(cvalue,oldValue,pershiqiucounts)));
 		}
 		
 		/*
@@ -114,21 +108,29 @@ public class TongjiHelper {
 		 * 规则：这一场的失球数大于之前统计的场均失球数，则减去（多余失球数）*5, 如果比场均小，则加上(少于失球数)*5
 		 */
 		if (key_c_t_kongqiulv.equals(collectKey)) {
-			Double oldpeihecounts = oldCollectsMap.get(collectKey);
-			if ( null == oldpeihecounts) {
-				oldpeihecounts = 0.0;
-			}
 			Integer counts = countsMap.get(collectKey);
 			if ( null == counts) {
 				counts = 1;
 			}
+			Double oldpeihecounts = getDouble(oldCollectsMap.get(collectKey));
 			Double perpeihecounts = oldpeihecounts/counts;
-			Double cvalue = Double.parseDouble(collectValue);
-			Double oldValue = judgeMap.get(key_j_t_peihe);
+			Double cvalue = getDouble(collectValue);
+			Double oldValue = getDouble(judgeMap.get(key_j_t_peihe));
 			if ( null == oldValue) {
 				oldValue = Default_peihe;
 			}
-			judgeMap.put(key_j_t_peihe, getTeamPeiHeByKongQiuLv(cvalue,oldValue,perpeihecounts));
+			judgeMap.put(key_j_t_peihe, String.valueOf(getTeamPeiHeByKongQiuLv(cvalue,oldValue,perpeihecounts)));
+		}
+	}
+	
+	private static Double getDouble(String value) {
+		if (StringUtils.isEmpty(value)) {
+			return 0.00;
+		}
+		try {
+			return Double.parseDouble(value);
+		}catch(Exception e) {
+			return 0.00;
 		}
 	}
 	
@@ -137,21 +139,30 @@ public class TongjiHelper {
 	 * @param judgeMaps
 	 * @return
 	 */
-	public static Double getTeamPoints(Map<String,Double> judgeMaps) {
+	public static Double getTeamPoints(Map<String,String> judgeMaps) {
 		if ( null == judgeMaps) {
 			return 0.00;
 		}
-		Double jingong = judgeMaps.get(key_j_t_jingong);
-		if ( null == jingong) {
+		String jingongstr = judgeMaps.get(key_j_t_jingong);
+		Double jingong = null;
+		if ( null == jingongstr) {
 			jingong = Default_jingong;
+		}else {
+			jingong = getDouble(jingongstr);
 		}
-		Double fangshou = judgeMaps.get(key_j_t_fangshou);
-		if ( null == fangshou) {
+		String fangshoustr = judgeMaps.get(key_j_t_fangshou);
+		Double fangshou = null;
+		if ( null == fangshoustr) {
 			fangshou = Default_fangshou;
+		}else {
+			fangshou = getDouble(fangshoustr);
 		}
-		Double peihe = judgeMaps.get(key_j_t_peihe);
-		if ( null == peihe) {
+		String peihestr = judgeMaps.get(key_j_t_peihe);
+		Double peihe = null;
+		if ( null == peihestr) {
 			peihe = Default_peihe;
+		}else {
+			peihe = getDouble(peihestr);
 		}
 		return (jingong+fangshou+peihe)/3;
 	}
@@ -184,8 +195,8 @@ public class TongjiHelper {
 	 * @param collectionCountsMap
 	 * @param judgeMap
 	 */
-	public static void updateTeamTongjiBySchedule(RaceScheduleTeam rst,TongjiT tt,Map<String,Double> collectionMap,
-			Map<String,Integer> collectionCountsMap,Map<String, Double> judgeMap) {
+	public static void updateTeamTongjiBySchedule(RaceScheduleTeam rst,TongjiT tt,Map<String,String> collectionMap,
+			Map<String,Integer> collectionCountsMap,Map<String, String> judgeMap) {
 		if (rst.getUdefined()!=1) {
 			//设置数据收集项
 			if ( null != rst.getCollectItemsMap()) {
@@ -195,14 +206,14 @@ public class TongjiHelper {
 					for (Iterator<String> it = citems.keySet().iterator();it.hasNext();) {
 						String itemId = it.next();
 						String svalue = citems.get(itemId);
-						Double value = Double.valueOf(svalue);
-						Double oldValue = collectionMap.get(itemId);
+						Double value = getDouble(svalue);
+						Double oldValue = getDouble(collectionMap.get(itemId));
 						//先计算值
 						TongjiHelper.calculateTeamJudge(itemId, svalue, collectionMap, collectionCountsMap, judgeMap);
 						if ( null == oldValue) {
-							collectionMap.put(itemId, value);
+							collectionMap.put(itemId, String.valueOf(value));
 						}else {
-							collectionMap.put(itemId, oldValue+value);
+							collectionMap.put(itemId, String.valueOf(oldValue+value));
 						}
 						Integer counts = collectionCountsMap.get(itemId);
 						if (null != counts ) {

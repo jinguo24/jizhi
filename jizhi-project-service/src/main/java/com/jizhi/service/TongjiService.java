@@ -304,10 +304,10 @@ public class TongjiService {
 		List<RaceScheduleTeam> rsts = raceScheduleTeamDao.query(0, tt.getTeamId(), type,999, 0, 10000);
 		if ( null != rsts) {
 			//球队位置数据项统计
-			Map<String,Double> collectionMap = new HashMap<String,Double>();
+			Map<String,String> collectionMap = new HashMap<String,String>();
 			Map<String,Integer> collectionCountsMap = new HashMap<String,Integer>();
 			//球队位置评判统计
-			Map<String, Double> judgeMap = new HashMap<String,Double>();
+			Map<String, String> judgeMap = new HashMap<String,String>();
 			//总分数
 			Double points = 0.00;
 			for (int i = 0 ; i < rsts.size() ; i ++) {

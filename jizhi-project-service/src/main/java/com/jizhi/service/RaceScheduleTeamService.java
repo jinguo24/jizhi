@@ -56,8 +56,6 @@ public class RaceScheduleTeamService {
 		if (race.getUdefined()==1) {
 			return ;
 		}
-		//因为之前没有设置collectsMap,调用一下set方法
-		race.setCollectItems(race.getCollectItems());
 		Map<String,Map<String,String>> collectsMap = race.getCollectItemsMap();
 		if ( null != collectsMap) {
 			//此处更新球队数据是在之前的统计数据上面加上这次的数据
@@ -76,13 +74,13 @@ public class RaceScheduleTeamService {
 			tongjit.setCounts(1);
 			isnew = true;
 		}
-		Map<String,Double> oldmaps = tongjit.getCollectItemsMap();
+		Map<String,String> oldmaps = tongjit.getCollectItemsMap();
 		if ( null == oldmaps) {
-			oldmaps = new HashMap<String,Double>();
+			oldmaps = new HashMap<String,String>();
 		}
-		Map<String,Double> jdmaps = tongjit.getJudgeItemsMap();
+		Map<String,String> jdmaps = tongjit.getJudgeItemsMap();
 		if ( null == jdmaps) {
-			jdmaps = new HashMap<String,Double>();
+			jdmaps = new HashMap<String,String>();
 		}
 		Map<String,Integer> collectionCountsMap = tongjit.getCollectItemsCountsMap();
 		if ( null == collectionCountsMap) {

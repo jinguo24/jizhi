@@ -20,11 +20,11 @@ public class TongjiT implements Serializable{
 	private int loses;
 	private int even;
 	private String collectItems;
-	private Map<String,Double> collectItemsMap = new HashMap<String,Double>();
+	private Map<String,String> collectItemsMap = new HashMap<String,String>();
 	private String collectItemsCounts;
 	private Map<String,Integer> collectItemsCountsMap = new HashMap<String,Integer>();
 	private String judgeItems;
-	private Map<String,Double> judgeItemsMap = new HashMap<String,Double>();
+	private Map<String,String> judgeItemsMap = new HashMap<String,String>();
 	private String judgeItemsCounts;
 	private Map<String,Integer> judgeItemsCountsMap = new HashMap<String,Integer>();
 	public String getTeamId() {
@@ -57,7 +57,7 @@ public class TongjiT implements Serializable{
 	public void setCollectItems(String collectItems) {
 		this.collectItems = collectItems;
 		if (!StringUtils.isEmpty(collectItems)) {
-			this.collectItemsMap  = (Map<String, Double>) JSONObject.parse(collectItems);
+			this.collectItemsMap  = (Map<String, String>) JSONObject.parse(collectItems);
 		}
 	}
 	public String getJudgeItems() {
@@ -66,16 +66,16 @@ public class TongjiT implements Serializable{
 	public void setJudgeItems(String judgeItems) {
 		this.judgeItems = judgeItems;
 		if (!StringUtils.isEmpty(judgeItems)) {
-			this.judgeItemsMap = (Map<String, Double>) JSONObject.parse(judgeItems);
+			this.judgeItemsMap = (Map<String, String>) JSONObject.parse(judgeItems);
 		}
 	}
-	public void setCollectItemsMap(Map<String, Double> collectItemsMap) {
+	public void setCollectItemsMap(Map<String, String> collectItemsMap) {
 		this.collectItemsMap = collectItemsMap;
 		if (null != collectItemsMap) {
 			this.collectItems = JSONObject.toJSONString(collectItemsMap);
 		}
 	}
-	public void setJudgeItemsMap(Map<String, Double> judgeItemsMap) {
+	public void setJudgeItemsMap(Map<String, String> judgeItemsMap) {
 		this.judgeItemsMap = judgeItemsMap;
 		if ( null != judgeItemsMap) {
 			this.judgeItems = JSONObject.toJSONString(judgeItemsMap);
@@ -117,10 +117,10 @@ public class TongjiT implements Serializable{
 			this.judgeItemsCounts = JSONObject.toJSONString(judgeItemsCountsMap);
 		}
 	}
-	public Map<String, Double> getCollectItemsMap() {
+	public Map<String, String> getCollectItemsMap() {
 		return collectItemsMap;
 	}
-	public Map<String, Double> getJudgeItemsMap() {
+	public Map<String, String> getJudgeItemsMap() {
 		return judgeItemsMap;
 	}
 	public int getWins() {

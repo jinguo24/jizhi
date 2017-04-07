@@ -257,6 +257,7 @@ public class RaceScheduleTeam implements Serializable{
 					}
 				}
 				this.collectItems = JSONObject.toJSONString(cmaps);
+				this.collectItemsMap = (Map<String,Map<String,String>>) JSONArray.parse(collectItems);
 			}
 		}
 	}
@@ -281,6 +282,16 @@ public class RaceScheduleTeam implements Serializable{
 				}
 				this.judgeItems = JSONObject.toJSONString(cmaps);
 			}
+		}
+	}
+	
+	public static void main(String[] args) {
+		String ss = "{\"t_jinqiu\":4.0,\"t_shiqiu\":2.0}";
+		Map<String, Double> collectItemsMap  = (Map<String, Double>) JSONObject.parse(ss);
+		for (Iterator<String> it = collectItemsMap.keySet().iterator();it.hasNext();) {
+			String itemId = it.next();
+			Double oldValue = collectItemsMap.get(itemId);
+			System.out.println(oldValue);
 		}
 	}
 }
