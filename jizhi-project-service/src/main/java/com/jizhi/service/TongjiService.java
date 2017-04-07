@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -288,11 +289,9 @@ public class TongjiService {
 		boolean isNew = false;
 		if ( null == tongjit) {
 			isNew = true;
-			tongjit = new TongjiT();
-			tongjit.setTeamId(teamId);
-		}else {
-			tongjit.clearItems();
 		}
+		tongjit = new TongjiT();
+		tongjit.setTeamId(teamId);
 		updateTeamTonji(tongjit,type);
 		if (isNew) {
 			tongjitDao.addTongjiTeam(tongjit);
@@ -311,58 +310,13 @@ public class TongjiService {
 			Map<String, Double> judgeMap = new HashMap<String,Double>();
 			//总分数
 			Double points = 0.00;
-			//胜
-			int wins = 0;
-			int loses = 0;
-			int evens = 0;
 			for (int i = 0 ; i < rsts.size() ; i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
-				if (rst.getUdefined()==1) {
-					continue;
-				}
-				//设置数据收集项
-				if ( null != rst.getCollectItemsMap()) {
-					Map<String,String> citems= rst.getCollectItemsMap().get(tt.getTeamId());
-					if ( null != citems) {
-						//设置数据收集项
-						for (Iterator<String> it = citems.keySet().iterator();it.hasNext();) {
-							String itemId = it.next();
-							String svalue = citems.get(itemId);
-							Double value = Double.valueOf(svalue);
-							Double oldValue = collectionMap.get(itemId);
-							//先计算值
-							TongjiHelper.calculateTeamJudge(itemId, svalue, collectionMap, collectionCountsMap, judgeMap);
-							if ( null == oldValue) {
-								collectionMap.put(itemId, value);
-							}else {
-								collectionMap.put(itemId, oldValue+value);
-							}
-							Integer counts = collectionCountsMap.get(itemId);
-							if (null != counts ) {
-								collectionCountsMap.put(itemId, counts+1);
-							}else {
-								collectionCountsMap.put(itemId, 1);
-							}
-						}
-					}
-				}
-				
-				if (tt.getTeamId().equals(rst.getSuccessTeamId())) {
-					wins++;
-				}else if (rst.getSuccessTeamId().equals("0")) {
-					evens++;
-				}else {
-					loses++;
-				}
+				TongjiHelper.updateTeamTongjiBySchedule(rst, tt, collectionMap, collectionCountsMap, judgeMap);
 			}
-			
 			tt.setCollectItemsMap(collectionMap);
 			tt.setJudgeItemsMap(judgeMap);
 			tt.setPoints(Math.floor(TongjiHelper.getTeamPoints(judgeMap)));
-			tt.setCounts(rsts.size());
-			tt.setWins(wins);
-			tt.setLoses(loses);
-			tt.setEven(evens);
 			tt.setCollectItemsCountsMap(collectionCountsMap);
 			//tt.setJudgeItemsCountsMap(judgeCountsMap);
 		}

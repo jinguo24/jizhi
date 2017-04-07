@@ -1,13 +1,10 @@
 package com.jizhi.service;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.jizhi.dao.RaceScheduleTeamDao;
 import com.jizhi.dao.TongjiTDao;
 import com.jizhi.model.RaceScheduleTeam;
@@ -56,14 +53,20 @@ public class RaceScheduleTeamService {
 	
 	public void updateRaceScheduleTeamResults(RaceScheduleTeam race) {
 		raceScheduleTeamDao.updateRaceScheduleTeamResults(race);
+		if (race.getUdefined()==1) {
+			return ;
+		}
+		//因为之前没有设置collectsMap,调用一下set方法
+		race.setCollectItems(race.getCollectItems());
 		Map<String,Map<String,String>> collectsMap = race.getCollectItemsMap();
 		if ( null != collectsMap) {
-			updateTeamTongji(race.getTeamOne(),collectsMap.get(race.getTeamOne()));
-			updateTeamTongji(race.getTeamTwo(),collectsMap.get(race.getTeamTwo()));
+			//此处更新球队数据是在之前的统计数据上面加上这次的数据
+			updateTeamTongji(race.getTeamOne(),race,collectsMap.get(race.getTeamOne()));
+			updateTeamTongji(race.getTeamTwo(),race,collectsMap.get(race.getTeamTwo()));
 		}
 	}
 	
-	private void updateTeamTongji(String teamId,Map<String,String> cmaps) {
+	private void updateTeamTongji(String teamId,RaceScheduleTeam race,Map<String,String> currentmaps) {
 		//更新统计数据
 		TongjiT tongjit = tongjiTDao.getById(teamId);
 		boolean isnew = false;
@@ -73,36 +76,27 @@ public class RaceScheduleTeamService {
 			tongjit.setCounts(1);
 			isnew = true;
 		}
-		Map<String,Double> csmaps = tongjit.getCollectItemsMap();
-		if ( null == csmaps) {
-			csmaps = new HashMap<String,Double>();
+		Map<String,Double> oldmaps = tongjit.getCollectItemsMap();
+		if ( null == oldmaps) {
+			oldmaps = new HashMap<String,Double>();
 		}
 		Map<String,Double> jdmaps = tongjit.getJudgeItemsMap();
 		if ( null == jdmaps) {
 			jdmaps = new HashMap<String,Double>();
 		}
-		if ( null != cmaps) {
-			for (Iterator<String> it = cmaps.keySet().iterator();it.hasNext();) {
-				String ikey = it.next();
-				String iv = cmaps.get(ikey);
-				if (csmaps.containsKey(ikey)) {
-					try {
-						csmaps.put(ikey, csmaps.get(ikey)+Double.parseDouble(iv));
-					}catch(Exception e) {
-					}
-				}else {
-					try {
-						csmaps.put(ikey, Double.parseDouble(iv));
-					}catch(Exception e) {
-					}
-				}
-				TongjiHelper.calculateTeamJudge(ikey,iv,tongjit.getCollectItemsMap(),tongjit.getCollectItemsCountsMap(),jdmaps);
-			}
-			tongjit.setCollectItemsMap(csmaps);
+		Map<String,Integer> collectionCountsMap = tongjit.getCollectItemsCountsMap();
+		if ( null == collectionCountsMap) {
+			collectionCountsMap = new HashMap<String,Integer>();
+		}
+		if ( null != currentmaps) {
+			TongjiHelper.updateTeamTongjiBySchedule(race, tongjit, oldmaps, collectionCountsMap, jdmaps);
+			tongjit.setCollectItemsMap(oldmaps);
 			//设置评分项
 			tongjit.setJudgeItemsMap(jdmaps);
 			tongjit.setPoints(TongjiHelper.getTeamPoints(tongjit.getJudgeItemsMap()));
+			tongjit.setCollectItemsCountsMap(collectionCountsMap);
 		}
+		
 		if (isnew) {
 			tongjiTDao.addTongjiTeam(tongjit);
 		}else {
