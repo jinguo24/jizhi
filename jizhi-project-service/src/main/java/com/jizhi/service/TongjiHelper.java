@@ -79,7 +79,7 @@ public class TongjiHelper {
 			Double perjinqiucounts = oldjinqiucounts/counts;
 			Double cvalue = getDouble(collectValue);
 			Double oldValue = getDouble(judgeMap.get(key_j_t_jingong));
-			if ( null == oldValue) {
+			if ( null == oldValue  || oldValue==0) {
 				oldValue = Default_jingong;
 			}
 			judgeMap.put(key_j_t_jingong, String.valueOf(getTeamJinGongByJinQiu(cvalue,oldValue,perjinqiucounts)));
@@ -97,7 +97,7 @@ public class TongjiHelper {
 			Double pershiqiucounts = oldshiqiucounts/counts;
 			Double cvalue = getDouble(collectValue);
 			Double oldValue = getDouble(judgeMap.get(key_j_t_fangshou));
-			if ( null == oldValue) {
+			if ( null == oldValue  || oldValue==0) {
 				oldValue = Default_fangshou;
 			}
 			judgeMap.put(key_j_t_fangshou, String.valueOf(getTeamFangShouByShiQiu(cvalue,oldValue,pershiqiucounts)));
@@ -116,7 +116,7 @@ public class TongjiHelper {
 			Double perpeihecounts = oldpeihecounts/counts;
 			Double cvalue = getDouble(collectValue);
 			Double oldValue = getDouble(judgeMap.get(key_j_t_peihe));
-			if ( null == oldValue) {
+			if ( null == oldValue || oldValue==0) {
 				oldValue = Default_peihe;
 			}
 			judgeMap.put(key_j_t_peihe, String.valueOf(getTeamPeiHeByKongQiuLv(cvalue,oldValue,perpeihecounts)));
