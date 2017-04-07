@@ -88,6 +88,7 @@ public class RaceController {
 						rst.setCollectItemslists(null);
 						rst.setJudgeItems(null);
 						rst.setJudgeItemslists(null);
+						rst.setJudgeItemsMap(null);
 					}
 				}
 			}
