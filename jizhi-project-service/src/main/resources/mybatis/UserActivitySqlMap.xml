@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userActivity" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.UserActivity" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="activity_id" property="activityId" jdbcType="VARCHAR" />
+		<result column="activity_name" property="activityName" jdbcType="VARCHAR" />
+		<result column="owner_phone" property="ownerPhone" jdbcType="VARCHAR" />
+		<result column="owner_name" property="ownerName" jdbcType="VARCHAR" />
+		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,phone,activity_id,activity_name,owner_phone,owner_name,begin_time,end_time,address
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.User">
+  	insert into user_activity_#{tbindex} (phone,activity_id,activity_name,owner_phone,owner_name,begin_time,end_time,address) 
+  		values (#{phone},#{activityId},#{activityName},#{ownerPhone},#{ownerName},#{beginTime},#{endTime},#{address})
+  </insert>
+ 
+  <select id="queryByUser" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from user_activity_#{tbindex} where phone = #{phone} 
+  	order by begin_time desc 
+  	limit #{begin},#{size}
+  </select>
+  
+  <select id="queryByUserAndActivity" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from user_activity_#{tbindex} where phone = #{phone} and activity_id = #{activityId}
+  </select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="activityPerson" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.ActivityPerson" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_id" property="activityId" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="is_owner" property="isOwner" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,activity_id,phone,name,create_time,is_owner
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.User">
+  	insert into activity_person_#{tbindex} (activity_id,phone,name,create_time,is_owner) 
+  		values (#{activityId},#{phone},#{name},#{createTime},#{isOwner})
+  </insert>
+ 
+  <select id="queryByActivity" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from activity_person_#{tbindex} where activity_id = #{activityId} 
+  	order by is_owner desc 
+  	limit #{begin},#{size}
+  </select>
+</mapper>
