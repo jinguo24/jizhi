@@ -33,4 +33,14 @@ public class ActivityPersonDao extends BaseIbatisDao {
 		param.put("size", pageSize);
 		return this.sqlSession.selectList("activityPerson.queryByActivity",param);
 	}
+	
+	public void delete(String activityId,String phone) {
+		ActivityPerson a = new ActivityPerson();
+		a.setActivityId(activityId);
+		Map param = new HashMap();
+		param.put("tbindex", a.getTbindex());
+		param.put("activityId", activityId);
+		param.put("phone", phone);
+		this.sqlSession.delete("activityPerson.delete",param);
+	}
 }

@@ -102,6 +102,12 @@ public class ActivityController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
 			Activity activity = activityService.getActivityByPhoneAndId(ownerphone, id);
+			if ( null != activity) {
+				String dys = request.getParameter("dys");
+				if ( null != dys && "1".equals(dys)) {
+					activity.setMembers(activityService.getPersons(id, 1, 100));
+				}
+			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", activity); 
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -153,15 +159,11 @@ public class ActivityController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
 			
-			if (activity.getDeadLineStatus()==1) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"已过活动报名截至时间，不能报名", null);
+			if (activity.getStatus()==1) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已关闭,停止报名", null);
 			}
 			
-			if (activity.getEndStatus()==1) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期.", null);
-			}
-			
-			UserActivity ua = activityService.getUserActivity(id, ownerphone);
+			UserActivity ua = activityService.getUserActivity(id, phone);
 			if (null != ua) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"您已经报名该活动,不能重复报名", null);
 			}
@@ -173,6 +175,33 @@ public class ActivityController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
 		}
 	}
+	
+	@RequestMapping(value = "updateUnvalid",method=RequestMethod.POST)
+	@ResponseBody
+	public String updateUnvalid(String id,String ownerPhone,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			activityService.updateActivityUnvalid(ownerPhone, id);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"更新成功", null);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"更新失败:"+e.getLocalizedMessage(), null);
+		}
+	}
+		
 	
 	@RequestMapping(value = "myActivitys",method=RequestMethod.GET)
 	@ResponseBody
@@ -193,6 +222,12 @@ public class ActivityController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			List<UserActivity> as = activityService.getActivites(dephone, pageIndex, pageSize);
+			if ( null != as ) {
+				for (int i = 0 ; i < as.size() ; i ++ ) {
+					UserActivity ua = as.get(i);
+					ua.setActivity(activityService.getActivityByPhoneAndId(ua.getOwnerPhone(), ua.getActivityId()));
+				}
+			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", as);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -219,6 +254,10 @@ public class ActivityController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
 			Activity activity = activityService.getActivityByPhoneAndId(phone, id);
+			if ( null != activity) {
+				activity.setToken(LocalUtil.entryLeader(activity.getId()+"&"+activity.getOwnerPhone()));
+				activity.setMembers(activityService.getPersons(id, 1, 100));
+			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", activity);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -230,8 +269,48 @@ public class ActivityController {
 	@ResponseBody
 	public String activityMembers(String id,int pageIndex,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			List<ActivityPerson> persons = activityService.getPersons(id, pageIndex, pageSize);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", persons);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,e.getLocalizedMessage(), e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "deleteMember",method=RequestMethod.GET)
+	@ResponseBody
+	public String deleteMember(String activitId,String phone,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			activityService.deleteMember(activitId, phone);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"删除成功", null);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,e.getLocalizedMessage(), e.getLocalizedMessage());

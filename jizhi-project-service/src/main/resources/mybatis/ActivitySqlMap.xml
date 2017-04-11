@@ -6,26 +6,26 @@
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="owner_phone" property="ownerPhone" jdbcType="VARCHAR" />
 		<result column="owner_name" property="ownerName" jdbcType="VARCHAR" />
-		<result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
-		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-		<result column="deadline_time" property="deadLineTime" jdbcType="TIMESTAMP" />
 		<result column="address" property="address" jdbcType="VARCHAR" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="activity_time" property="activityTime" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,owner_phone,owner_name,begin_time,end_time,deadline_time,address,remark
+	id,name,owner_phone,owner_name,address,remark,status,activity_time,create_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.User">
-  	insert into activity_#{tbindex} (id,name,owner_phone,owner_name,begin_time,end_time,deadline_time,address,remark) 
-  		values (#{id},#{name},#{ownerPhone},#{ownerName},#{beginTime},#{endTime},#{deadLineTime},#{address},#{remark})
+  	insert into activity_#{tbindex} (id,name,owner_phone,owner_name,address,remark,status,activity_time,create_time) 
+  		values (#{id},#{name},#{ownerPhone},#{ownerName},#{address},#{remark},#{status},#{activityTime},NOW())
   </insert>
  
   <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
   	from activity_#{tbindex} where owner_phone = #{ownerPhone}
-  	order by begin_time desc 
+  	order by create_time desc 
   	limit #{begin},#{size}
   </select>
   
@@ -34,4 +34,9 @@
   	<include refid="Base_Column_List"></include>
   	from activity_#{tbindex} where id = #{id} and owner_phone = #{ownerPhone} 
   </select>
+  
+  <update id="updateUnvalid">
+  	update activity_#{tbindex} set status = 1 where id = #{id} and owner_phone = #{ownerPhone} 
+  </update>
+  
 </mapper>

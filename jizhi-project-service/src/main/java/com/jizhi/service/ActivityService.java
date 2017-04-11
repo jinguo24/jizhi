@@ -1,9 +1,7 @@
 package com.jizhi.service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,36 +46,34 @@ public class ActivityService {
 		
 		UserActivity ua = new UserActivity();
 		ua.setActivityId(activity.getId());
-		ua.setActivityName(activity.getName());
-		ua.setAddress(activity.getAddress());
-		ua.setBeginTime(activity.getBeginTime());
-		ua.setEndTime(activity.getEndTime());
-		ua.setOwnerName(activity.getOwnerName());
 		ua.setOwnerPhone(activity.getOwnerPhone());
 		ua.setPhone(activity.getOwnerPhone());
+		ua.setActivityCreatTime(activity.getCreateTime());
 		userActivityDao.addUserActivity(ua);
 	}
 	
 	public void addMember(String activityId,String ownerPhone,String phone,String name) {
 		Activity activity = getActivityByPhoneAndId(ownerPhone,activityId);
-		ActivityPerson ap = new ActivityPerson();
-		ap.setActivityId(activity.getId());
-		ap.setCreateTime(new Date());
-		ap.setName(activity.getOwnerName());
-		ap.setPhone(activity.getOwnerPhone());
-		ap.setIsOwner(0);
-		activityPersonDao.addActivityPerson(ap);
-		
-		UserActivity ua = new UserActivity();
-		ua.setActivityId(activity.getId());
-		ua.setActivityName(activity.getName());
-		ua.setAddress(activity.getAddress());
-		ua.setBeginTime(activity.getBeginTime());
-		ua.setEndTime(activity.getEndTime());
-		ua.setOwnerName(activity.getOwnerName());
-		ua.setOwnerPhone(activity.getOwnerPhone());
-		ua.setPhone(activity.getOwnerPhone());
-		userActivityDao.addUserActivity(ua);
+		if ( null != activity) {
+			ActivityPerson ap = new ActivityPerson();
+			ap.setActivityId(activity.getId());
+			ap.setCreateTime(new Date());
+			ap.setName(name);
+			ap.setPhone(phone);
+			ap.setIsOwner(0);
+			activityPersonDao.addActivityPerson(ap);
+			
+			UserActivity ua = new UserActivity();
+			ua.setActivityId(activity.getId());
+			ua.setOwnerPhone(activity.getOwnerPhone());
+			ua.setPhone(phone);
+			ua.setActivityCreatTime(activity.getCreateTime());
+			userActivityDao.addUserActivity(ua);
+		}
+	}
+	
+	public void updateActivityUnvalid(String phone,String id) {
+		activityDao.updateUnvalid(phone, id);
 	}
 	
 	public List<ActivityPerson> getPersons(String activityId,int pageIndex,int pageSize) {
@@ -96,5 +92,10 @@ public class ActivityService {
 	
 	public UserActivity getUserActivity(String activityId,String phone) {
 		return  userActivityDao.getUserActivity(phone, activityId);
+	}
+	
+	public void deleteMember(String activityId,String phone) {
+		activityPersonDao.delete(activityId, phone);
+		userActivityDao.delete(activityId, phone);
 	}
 }

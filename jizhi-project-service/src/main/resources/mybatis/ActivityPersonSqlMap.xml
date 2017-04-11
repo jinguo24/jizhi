@@ -25,4 +25,8 @@
   	order by is_owner desc 
   	limit #{begin},#{size}
   </select>
+  
+  <delete id="delete">
+  	delete from activity_person_#{tbindex} where activity_id = #{activityId} and phone = #{phone}
+  </delete>
 </mapper>

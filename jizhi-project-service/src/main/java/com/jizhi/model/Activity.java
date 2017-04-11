@@ -2,6 +2,7 @@ package com.jizhi.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.util.StringUtils;
 
@@ -13,14 +14,14 @@ public class Activity implements Serializable{
 	private String name;
 	private String ownerPhone;
 	private String ownerName;
-	private Date beginTime;
-	private Date endTime;
-	private Date deadLineTime;
 	private String address;
+	private String activityTime;
 	private String remark;
 	private int tbindex;
-	private int deadLineStatus = 0;//状态0-有效 1-停止报名
-	private int endStatus = 0;//0-有效 1-过期
+	private int status = 0;//0-有效 1-过期
+	private Date createTime;
+	private List<ActivityPerson> members;
+	private String token;
 	public String getId() {
 		return id;
 	}
@@ -48,21 +49,6 @@ public class Activity implements Serializable{
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
 	}
-	public Date getBeginTime() {
-		return beginTime;
-	}
-	public void setBeginTime(Date beginTime) {
-		this.beginTime = beginTime;
-	}
-	public Date getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-		if (null != endTime && endTime.before(new Date())) {
-			this.endStatus = 1;
-		}
-	}
 	public String getAddress() {
 		return address;
 	}
@@ -78,19 +64,34 @@ public class Activity implements Serializable{
 	public int getTbindex() {
 		return tbindex;
 	}
-	public Date getDeadLineTime() {
-		return deadLineTime;
+	public int getStatus() {
+		return status;
 	}
-	public void setDeadLineTime(Date deadLineTime) {
-		this.deadLineTime = deadLineTime;
-		if (null != deadLineTime && deadLineTime.before(new Date())) {
-			this.deadLineStatus = 1;
-		}
+	public void setStatus(int status) {
+		this.status = status;
 	}
-	public int getDeadLineStatus() {
-		return deadLineStatus;
+	public String getActivityTime() {
+		return activityTime;
 	}
-	public int getEndStatus() {
-		return endStatus;
+	public void setActivityTime(String activityTime) {
+		this.activityTime = activityTime;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public List<ActivityPerson> getMembers() {
+		return members;
+	}
+	public void setMembers(List<ActivityPerson> members) {
+		this.members = members;
+	}
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
 	}
 }

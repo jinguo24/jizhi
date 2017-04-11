@@ -43,4 +43,14 @@ public class ActivityDao extends BaseIbatisDao {
 		param.put("size", pageSize);
 		return this.sqlSession.selectList("activity.queryByPhone",param);
 	}
+	
+	public void updateUnvalid(String phone,String id) {
+		Activity a = new Activity();
+		a.setOwnerPhone(phone);
+		Map param = new HashMap();
+		param.put("tbindex", a.getTbindex());
+		param.put("ownerPhone", phone);
+		param.put("id", id);
+		this.sqlSession.update("activity.updateUnvalid",param);
+	}
 }

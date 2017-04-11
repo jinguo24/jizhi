@@ -12,12 +12,9 @@ public class UserActivity implements Serializable{
 	private int id;
 	private String phone;
 	private String activityId;
-	private String activityName;
+	private Activity activity;
+	private Date activityCreatTime;
 	private String ownerPhone;
-	private String ownerName;
-	private Date beginTime;
-	private Date endTime;
-	private String address;
 	private int tbindex;
 	public int getId() {
 		return id;
@@ -40,11 +37,14 @@ public class UserActivity implements Serializable{
 	public void setActivityId(String activityId) {
 		this.activityId = activityId;
 	}
-	public String getActivityName() {
-		return activityName;
+	public int getTbindex() {
+		return tbindex;
 	}
-	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+	public Date getActivityCreatTime() {
+		return activityCreatTime;
+	}
+	public void setActivityCreatTime(Date activityCreatTime) {
+		this.activityCreatTime = activityCreatTime;
 	}
 	public String getOwnerPhone() {
 		return ownerPhone;
@@ -52,31 +52,10 @@ public class UserActivity implements Serializable{
 	public void setOwnerPhone(String ownerPhone) {
 		this.ownerPhone = ownerPhone;
 	}
-	public String getOwnerName() {
-		return ownerName;
+	public Activity getActivity() {
+		return activity;
 	}
-	public void setOwnerName(String ownerName) {
-		this.ownerName = ownerName;
-	}
-	public Date getBeginTime() {
-		return beginTime;
-	}
-	public void setBeginTime(Date beginTime) {
-		this.beginTime = beginTime;
-	}
-	public Date getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public int getTbindex() {
-		return tbindex;
+	public void setActivity(Activity activity) {
+		this.activity = activity;
 	}
 }
