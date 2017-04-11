@@ -18,7 +18,7 @@
   
   <insert id="insert" parameterType="com.jizhi.model.User">
   	insert into activity_#{tbindex} (id,name,owner_phone,owner_name,address,remark,status,activity_time,create_time) 
-  		values (#{id},#{name},#{ownerPhone},#{ownerName},#{address},#{remark},#{status},#{activityTime},NOW())
+  		values (#{id},#{name},#{ownerPhone},#{ownerName},#{address},#{remark},#{status},#{activityTime},#{createTime})
   </insert>
  
   <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">

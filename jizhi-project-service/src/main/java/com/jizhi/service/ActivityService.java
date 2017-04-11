@@ -34,6 +34,7 @@ public class ActivityService {
 	}
 	
 	public void addActivity(Activity activity) {
+		activity.setCreateTime(new Date());
 		activityDao.addActivity(activity);
 		
 		ActivityPerson ap = new ActivityPerson();
