@@ -200,10 +200,6 @@ public class ActivityController {
 		}
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(LocalUtil.entry("18600671341"));
-	}
-	
 	@RequestMapping(value = "detail",method=RequestMethod.GET)
 	@ResponseBody
 	public String detail(String id,String phone,HttpServletRequest request, HttpServletResponse response) {
