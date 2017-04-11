@@ -1,11 +1,8 @@
 package com.jizhi.controller;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,18 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jizhi.constant.ChouQianCache;
 import com.jizhi.model.Activity;
 import com.jizhi.model.ActivityPerson;
-import com.jizhi.model.Race;
-import com.jizhi.model.RacePersonApply;
-import com.jizhi.model.TeamChouQianDetail;
-import com.jizhi.model.TeamRaceApply;
 import com.jizhi.model.User;
 import com.jizhi.model.UserActivity;
 import com.jizhi.service.ActivityService;
 import com.jizhi.service.UserService;
 import com.simple.common.util.AjaxWebUtil;
+import com.simple.common.util.CookieUtils;
 import com.simple.common.util.PrimaryKeyUtil;
 
 @Controller
@@ -78,7 +71,6 @@ public class ActivityController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"发布失败:"+e.getLocalizedMessage(), e.getLocalizedMessage());
 		}
 	}
-	
 	/**
 	 * 处理时间
 	 * @param binder
@@ -161,8 +153,12 @@ public class ActivityController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
 			}
 			
-			if (activity.getStatus()==1) {
+			if (activity.getDeadLineStatus()==1) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"已过活动报名截至时间，不能报名", null);
+			}
+			
+			if (activity.getEndStatus()==1) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期.", null);
 			}
 			
 			UserActivity ua = activityService.getUserActivity(id, ownerphone);
@@ -202,6 +198,10 @@ public class ActivityController {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
 		}
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(LocalUtil.entry("18600671341"));
 	}
 	
 	@RequestMapping(value = "detail",method=RequestMethod.GET)

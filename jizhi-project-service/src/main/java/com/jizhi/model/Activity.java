@@ -19,7 +19,8 @@ public class Activity implements Serializable{
 	private String address;
 	private String remark;
 	private int tbindex;
-	private int status = 0;//是否已过期 0-否 1-是
+	private int deadLineStatus = 0;//状态0-有效 1-停止报名
+	private int endStatus = 0;//0-有效 1-过期
 	public String getId() {
 		return id;
 	}
@@ -58,6 +59,9 @@ public class Activity implements Serializable{
 	}
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+		if (null != endTime && endTime.before(new Date())) {
+			this.endStatus = 1;
+		}
 	}
 	public String getAddress() {
 		return address;
@@ -80,10 +84,13 @@ public class Activity implements Serializable{
 	public void setDeadLineTime(Date deadLineTime) {
 		this.deadLineTime = deadLineTime;
 		if (null != deadLineTime && deadLineTime.before(new Date())) {
-			this.status = 1;
+			this.deadLineStatus = 1;
 		}
 	}
-	public int getStatus() {
-		return status;
+	public int getDeadLineStatus() {
+		return deadLineStatus;
+	}
+	public int getEndStatus() {
+		return endStatus;
 	}
 }
