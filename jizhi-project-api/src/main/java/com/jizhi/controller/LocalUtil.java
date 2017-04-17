@@ -25,6 +25,16 @@ public class LocalUtil {
 		return decry(content,leader_entryKey);
 	}
 	
+	private static final String yuyue_entryKey = "jzyuyueo";
+	
+	public static String entryYuyue(String openId) {
+		return entry(openId, yuyue_entryKey);
+	}
+	
+	public static String decryYuyue(String content) {
+		return decry(content,yuyue_entryKey);
+	}
+	
 	private static String entry(String content,String key) {
 		return Base64.getBase64(DesEncrypt.encrypt(content, key));
 	}

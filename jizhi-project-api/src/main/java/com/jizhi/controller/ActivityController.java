@@ -27,6 +27,10 @@ import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.CookieUtils;
 import com.simple.common.util.PrimaryKeyUtil;
 
+/**
+ * 活动工具
+ * @author zhengfy1
+ */
 @Controller
 @RequestMapping(value = "/activity")
 public class ActivityController {

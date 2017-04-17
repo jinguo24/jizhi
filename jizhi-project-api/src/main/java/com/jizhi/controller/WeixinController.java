@@ -3,19 +3,28 @@ package com.jizhi.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.jizhi.model.WxUser;
+import com.jizhi.service.YuyueService;
 import com.simple.common.config.EnvPropertiesConfiger;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.weixin.auth.JsConfigInfo;
+import com.simple.weixin.auth.OAuthUserInfo;
 import com.simple.weixin.auth.WeiXinAuth;
 
 @Controller
 @RequestMapping(value = "/wx")
 public class WeixinController {
 
+	@Autowired
+	private YuyueService yuyueService;
+	
 	@RequestMapping(value = "homeTicket",method=RequestMethod.GET)
 	@ResponseBody
 	public String homeTicket(String url,HttpServletRequest request, HttpServletResponse response) {
@@ -92,4 +101,72 @@ public class WeixinController {
 		}
 	}
 	
+	@RequestMapping(value = "yuyue",method=RequestMethod.GET)
+	public String yuyueAuthPage(HttpServletRequest request, HttpServletResponse response) {
+		return "redirect:"+WeiXinAuth.getAuthUrl(EnvPropertiesConfiger.getValue("yuyuefirst"), true, null);
+	}
+	
+	@RequestMapping(value = "yuyueAuth",method=RequestMethod.GET)
+	public String yuyueAuth(String code,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			OAuthUserInfo au  = WeiXinAuth.authInfo(code);
+			if (null == au) {
+				return "用户授权失败.";
+			}
+			WxUser wxUser = yuyueService.getWxUserByOpenId(au.getOpenid());
+			if ( null == wxUser) {
+				wxUser = new WxUser();
+				wxUser.setOpenId(au.getOpenid());
+				wxUser.setNickName(au.getNickname());
+				wxUser.setImage(au.getHeadimgurl());
+				yuyueService.addWxUser(wxUser);
+			}else {
+				if ((!StringUtils.isEmpty(au.getHeadimgurl())) && (!au.getHeadimgurl().equals(wxUser.getImage()))) {
+					wxUser.setNickName(au.getNickname());
+					wxUser.setImage(au.getHeadimgurl());
+					yuyueService.updateWxInfo(wxUser);
+				}
+			}
+			String token = LocalUtil.entryYuyue(au.getOpenid());
+			return "redirect:"+String.format(EnvPropertiesConfiger.getValue("yuyuePage"),token,au.getOpenid());
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "error.";
+		}
+	}
+	
+	@RequestMapping(value = "joinpage",method=RequestMethod.GET)
+	public String joinpage(HttpServletRequest request, HttpServletResponse response) {
+		return "redirect:"+WeiXinAuth.getAuthUrl(EnvPropertiesConfiger.getValue("yuyuejoin"), true, null);
+	}
+	
+	@RequestMapping(value = "yuyueJoin",method=RequestMethod.GET)
+	public String joinpage(String code,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			OAuthUserInfo au  = WeiXinAuth.authInfo(code);
+			if (null == au) {
+				return "用户授权失败.";
+			}
+			WxUser wxUser = yuyueService.getWxUserByOpenId(au.getOpenid());
+			if ( null == wxUser) {
+				wxUser = new WxUser();
+				wxUser.setOpenId(au.getOpenid());
+				wxUser.setNickName(au.getNickname());
+				wxUser.setImage(au.getHeadimgurl());
+				yuyueService.addWxUser(wxUser);
+			}else {
+				if ((!StringUtils.isEmpty(au.getHeadimgurl())) && (!au.getHeadimgurl().equals(wxUser.getImage()))) {
+					wxUser.setNickName(au.getNickname());
+					wxUser.setImage(au.getHeadimgurl());
+					yuyueService.updateWxInfo(wxUser);
+				}
+			}
+			
+			String token = LocalUtil.entryYuyue(au.getOpenid());
+			return "redirect:"+String.format(EnvPropertiesConfiger.getValue("yuyuePage"),token,au.getOpenid());
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "error.";
+		}
+	}
 }
