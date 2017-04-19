@@ -1,6 +1,5 @@
 package com.jizhi.dao;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,8 @@ public class YuyueActivityDao extends BaseIbatisDao {
 		this.sqlSession.insert("yuyueActivity.insert", yuyueActivity);
 	}
 	
-	public List<YuyueActivity> query(Date endTime,int status,int begin,int size) {
+	public List<YuyueActivity> query(int status,int begin,int size) {
 		Map param = new HashMap();
-		param.put("endTime", endTime);
 		param.put("status", status);
 		param.put("begin", begin);
 		param.put("size", size);
@@ -36,9 +34,10 @@ public class YuyueActivityDao extends BaseIbatisDao {
 		param.put("status", status);
 		this.sqlSession.update("yuyueActivity.updateStatus",param);
 	}
-	public void increaseCount(String activityId) {
-		Map param = new HashMap();
-		param.put("activityId", activityId);
-		this.sqlSession.update("yuyueActivity.increaseCount",param);
+
+	public YuyueActivity queryById(String id) {
+		return this.sqlSession.selectOne("yuyueActivity.queryById",id);
 	}
+	
+	
 }

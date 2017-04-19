@@ -3,31 +3,30 @@
 <mapper namespace="yuyueActivityJoin" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.YuyueActivityJoin" >
 		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="activity_open_id" property="activityOpenId" jdbcType="VARCHAR" />
-		<result column="activity_id" property="activityId" jdbcType="VARCHAR" />
+		<result column="activity_user_id" property="activityUserId" jdbcType="VARCHAR" />
 		<result column="open_id" property="openId" jdbcType="VARCHAR" />
 		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
 		<result column="image" property="image" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,activity_open_id,activity_id,open_id,nick_name,image
+	id,activity_user_id,open_id,nick_name,image,create_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.YuyueActivityJoin">
-  	insert into yuyue_activity_join_#{tbindex} (activity_open_id,activity_id,open_id,nick_name,image) 
-  		values (#{activityOpenId},#{activityId},#{openId},#{nickName},#{image})
+  	insert into yuyue_activity_join_#{tbindex} (activity_user_id,open_id,nick_name,image,create_time) 
+  		values (#{activityUserId},#{openId},#{nickName},#{image},#{createTime})
   </insert>
  
-  <select id="queryByActiviyId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="queryByActiviyUserId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from yuyue_activity_join_#{tbindex} where activity_id = #{activityId} 
-  	order by id desc
+  	from yuyue_activity_join_#{tbindex} where activity_user_id = #{activityUserId} 
   	limit #{begin},#{size}
   </select>
   
   <select id="queryCountByActivityIdAndOpenId" resultType="Integer" parameterType="java.util.HashMap">
-  	select count(1) from yuyue_activity_join_#{tbindex} where activity_id = #{activityId} and open_id = #{openId}
+  	select count(1) from yuyue_activity_join_#{tbindex} where activity_user_id = #{activityUserId} and open_id = #{openId}
   </select>
   
 </mapper>

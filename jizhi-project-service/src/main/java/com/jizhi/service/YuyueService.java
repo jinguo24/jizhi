@@ -1,6 +1,5 @@
 package com.jizhi.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +8,11 @@ import org.springframework.stereotype.Service;
 import com.jizhi.dao.WxUserDao;
 import com.jizhi.dao.YuyueActivityDao;
 import com.jizhi.dao.YuyueActivityJoinDao;
-import com.jizhi.dao.YuyueUserActivityDao;
+import com.jizhi.dao.YuyueActivityUserDao;
 import com.jizhi.model.WxUser;
 import com.jizhi.model.YuyueActivity;
 import com.jizhi.model.YuyueActivityJoin;
-import com.jizhi.model.YuyueUserActivity;
+import com.jizhi.model.YuyueActivityUser;
 
 @Service
 public class YuyueService {
@@ -21,7 +20,7 @@ public class YuyueService {
 	@Autowired
 	private WxUserDao wxUserDao;
 	@Autowired
-	private YuyueUserActivityDao yuyueUserActivityDao;
+	private YuyueActivityUserDao yuyueActivityUserDao;
 	@Autowired
 	private YuyueActivityJoinDao yuyueActivityJoinDao;
 	@Autowired
@@ -44,52 +43,46 @@ public class YuyueService {
 		wxUserDao.updateWxInfo(wxUser);
 	}
 	
-	public void addYuyueActivity(YuyueUserActivity yua) {
-		yua.setCreateTime(new Date());
-		//TODO 根据创建时间来计算截止报名时间,这个礼拜的礼拜五中午12点，或者下个礼拜五的中午12点
-		yua.setDeadLineTime(deadLineTime);
-		yua.setEndTime(endTime);
-		yuyueUserActivityDao.addYuyueActivity(yua);
-		YuyueActivity ya = new YuyueActivity();
-		ya.setActivityId(yua.getId());
-		ya.setCreateTime(yua.getCreateTime());
-		ya.setDeadLineTime(yua.getDeadLineTime());
-		ya.setEndTime(yua.getEndTime());
-		ya.setName(yua.getName());
-		ya.setStatus(yua.getStatus());
+	public YuyueActivity queryActivityById(String activityId) {
+		return yuyueActivityDao.queryById(activityId);
+	}
+	
+	public void addYuyueActivity(YuyueActivity ya) {
 		yuyueActivityDao.addYuyueActivity(ya);
 		
 	}
 	
-	public List<YuyueUserActivity> queryYuyueActivityList(String openId,int status,int pageIndex,int pageSize) {
-		if (pageIndex<1) {
+	public void addYuyueActivityUser(YuyueActivityUser yau) {
+		yuyueActivityUserDao.addYuyueActivityUser(yau);
+	}
+	
+	public YuyueActivityUser queryYuyueActivityUserByOpenId(String activityId,String openId) {
+		return yuyueActivityUserDao.getByOpenId(activityId, openId);
+	}
+	
+	public List<YuyueActivityUser> queryYuyueActivityUserList(String activityId,int pageIndex,int pageSize) {
+		if ( pageIndex < 1 ) {
 			pageIndex = 1;
 		}
-		return yuyueUserActivityDao.getListByOpenId(openId, status, (pageIndex-1)*pageSize, pageSize);
+		return yuyueActivityUserDao.getListByActivityId(activityId, (pageIndex-1)*pageSize, pageSize);
 	}
 	
-	public YuyueUserActivity queryYuyueActivity(String openId,String id) {
-		return yuyueUserActivityDao.getYuyueActivityById(openId, id);
+	public Integer queryYuyueActivityJoinCounts(String activityUserId,String openId) {
+		return yuyueActivityJoinDao.queryCountByOpenId(activityUserId, openId);
 	}
 	
-	public Integer queryYuyueActivityJoinCounts(String activityId,String openId) {
-		return yuyueActivityJoinDao.queryCountByOpenId(activityId, openId);
-	}
-	
-	public List<YuyueActivityJoin> queryYuyueActivityJoins(String activityId,int pageIndex,int pageSize) {
+	public List<YuyueActivityJoin> queryYuyueActivityJoins(String activityUserId,int pageIndex,int pageSize) {
 		if (pageIndex < 1) {
 			pageIndex = 1;
 		}
-		return yuyueActivityJoinDao.getByActivityId(activityId, (pageIndex-1)*pageSize, pageSize);
+		return yuyueActivityJoinDao.getByActivityId(activityUserId, (pageIndex-1)*pageSize, pageSize);
 	}
 	
 	public void addYuyueActivityJoin(YuyueActivityJoin yuyueActivityJoin) {
 		yuyueActivityJoinDao.addYuyueActivity(yuyueActivityJoin);
 	}
 	
-	public void increaseActivityJoinCount(String activityId) {
-		yuyueActivityDao.increaseCount(activityId);
+	public void increaseActivityJoinCount(String activityId,String activiyUserId) {
+		yuyueActivityUserDao.increaseJoinCount(activityId, activiyUserId);
 	}
-	
-	
 }

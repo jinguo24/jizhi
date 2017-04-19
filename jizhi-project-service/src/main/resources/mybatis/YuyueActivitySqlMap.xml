@@ -2,40 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="yuyueActivity" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.YuyueActivity" >
-		<id column="activity_id" property="activityId" jdbcType="VARCHAR" />
+		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="deadLine_time" property="deadLineTime" jdbcType="TIMESTAMP" />
-		<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="INTEGER" />
-		<result column="join_count" property="joinCount" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	activity_id,name,create_time,deadLine_time,end_time,status,join_count
+	id,name,create_time,deadLine_time,status
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.YuyueActivity">
-  	insert into yuyue_activity (activity_id,name,create_time,deadLine_time,end_time,status,join_count) 
-  		values (#{activityId},#{name},#{createTime},#{deadLineTime},#{endTime},#{status},#{joinCount})
+  	insert into yuyue_activity (id,name,create_time,deadLine_time,status) 
+  		values (#{id},#{name},#{createTime},#{deadLineTime},#{status})
   </insert>
  
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
   	from yuyue_activity where 1=1 
-  	<if test="null != > endTime and endTime != '' " > and end_time &gt;= #{endTime}</if>
-  	<if test="status > 0 and  status != 999" > and status=#{status}</if>
-  	<if test="status == 999 " > and status in (1,3)</if>
-  	order by join_count desc,create_time desc
+  	<if test="status > 0" > and status=#{status}</if>
+  	order by create_time desc
   	limit #{begin},#{size}
   </select>
   
-  <update id="updateStatus" parameterType="com.jizhi.model.YuyueActivity">
-  	update yuyue_activity set status = #{status} where activity_id = #{activityId}
-  </update>
+    <select id="queryById" resultMap="BaseResultMap" parameterType="String">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from yuyue_activity where id=#{id} 
+  </select>
   
-  <update id="increaseCount" parameterType="java.util.HashMap">
-  	update yuyue_activity set join_count = join_count+1 where activity_id = #{activityId}
+  <update id="updateStatus" parameterType="java.util.HashMap">
+  	update yuyue_activity set status = #{status} where id = #{id}
   </update>
   
 </mapper>

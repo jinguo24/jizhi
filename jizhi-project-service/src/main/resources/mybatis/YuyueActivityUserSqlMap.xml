@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yuyueActivityUser" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.YuyueActivityUser" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="activity_id" property="activityId" jdbcType="VARCHAR" />
+		<result column="image" property="image" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="join_count" property="joinCounts" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,open_id,activity_id,image,nick_name,join_count
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.YuyueUserActivity">
+  	insert into yuyue_activity_user_#{tbindex} (id,open_id,activity_id,image,nick_name,join_count) 
+  		values (#{id},#{openId},#{activityId},#{image},#{nickName},#{joinCounts})
+  </insert>
+ 
+  <select id="queryByActivityId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from yuyue_activity_user_#{tbindex} where activity_id = #{activityId} 
+  	order by join_count desc
+  	limit #{begin},#{size}
+  </select>
+  
+  <select id="queryByOpenId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from yuyue_activity_user_#{tbindex} where open_id = #{openId} and activity_id = #{activityId}
+  </select>
+  
+  <update id="increaseCounts" parameterType="java.util.HashMap">
+  	update yuyue_activity_user_#{tbindex} set join_count = join_count+1 where id = #{id} and activity_id = #{activityId}
+  </update>
+  
+</mapper>
