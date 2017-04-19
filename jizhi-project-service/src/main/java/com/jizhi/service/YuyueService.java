@@ -1,5 +1,6 @@
 package com.jizhi.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.jizhi.model.WxUser;
 import com.jizhi.model.YuyueActivity;
 import com.jizhi.model.YuyueActivityJoin;
 import com.jizhi.model.YuyueActivityUser;
+import com.simple.common.util.PageResult;
 
 @Service
 public class YuyueService {
@@ -43,13 +45,32 @@ public class YuyueService {
 		wxUserDao.updateWxInfo(wxUser);
 	}
 	
+	public PageResult getActivityPageResult(int status,int pageIndex,int pageSize) {
+		if (pageIndex < 1) {
+			pageIndex = 1;
+		}
+		List<YuyueActivity> yards = yuyueActivityDao.query(status, (pageIndex-1)*pageSize, pageSize);
+		int count = yuyueActivityDao.queryCount(status);
+		return new PageResult(count,pageSize,pageIndex,yards);
+	}
+	
+	
 	public YuyueActivity queryActivityById(String activityId) {
 		return yuyueActivityDao.queryById(activityId);
 	}
 	
 	public void addYuyueActivity(YuyueActivity ya) {
+		ya.setCreateTime(new Date());
 		yuyueActivityDao.addYuyueActivity(ya);
 		
+	}
+	
+	public void updateYuyueActivity(YuyueActivity ya) {
+		yuyueActivityDao.update(ya);
+	}
+	
+	public void updateYuyueActivityStatus(String activityId,int status) {
+		yuyueActivityDao.updateStatus(activityId, status);
 	}
 	
 	public void addYuyueActivityUser(YuyueActivityUser yau) {
