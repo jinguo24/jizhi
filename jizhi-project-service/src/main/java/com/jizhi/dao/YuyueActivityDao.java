@@ -1,9 +1,9 @@
 package com.jizhi.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -21,32 +21,24 @@ public class YuyueActivityDao extends BaseIbatisDao {
 		this.sqlSession.insert("yuyueActivity.insert", yuyueActivity);
 	}
 	
-	public List<YuyueActivity> getListByOpenId(String openId,int status,int begin,int size) {
-		YuyueActivity a = new YuyueActivity();
-		a.setOpenId(openId);
+	public List<YuyueActivity> query(Date endTime,int status,int begin,int size) {
 		Map param = new HashMap();
-		param.put("tbindex", a.getTbindex());
-		param.put("openId", openId);
+		param.put("endTime", endTime);
 		param.put("status", status);
 		param.put("begin", begin);
 		param.put("size", size);
-		return this.sqlSession.selectList("yuyueActivity.queryByOpenId",param);
+		return this.sqlSession.selectList("yuyueActivity.query",param);
 	}
 	
-	public void updateStatus(YuyueActivity ya) {
-		this.sqlSession.update("yuyueActivity.updateStatus",ya);
-	}
-	
-	public YuyueActivity getYuyueActivityById(String openId,String id) {
-		YuyueActivity a = new YuyueActivity();
-		a.setOpenId(openId);
+	public void updateStatus(String activityId,int status) {
 		Map param = new HashMap();
-		param.put("tbindex", a.getTbindex());
-		param.put("openId", openId);
-		param.put("id", id);
-		return this.sqlSession.selectOne("yuyueActivity.queryById",param);
+		param.put("activityId", activityId);
+		param.put("status", status);
+		this.sqlSession.update("yuyueActivity.updateStatus",param);
 	}
-	
-	
-	
+	public void increaseCount(String activityId) {
+		Map param = new HashMap();
+		param.put("activityId", activityId);
+		this.sqlSession.update("yuyueActivity.increaseCount",param);
+	}
 }

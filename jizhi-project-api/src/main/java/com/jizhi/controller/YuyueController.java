@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jizhi.model.User;
 import com.jizhi.model.WxUser;
-import com.jizhi.model.YuyueActivity;
+import com.jizhi.model.YuyueUserActivity;
+import com.jizhi.model.YuyueActivityJoin;
 import com.jizhi.service.UserService;
 import com.jizhi.service.YuyueService;
 import com.simple.common.config.EnvPropertiesConfiger;
@@ -43,8 +44,44 @@ public class YuyueController {
 	@Autowired
 	private YuyueService yuyueService;
 	
+	@RequestMapping(value = "page",method=RequestMethod.GET)
+	public String yuyuePage(HttpServletRequest request, HttpServletResponse response) {
+		return "redirect:"+WeiXinAuth.getAuthUrl(EnvPropertiesConfiger.getValue("yuyuefirst"), true, null);
+	}
 	
-
+	@RequestMapping(value = "auth",method=RequestMethod.GET)
+	public String auth(String code,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			OAuthUserInfo au = auth(code);
+			String token = LocalUtil.entryYuyue(au.getOpenid());
+			return "redirect:"+String.format(EnvPropertiesConfiger.getValue("yuyuePage"),token,au.getOpenid());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "error:"+e.getLocalizedMessage();
+		}
+	}
+	
+	private OAuthUserInfo auth(String code) throws Exception{
+		OAuthUserInfo au  = WeiXinAuth.authInfo(code);
+		if (null == au) {
+			throw new RuntimeException("用户授权失败.");
+		}
+		WxUser wxUser = yuyueService.getWxUserByOpenId(au.getOpenid());
+		if ( null == wxUser) {
+			wxUser = new WxUser();
+			wxUser.setOpenId(au.getOpenid());
+			wxUser.setNickName(au.getNickname());
+			wxUser.setImage(au.getHeadimgurl());
+			yuyueService.addWxUser(wxUser);
+		}else {
+			if ((!StringUtils.isEmpty(au.getHeadimgurl())) && (!au.getHeadimgurl().equals(wxUser.getImage()))) {
+				wxUser.setNickName(au.getNickname());
+				wxUser.setImage(au.getHeadimgurl());
+				yuyueService.updateWxInfo(wxUser);
+			}
+		}
+		return au;
+	}
 	
 	private String loginOpenId(HttpServletRequest request) {
 		String currentOpenId = CookieUtils.getCookie(request, "openId");
@@ -66,7 +103,7 @@ public class YuyueController {
 	
 	@RequestMapping(value = "apply/ymq",method=RequestMethod.POST)
 	@ResponseBody
-	public String apply(YuyueActivity ya,String token,HttpServletRequest request, HttpServletResponse response) {
+	public String apply(YuyueUserActivity ya,String token,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if ( null == ya) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请填写相应信息", "请填写相应信息");
@@ -124,7 +161,7 @@ public class YuyueController {
 			if (StringUtils.isEmpty(openId)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
 			}
-			List<YuyueActivity> yuyuelist = yuyueService.queryYuyueActivityList(openId, 1, pageIndex, pageSize);
+			List<YuyueUserActivity> yuyuelist = yuyueService.queryYuyueActivityList(openId, 1, pageIndex, pageSize);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", yuyuelist);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -136,7 +173,10 @@ public class YuyueController {
 	@ResponseBody
 	public String info(String openId,String id,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			YuyueActivity ya = yuyueService.queryYuyueActivity(openId, id);
+			YuyueUserActivity ya = yuyueService.queryYuyueActivity(openId, id);
+			if (null != ya) {
+				ya.setJoins(yuyueService.queryYuyueActivityJoins(ya.getId(), 1, 10000));
+			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", ya);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -144,17 +184,71 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "join",method=RequestMethod.GET)
+	@RequestMapping(value = "currenJoin",method=RequestMethod.GET)
 	@ResponseBody
-	public String join(String openId,int id,HttpServletRequest request, HttpServletResponse response) {
+	public String currenJoin(String activityId,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			YuyueActivity ya = yuyueService.queryYuyueActivity(openId, id);
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", ya);
+			String openId = loginOpenId(request);
+			if (StringUtils.isEmpty(openId)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			Integer count = yuyueService.queryYuyueActivityJoinCounts(activityId, openId);
+			if (null == count || count <=0) {
+				AjaxWebUtil.sendAjaxResponse(request, response, true,"已经点赞", 1);
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"还未点赞", 2);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败:"+e.getLocalizedMessage(), e.getLocalizedMessage());
 		}
 	}
 	
+	@RequestMapping(value = "joinpage",method=RequestMethod.GET)
+	public String joinpage(HttpServletRequest request, HttpServletResponse response) {
+		return "redirect:"+WeiXinAuth.getAuthUrl(EnvPropertiesConfiger.getValue("yuyuejoin"), true,null);
+	}
 	
+	@RequestMapping(value = "joinAuth",method=RequestMethod.GET)
+	public String joinAuth(String code,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			OAuthUserInfo au  = auth(code);
+			return "redirect:"+EnvPropertiesConfiger.getValue("yuyuejoinPage");
+		}catch(Exception e) {
+			e.printStackTrace();
+			return "error."+e.getLocalizedMessage();
+		}
+	}
+	
+	@RequestMapping(value = "join",method=RequestMethod.POST)
+	@ResponseBody
+	public String join(String activityId,String ownerOpenId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String openId = loginOpenId(request);
+			if (StringUtils.isEmpty(openId)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			if (!StringUtils.isEmpty(activityId)&!StringUtils.isEmpty(ownerOpenId)) {
+					Integer count = yuyueService.queryYuyueActivityJoinCounts(activityId, openId);
+					if ( null != count && count > 0 ) {
+						return AjaxWebUtil.sendAjaxResponse(request, response, false,"已经点赞", null);
+					}else {
+						YuyueActivityJoin yaj = new YuyueActivityJoin();
+						yaj.setActivityId(activityId);
+						yaj.setActivityOpenId(ownerOpenId);
+						yaj.setOpenId(openId);
+						WxUser wxUser = yuyueService.getWxUserByOpenId(openId);
+						if ( null != wxUser) {
+							yaj.setImage(wxUser.getImage());
+							yaj.setNickName(wxUser.getNickName());
+						}
+						yuyueService.addYuyueActivityJoin(yaj);
+						yuyueService.increaseActivityJoinCount(activityId);
+					}
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"操作成功", null);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"操作失败:"+e.getLocalizedMessage(), null);
+		}
+	}
 }
