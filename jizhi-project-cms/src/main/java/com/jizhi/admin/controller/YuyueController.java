@@ -1,6 +1,8 @@
 package com.jizhi.admin.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,7 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,6 +35,16 @@ public class YuyueController {
 	
 	@Autowired
 	private YuyueService yuyueService;
+	
+	/**
+	 * 处理时间
+	 * @param binder
+	 */
+	@InitBinder  
+	protected  void initBinder(WebDataBinder binder) {  
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));  
+	}
 	
 	@RequestMapping(value = "list",method=RequestMethod.GET)
 	@ResponseBody
