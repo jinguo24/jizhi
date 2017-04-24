@@ -13,7 +13,7 @@
 	id,open_id,activity_id,image,nick_name,join_count
   </sql>
   
-  <insert id="insert" parameterType="com.jizhi.model.YuyueUserActivity">
+  <insert id="insert" parameterType="com.jizhi.model.YuyueActivityUser">
   	insert into yuyue_activity_user_#{tbindex} (id,open_id,activity_id,image,nick_name,join_count) 
   		values (#{id},#{openId},#{activityId},#{image},#{nickName},#{joinCounts})
   </insert>
