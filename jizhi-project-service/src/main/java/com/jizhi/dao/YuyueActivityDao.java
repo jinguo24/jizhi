@@ -40,7 +40,7 @@ public class YuyueActivityDao extends BaseIbatisDao {
 	
 	public void updateStatus(String activityId,int status) {
 		Map param = new HashMap();
-		param.put("activityId", activityId);
+		param.put("id", activityId);
 		param.put("status", status);
 		this.sqlSession.update("yuyueActivity.updateStatus",param);
 	}
@@ -49,5 +49,8 @@ public class YuyueActivityDao extends BaseIbatisDao {
 		return this.sqlSession.selectOne("yuyueActivity.queryById",id);
 	}
 	
+	public int updateUsed(String id) {
+		return this.sqlSession.update("yuyueActivity.updateUsed",id);
+	}
 	
 }

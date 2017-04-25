@@ -25,6 +25,7 @@ import com.jizhi.service.UserService;
 import com.jizhi.service.YuyueService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.PageResult;
+import com.simple.common.util.PrimaryKeyUtil;
 
 @Controller
 @RequestMapping(value = "/yuyue")
@@ -69,10 +70,11 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "add",method=RequestMethod.POST)
+	@RequestMapping(value = "add",method=RequestMethod.GET)
 	@ResponseBody
 	public String add(YuyueActivity ya,HttpServletRequest request, HttpServletResponse response) {
 		try {
+			ya.setId(PrimaryKeyUtil.getUUID());
 			yuyueService.addYuyueActivity(ya);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null); 
 		}catch(Exception e) {
@@ -92,7 +94,7 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "updateStatus",method=RequestMethod.POST)
+	@RequestMapping(value = "updateStatus",method=RequestMethod.GET)
 	@ResponseBody
 	public String deletePerson(String id,int status,HttpServletRequest request, HttpServletResponse response) {
 		try {

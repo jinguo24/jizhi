@@ -1,7 +1,9 @@
 package com.jizhi.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class YuyueService {
 	private YuyueActivityJoinDao yuyueActivityJoinDao;
 	@Autowired
 	private YuyueActivityDao yuyueActivityDao;
+	
+	private static final Object yuyueLock = new Object();
 	
 	
 	public void addWxUser(WxUser wxUser) {
@@ -61,6 +65,7 @@ public class YuyueService {
 	
 	public void addYuyueActivity(YuyueActivity ya) {
 		ya.setCreateTime(new Date());
+		ya.setStatus(1);
 		yuyueActivityDao.addYuyueActivity(ya);
 		
 	}
@@ -88,10 +93,6 @@ public class YuyueService {
 		return yuyueActivityUserDao.getListByActivityId(activityId, (pageIndex-1)*pageSize, pageSize);
 	}
 	
-	public Integer queryYuyueActivityJoinCounts(String activityUserId,String openId) {
-		return yuyueActivityJoinDao.queryCountByOpenId(activityUserId, openId);
-	}
-	
 	public List<YuyueActivityJoin> queryYuyueActivityJoins(String activityUserId,int pageIndex,int pageSize) {
 		if (pageIndex < 1) {
 			pageIndex = 1;
@@ -105,5 +106,26 @@ public class YuyueService {
 	
 	public void increaseActivityJoinCount(String activityId,String activiyUserId) {
 		yuyueActivityUserDao.increaseJoinCount(activityId, activiyUserId);
+	}
+	
+	public YuyueActivityJoin queryJoinByActivityIdAndPhone(String activityId,String phone) {
+		return yuyueActivityJoinDao.getByActivityIdAndPhone(activityId, phone);
+	}
+	
+	public boolean join(String activityId,String phone) {
+		synchronized (yuyueLock) {
+			int count = yuyueActivityDao.updateUsed(activityId);
+			if (count>0) {
+				YuyueActivityJoin yaj = new YuyueActivityJoin();
+				yaj.setActivityId(activityId);
+				yaj.setPhone(phone);
+				yaj.setCreateTime(new Date());
+				yuyueActivityJoinDao.addYuyueActivity(yaj);
+				return true;
+			}else {
+				return false;
+			}
+		}
+
 	}
 }

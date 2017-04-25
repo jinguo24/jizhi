@@ -10,11 +10,9 @@ public class YuyueActivityJoin implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private int id;
-	private String activityUserId;
-	private String openId;
-	private String nickName;
-	private String image;
+	private String activityId;
 	private Date createTime;
+	private String phone;
 	private int tbindex;
 	public int getId() {
 		return id;
@@ -22,32 +20,14 @@ public class YuyueActivityJoin implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getActivityUserId() {
-		return activityUserId;
+	public String getActivityId() {
+		return activityId;
 	}
-	public void setActivityUserId(String activityUserId) {
-		this.activityUserId = activityUserId;
-		if (!StringUtils.isEmpty(activityUserId)) {
-			this.tbindex = Math.abs(activityUserId.hashCode()%100);
+	public void setActivityId(String activityId) {
+		this.activityId = activityId;
+		if (!StringUtils.isEmpty(activityId)) {
+			this.tbindex = Math.abs(activityId.hashCode()%100);
 		}
-	}
-	public String getOpenId() {
-		return openId;
-	}
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
-	public String getNickName() {
-		return nickName;
-	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
-	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
 	}
 	public int getTbindex() {
 		return tbindex;
@@ -57,5 +37,11 @@ public class YuyueActivityJoin implements Serializable{
 	}
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }

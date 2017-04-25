@@ -12,19 +12,13 @@ public class YuyueActivity implements Serializable{
 	private String id;
 	private String name;
 	private Date createTime;
-	private Date deadLineTime;
 	private int status;
+	private int maxAllowed;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public Date getDeadLineTime() {
-		return deadLineTime;
-	}
-	public void setDeadLineTime(Date deadLineTime) {
-		this.deadLineTime = deadLineTime;
 	}
 	public int getStatus() {
 		return status;
@@ -43,5 +37,11 @@ public class YuyueActivity implements Serializable{
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public int getMaxAllowed() {
+		return maxAllowed;
+	}
+	public void setMaxAllowed(int maxAllowed) {
+		this.maxAllowed = maxAllowed;
 	}
 }

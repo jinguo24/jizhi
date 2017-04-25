@@ -20,24 +20,25 @@ public class YuyueActivityJoinDao extends BaseIbatisDao {
 		this.sqlSession.insert("yuyueActivityJoin.insert", yuyueActivityJoin);
 	}
 	
-	public List<YuyueActivityJoin> getByActivityId(String activityUserId,int begin,int size) {
+	public List<YuyueActivityJoin> getByActivityId(String activityId,int begin,int size) {
 		YuyueActivityJoin a = new YuyueActivityJoin();
-		a.setActivityUserId(activityUserId);
+		a.setActivityId(activityId);
 		Map param = new HashMap();
 		param.put("tbindex", a.getTbindex());
-		param.put("activityUserId", activityUserId);
+		param.put("activityId", activityId);
 		param.put("begin", begin);
 		param.put("size", size);
-		return this.sqlSession.selectList("yuyueActivityJoin.queryByActiviyUserId",param);
+		return this.sqlSession.selectList("yuyueActivityJoin.queryByActiviyId",param);
 	}
 	
-	public Integer queryCountByOpenId(String activityUserId,String openId) {
+	public YuyueActivityJoin getByActivityIdAndPhone(String activityId,String phone) {
 		YuyueActivityJoin a = new YuyueActivityJoin();
-		a.setActivityUserId(activityUserId);
+		a.setActivityId(activityId);
 		Map param = new HashMap();
 		param.put("tbindex", a.getTbindex());
-		param.put("activityUserId", activityUserId);
-		param.put("openId", openId);
-		return this.sqlSession.selectOne("yuyueActivityJoin.queryCountByActivityIdAndOpenId",param);
+		param.put("activityId", activityId);
+		param.put("phone", phone);
+		return this.sqlSession.selectOne("yuyueActivityJoin.queryByActiviyIdAndPhone",param);
 	}
+	
 }
