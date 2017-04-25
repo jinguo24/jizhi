@@ -65,7 +65,7 @@ public class YuyueService {
 	
 	public void addYuyueActivity(YuyueActivity ya) {
 		ya.setCreateTime(new Date());
-		ya.setStatus(1);
+		ya.setStatus(3);
 		yuyueActivityDao.addYuyueActivity(ya);
 		
 	}

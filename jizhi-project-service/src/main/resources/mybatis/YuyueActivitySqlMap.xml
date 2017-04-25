@@ -7,22 +7,24 @@
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="max_allowed" property="maxAllowed" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="surplus" property="surplus" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,create_time,status,max_allowed
+	id,name,create_time,status,max_allowed,remark,surplus
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.YuyueActivity">
-  	insert into yuyue_activity (id,name,create_time,status,max_allowed) 
-  		values (#{id},#{name},#{createTime},#{status},#{maxAllowed})
+  	insert into yuyue_activity (id,name,create_time,status,max_allowed,remark,surplus) 
+  		values (#{id},#{name},#{createTime},#{status},#{maxAllowed},#{remark},#{surplus})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.YuyueActivity">
-  	update yuyue_activity set name = #{name},max_allowed = #{maxAllowed} where id = #{id}
+  	update yuyue_activity set name = #{name},max_allowed = #{maxAllowed},remark=#{remark} where id = #{id}
   </update>
   
   <update id="updateUsed" parameterType="String">
-  	update yuyue_activity set max_allowed = max_allowed -1 where id = #{id} and max_allowed > 0 
+  	update yuyue_activity set surplus = surplus -1 where id = #{id} and surplus > 0 
   </update>
  
   <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">

@@ -51,32 +51,35 @@ public class YuyueController {
 	@ResponseBody
 	public String info(String activityId,HttpServletRequest request, HttpServletResponse response) {
 		try {
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			User u = userService.getUser(currentPhone);
-//			if ( null == u) {
-//				u = new User();
-//				u.setPhone(currentPhone);
-//				u.setCreateTime(new Date());
-//				userService.addUser(u);
-//			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			User u = userService.getUser(currentPhone);
+			if ( null == u) {
+				u = new User();
+				u.setPhone(currentPhone);
+				u.setCreateTime(new Date());
+				userService.addUser(u);
+			}
 			
 			YuyueActivity ac = yuyueService.queryActivityById(activityId);
 			if ( null == ac) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动无效", null);
+			}
+			if (ac.getStatus()==2 ) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已关闭", null);
 			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", ac);
 		}catch(Exception e) {
@@ -85,24 +88,24 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "yuyue",method=RequestMethod.GET)
+	@RequestMapping(value = "yuyue",method=RequestMethod.POST)
 	@ResponseBody
-	public String doYuyue(String activityId,String dephone,HttpServletRequest request, HttpServletResponse response) {
+	public String doYuyue(String activityId,HttpServletRequest request, HttpServletResponse response) {
 		try {
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			
 			YuyueActivity ac = yuyueService.queryActivityById(activityId);
 			if ( null == ac) {
@@ -111,7 +114,7 @@ public class YuyueController {
 			if (ac.getStatus()==2 ) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已关闭，无法预约", null);
 			}
-			if (ac.getMaxAllowed() <=0 ) {
+			if (ac.getSurplus() <=0 ) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动人数已满，无法预约", null);
 			}
 			YuyueActivityJoin yaj = yuyueService.queryJoinByActivityIdAndPhone(activityId, dephone);

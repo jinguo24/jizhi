@@ -70,11 +70,12 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "add",method=RequestMethod.GET)
+	@RequestMapping(value = "add",method=RequestMethod.POST)
 	@ResponseBody
 	public String add(YuyueActivity ya,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			ya.setId(PrimaryKeyUtil.getUUID());
+			ya.setSurplus(ya.getMaxAllowed());
 			yuyueService.addYuyueActivity(ya);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"添加成功", null); 
 		}catch(Exception e) {
@@ -83,7 +84,7 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "update",method=RequestMethod.GET)
+	@RequestMapping(value = "update",method=RequestMethod.POST)
 	@ResponseBody
 	public String update(YuyueActivity ya,HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -94,7 +95,7 @@ public class YuyueController {
 		}
 	}
 	
-	@RequestMapping(value = "updateStatus",method=RequestMethod.GET)
+	@RequestMapping(value = "updateStatus",method=RequestMethod.POST)
 	@ResponseBody
 	public String deletePerson(String id,int status,HttpServletRequest request, HttpServletResponse response) {
 		try {

@@ -14,6 +14,8 @@ public class YuyueActivity implements Serializable{
 	private Date createTime;
 	private int status;
 	private int maxAllowed;
+	private int surplus;
+	private String remark;
 	public String getName() {
 		return name;
 	}
@@ -43,5 +45,17 @@ public class YuyueActivity implements Serializable{
 	}
 	public void setMaxAllowed(int maxAllowed) {
 		this.maxAllowed = maxAllowed;
+	}
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public int getSurplus() {
+		return surplus;
+	}
+	public void setSurplus(int surplus) {
+		this.surplus = surplus;
 	}
 }
