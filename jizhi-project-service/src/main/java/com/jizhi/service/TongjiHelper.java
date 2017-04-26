@@ -189,14 +189,69 @@ public class TongjiHelper {
 	
 	/**
 	 * 通过一场赛程的结果来更新球队的统计数据
+	 * 算法：每场比赛的结果跟之前的结果来对比，场均，进行加减分
 	 * @param rst
 	 * @param tt
 	 * @param collectionMap
 	 * @param collectionCountsMap
 	 * @param judgeMap
 	 */
-	public static void updateTeamTongjiBySchedule(RaceScheduleTeam rst,TongjiT tt,Map<String,String> collectionMap,
-			Map<String,Integer> collectionCountsMap,Map<String, String> judgeMap) {
+//	public static void updateTeamTongjiBySchedule(RaceScheduleTeam rst,TongjiT tt,Map<String,String> collectionMap,
+//			Map<String,Integer> collectionCountsMap,Map<String, String> judgeMap) {
+//		if (rst.getUdefined()!=1) {
+//			//设置数据收集项
+//			if ( null != rst.getCollectItemsMap()) {
+//				Map<String,String> citems= rst.getCollectItemsMap().get(tt.getTeamId());
+//				if ( null != citems) {
+//					//设置数据收集项
+//					for (Iterator<String> it = citems.keySet().iterator();it.hasNext();) {
+//						String itemId = it.next();
+//						String svalue = citems.get(itemId);
+//						Double value = getDouble(svalue);
+//						Double oldValue = getDouble(collectionMap.get(itemId));
+//						//先计算值
+//						TongjiHelper.calculateTeamJudge(itemId, svalue, collectionMap, collectionCountsMap, judgeMap);
+//						if ( null == oldValue) {
+//							collectionMap.put(itemId, String.valueOf(value));
+//						}else {
+//							collectionMap.put(itemId, String.valueOf(oldValue+value));
+//						}
+//						Integer counts = collectionCountsMap.get(itemId);
+//						if (null != counts ) {
+//							collectionCountsMap.put(itemId, counts+1);
+//						}else {
+//							collectionCountsMap.put(itemId, 1);
+//						}
+//					}
+//				}
+//			}
+//			if (!StringUtils.isEmpty(rst.getSuccessTeamId())) {
+//				if (tt.getTeamId().equals(rst.getSuccessTeamId())) {
+//					int wins = tt.getWins();
+//					tt.setWins(wins+1);
+//				}else if (rst.getSuccessTeamId().equals("0")) {
+//					int evens = tt.getEven();
+//					tt.setEven(evens+1);
+//				}else {
+//					int loses = tt.getLoses();
+//					tt.setLoses(loses+1);
+//				}
+//			}
+//			int counts = tt.getCounts();
+//			tt.setCounts(counts+1);
+//		}
+//	}
+	
+	/**
+	 * 通过一场赛程的结果来更新球队的统计数据
+	 * @param rst
+	 * @param tt
+	 * @param collectionMap
+	 * @param collectionCountsMap
+	 * @param judgeMap
+	 */
+	public static void updateTeamTongjiSimpleBySchedule(RaceScheduleTeam rst,TongjiT tt,Map<String,String> collectionMap,
+			Map<String,Integer> collectionCountsMap) {
 		if (rst.getUdefined()!=1) {
 			//设置数据收集项
 			if ( null != rst.getCollectItemsMap()) {
@@ -209,7 +264,7 @@ public class TongjiHelper {
 						Double value = getDouble(svalue);
 						Double oldValue = getDouble(collectionMap.get(itemId));
 						//先计算值
-						TongjiHelper.calculateTeamJudge(itemId, svalue, collectionMap, collectionCountsMap, judgeMap);
+						//去掉此项 TongjiHelper.calculateTeamJudge(itemId, svalue, collectionMap, collectionCountsMap, judgeMap);
 						if ( null == oldValue) {
 							collectionMap.put(itemId, String.valueOf(value));
 						}else {
@@ -238,6 +293,81 @@ public class TongjiHelper {
 			}
 			int counts = tt.getCounts();
 			tt.setCounts(counts+1);
+		}
+	}
+	
+	/**
+	 * 计算球队进攻能力，防守能力，配合能力
+	 * @param collectKey
+	 * @param collectValue
+	 * @param oldCollectsMap
+	 * @param countsMap
+	 * @param judgeMap
+	 */
+	public static void calculateTeamJudge(Map<String,String> collectsMap,Map<String,Integer> countsMap,Map<String,String> judgeMap) {
+		if ( null == collectsMap || null == countsMap) {
+			return ;
+		}
+		//进攻能力，总进球数/场数 *200
+		String jinqiu = collectsMap.get(key_c_t_jinqiu);
+		Integer counts = countsMap.get(key_c_t_jinqiu);
+		if ( null == counts) {
+			counts = 1;
+		}
+		if (!StringUtils.isEmpty(jinqiu)) {
+			//场均进球
+			
+			Double jinqiucounts = getDouble(jinqiu) ;
+			Double perjinqiucounts = jinqiucounts/counts;
+			Double jingongnengli = perjinqiucounts*200;
+			if (jingongnengli>999) {
+				jingongnengli = 999.0;
+			}
+			if (jingongnengli < 200) {
+				jingongnengli = 200.0;
+			}
+			judgeMap.put(key_j_t_jingong, String.valueOf(jingongnengli));
+		}else {
+			judgeMap.put(key_j_t_jingong, String.valueOf(Default_jingong));
+		}
+		/*
+		 * 防守能力，999-场均失球*80
+		 */
+		String fangshou = collectsMap.get(key_c_t_shiqiu);
+		Integer fscounts = countsMap.get(key_c_t_shiqiu);
+		if ( null == fscounts) {
+			fscounts = 1;
+		}
+		if (!StringUtils.isEmpty(fangshou)) {
+			Double oldshiqiucounts = getDouble(fangshou);
+			Double pershiqiucounts = oldshiqiucounts/fscounts;
+			Double fangshounengli = 999-pershiqiucounts*80;
+			if (fangshounengli<200) {
+				fangshounengli = 200.0;
+			}
+			judgeMap.put(key_j_t_fangshou, String.valueOf(fangshounengli));
+		}else {
+			judgeMap.put(key_j_t_fangshou, String.valueOf(Default_fangshou));
+		}
+		
+		/*
+		 * 配合能力，控球率*15
+		 */
+		String kongqiu = collectsMap.get(key_c_t_kongqiulv);
+		Integer kqcounts = countsMap.get(key_c_t_kongqiulv);
+		if ( null == kqcounts) {
+			kqcounts = 1;
+		}
+		if (!StringUtils.isEmpty(kongqiu)) {
+			Double oldpeihecounts = getDouble(kongqiu);
+			Double perpeihecounts = oldpeihecounts/counts;
+			Double peihenengli = perpeihecounts*15;
+			if (peihenengli < 200) {
+				peihenengli = 200.0;
+			}
+			judgeMap.put(key_j_t_peihe, String.valueOf(peihenengli));
+		}else {
+			judgeMap.put(key_j_t_peihe, String.valueOf(Default_peihe));
 		}
 	}
 	

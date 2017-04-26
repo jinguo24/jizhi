@@ -80,7 +80,7 @@
   </delete>
   
   <update id="updateStatusByRaceId" parameterType="java.util.HashMap">
-  	update race_schedule_team set status = #{status} where race_id = #{raceId} 
+  	update race_schedule_team set status = #{status} where race_id = #{raceId} and status != 3
   </update>
   
    <update id="updateResults" parameterType="java.util.HashMap">

@@ -312,9 +312,11 @@ public class TongjiService {
 			Double points = 0.00;
 			for (int i = 0 ; i < rsts.size() ; i ++) {
 				RaceScheduleTeam rst = rsts.get(i);
-				TongjiHelper.updateTeamTongjiBySchedule(rst, tt, collectionMap, collectionCountsMap, judgeMap);
+				//TongjiHelper.updateTeamTongjiBySchedule(rst, tt, collectionMap, collectionCountsMap, judgeMap);
+				TongjiHelper.updateTeamTongjiSimpleBySchedule(rst, tt, collectionMap, collectionCountsMap);
 			}
 			tt.setCollectItemsMap(collectionMap);
+			TongjiHelper.calculateTeamJudge(collectionMap, collectionCountsMap, judgeMap);
 			tt.setJudgeItemsMap(judgeMap);
 			tt.setPoints(Math.floor(TongjiHelper.getTeamPoints(judgeMap)));
 			tt.setCollectItemsCountsMap(collectionCountsMap);
