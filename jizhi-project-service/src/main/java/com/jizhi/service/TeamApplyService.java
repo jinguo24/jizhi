@@ -164,6 +164,8 @@ public class TeamApplyService {
 		tar.setTeamName(teamapply.getTeamName());
 		tar.setType(teamapply.getType());
 		tar.setMemberList(racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 1000));
+		tar.setStudentNo(teamapply.getStudentNo());
+		tar.setClassName(teamapply.getClassName());
 		teamRaceApplyRejectDao.addTeamRaceApply(tar);
 		teamRaceApplyDao.deleteById(teamapply.getId());
 		racePersonApplyDao.deleteByTeamApplyId(teamapply.getRaceId(), teamapply.getId());

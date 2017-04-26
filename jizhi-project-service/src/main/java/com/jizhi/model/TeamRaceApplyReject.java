@@ -25,6 +25,8 @@ public class TeamRaceApplyReject implements Serializable{
 	private Date createTime;
 	private String members;
 	private List<RacePersonApply> memberList;
+	private String studentNo;//学号
+	private String className;//班级名称
 	public String getId() {
 		return id;
 	}
@@ -102,6 +104,18 @@ public class TeamRaceApplyReject implements Serializable{
 	}
 	public void setMembers(String members) {
 		this.members = members;
+	}
+	public String getStudentNo() {
+		return studentNo;
+	}
+	public void setStudentNo(String studentNo) {
+		this.studentNo = studentNo;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
 	}
 	public List<RacePersonApply> getMemberList() {
 		return memberList;

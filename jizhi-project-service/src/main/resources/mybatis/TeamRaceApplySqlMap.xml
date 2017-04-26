@@ -13,14 +13,16 @@
 		<result column="leader_phone" property="leaderPhone" jdbcType="VARCHAR" />
 		<result column="leader_name" property="leaderName" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="student_no" property="studentNo" jdbcType="VARCHAR" />
+		<result column="class_name" property="className" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time
+	id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time,student_no,class_name
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.TeamRaceApply">
-  	insert into race_team_apply (id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time) 
-  		values (#{id},#{raceId},#{status},#{raceName},#{teamName},#{remark},#{type},#{teamImage},#{leaderPhone},#{leaderName},#{createTime})
+  	insert into race_team_apply (id,race_id,status,race_name,team_name,remark,type,team_image,leader_phone,leader_name,create_time,student_no,class_name) 
+  		values (#{id},#{raceId},#{status},#{raceName},#{teamName},#{remark},#{type},#{teamImage},#{leaderPhone},#{leaderName},#{createTime},#{studentNo},#{className})
   </insert>
   
   <update id="updateStatus" parameterType="com.jizhi.model.TeamRaceApply" >

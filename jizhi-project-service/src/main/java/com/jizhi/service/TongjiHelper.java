@@ -319,7 +319,7 @@ public class TongjiHelper {
 			
 			Double jinqiucounts = getDouble(jinqiu) ;
 			Double perjinqiucounts = jinqiucounts/counts;
-			Double jingongnengli = perjinqiucounts*200;
+			Double jingongnengli = (Default_jingong-200)+perjinqiucounts*80.9;
 			if (jingongnengli>999) {
 				jingongnengli = 999.0;
 			}
@@ -328,7 +328,7 @@ public class TongjiHelper {
 			}
 			judgeMap.put(key_j_t_jingong, String.valueOf(jingongnengli));
 		}else {
-			judgeMap.put(key_j_t_jingong, String.valueOf(Default_jingong));
+			judgeMap.put(key_j_t_jingong, String.valueOf(Default_jingong-200));
 		}
 		/*
 		 * 防守能力，999-场均失球*80

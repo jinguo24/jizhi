@@ -26,6 +26,8 @@ public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 	private List<RacePersonApply> members;
 	private String token;//token
 	private int currentLeader;//当前用户是否领队
+	private String studentNo;//学号
+	private String className;//班级名称
 	
 	public String getId() {
 		return id;
@@ -116,6 +118,18 @@ public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 	}
 	public void setCurrentLeader(int currentLeader) {
 		this.currentLeader = currentLeader;
+	}
+	public String getStudentNo() {
+		return studentNo;
+	}
+	public void setStudentNo(String studentNo) {
+		this.studentNo = studentNo;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
 	}
 	@Override
 	public String toString() {
