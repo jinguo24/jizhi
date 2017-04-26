@@ -50,12 +50,12 @@ public class TeamController {
 	
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
-	public String applyTeam(Integer raceId,String raceName,String phone,String name,String teamname,String image,HttpServletRequest request, HttpServletResponse response) {
+	public String applyTeam(Integer raceId,String raceName,String phone,String name,String teamname,String image,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
 		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
-		return applyTeam(raceId,raceName,RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, teamname, image, request, response);
+		return applyTeam(raceId,raceName,RaceEnums.RaceTypes.ZUQIU.getId(), phone, name, teamname, image, studentNo,className,request, response);
 	}
 	
-	private String applyTeam(int raceId,String raceName,int type,String phone,String name,String teamname,String image,HttpServletRequest request, HttpServletResponse response) {
+	private String applyTeam(int raceId,String raceName,int type,String phone,String name,String teamname,String image,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (StringUtils.isEmpty(phone)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
@@ -71,6 +71,7 @@ public class TeamController {
 				user.setCreateTime(new Date());
 				user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
 				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+				user.setStudentNo(org.apache.commons.lang.StringUtils.trimToEmpty(studentNo));
 				userService.addUser(user);
 			}
 			
@@ -114,6 +115,8 @@ public class TeamController {
 			teamapply.setLeaderPhone(StringUtils.trimToEmpty(phone));
 			teamapply.setLeaderName(StringUtils.trimToEmpty(name));
 			teamapply.setCreateTime(new Date());
+			teamapply.setStudentNo(studentNo);
+			teamapply.setClassName(className);
 			teamApplyService.addTeamApply(teamapply);
 			String token = LocalUtil.entryLeader(teamapply.getId());
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", token);
@@ -175,7 +178,7 @@ public class TeamController {
 	
 	@RequestMapping(value = "teamMemberAdd",method=RequestMethod.POST)
 	@ResponseBody
-	public String teamMemberAdd(String token,String name,String nickName,String phone,HttpServletRequest request, HttpServletResponse response) {
+	public String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
 		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
 		try {
 			if (StringUtils.isEmpty(phone)) {
@@ -198,6 +201,7 @@ public class TeamController {
 				user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
 				user.setNickName(org.apache.commons.lang.StringUtils.trimToEmpty(nickName));
 				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+				user.setStudentNo(org.apache.commons.lang.StringUtils.trimToEmpty(studentNo));
 				userService.addUser(user);
 			}
 			
@@ -237,6 +241,8 @@ public class TeamController {
 			rpapply.setRaceName(teamapply.getRaceName());
 			rpapply.setTeamApplyId(teamapply.getId());
 			rpapply.setTeamName(teamapply.getTeamName());
+			rpapply.setStudentNo(studentNo);
+			rpapply.setClassName(className);
 			teamApplyService.addPersonApply(rpapply);
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
 		}catch(Exception e) {

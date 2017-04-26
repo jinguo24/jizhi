@@ -20,6 +20,7 @@ public class User implements Serializable{
 	private Date createTime;
 	private int tbinedex;
 	private String positions;
+	private String studentNo;
 	private List<String> positionsList;
 	public String getPhone() {
 		return phone;
@@ -77,5 +78,11 @@ public class User implements Serializable{
 	}
 	public void setPositionsList(List<String> positionsList) {
 		this.positionsList = positionsList;
+	}
+	public String getStudentNo() {
+		return studentNo;
+	}
+	public void setStudentNo(String studentNo) {
+		this.studentNo = studentNo;
 	}
 }

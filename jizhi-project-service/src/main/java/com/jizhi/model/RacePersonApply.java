@@ -18,6 +18,8 @@ public class RacePersonApply implements Serializable{
 	private int leader;
 	private int tbinedex;
 	private String positions;
+	private String studentNo;//学号
+	private String className;//班级名称
 	public int getId() {
 		return id;
 	}
@@ -81,5 +83,17 @@ public class RacePersonApply implements Serializable{
 	}
 	public void setPositions(String positions) {
 		this.positions = positions;
+	}
+	public String getStudentNo() {
+		return studentNo;
+	}
+	public void setStudentNo(String studentNo) {
+		this.studentNo = studentNo;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
 	}
 }
