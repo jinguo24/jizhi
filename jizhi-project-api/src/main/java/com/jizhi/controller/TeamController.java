@@ -151,23 +151,25 @@ public class TeamController {
 		if (null == teamapply) {
 			return null;
 		}
-		initMembers(teamapply,request);
+		initMembers(teamapply,true,request);
 		return teamapply;
 	}
 	
-	private void initMembers(TeamRaceApply teamapply,HttpServletRequest request) {
+	private void initMembers(TeamRaceApply teamapply,boolean needsLeader,HttpServletRequest request) {
 		String dys = request.getParameter("dys");
 		if (!StringUtils.isEmpty(dys) && "1".equals(dys)) {
 			List<RacePersonApply> tms =  new ArrayList<RacePersonApply>();
-			RacePersonApply ra = new RacePersonApply();
-			ra.setName(teamapply.getLeaderName());
-			ra.setPhone(teamapply.getLeaderPhone());
-			ra.setRaceId(teamapply.getRaceId());
-			ra.setRaceName(teamapply.getRaceName());
-			ra.setTeamApplyId(teamapply.getId());
-			ra.setTeamName(teamapply.getTeamName());
-			ra.setLeader(1);
-			tms.add(ra);
+			if (needsLeader) {
+				RacePersonApply ra = new RacePersonApply();
+				ra.setName(teamapply.getLeaderName());
+				ra.setPhone(teamapply.getLeaderPhone());
+				ra.setRaceId(teamapply.getRaceId());
+				ra.setRaceName(teamapply.getRaceName());
+				ra.setTeamApplyId(teamapply.getId());
+				ra.setTeamName(teamapply.getTeamName());
+				ra.setLeader(1);
+				tms.add(ra);
+			}
 			List<RacePersonApply> ts = teamApplyService.queryPersonApplysByTeamApply(teamapply.getRaceId(), teamapply.getId());
 			if ( null != ts ) {
 				tms.addAll(ts);
@@ -181,75 +183,100 @@ public class TeamController {
 	public String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
 		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
 		try {
-			if (StringUtils.isEmpty(phone)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
-			}
-			
-			if (StringUtils.isEmpty(name)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
-			}
-			
-			String taid = LocalUtil.decryLeader(token);
-			if ("_jz_unkownphone".equals(taid)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
-			}
-			//判断用户是否存在，不存在则新增用户
-			User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
-			if ( null == user ) {
-				user = new User();
-				user.setCreateTime(new Date());
-				user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
-				user.setNickName(org.apache.commons.lang.StringUtils.trimToEmpty(nickName));
-				user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
-				user.setStudentNo(org.apache.commons.lang.StringUtils.trimToEmpty(studentNo));
-				userService.addUser(user);
-			}
-			
-			TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(taid);
-			if  (null == teamapply) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
-			}
-			
-			Race race  = raceService.queryById(teamapply.getRaceId());
-			if (null == race || race.getStatus() == 2) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
-			}
-			
-			if (race.getStatus() == 3) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
-			}
-			
-			if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
-			}
-			//所有
-			Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
-			if ( null != count && count > 0 ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
-			}
-			
-			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
-			if ( null != rpapply ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","只允许注册一个队伍", rpapply);
-			}
-			
-			rpapply = new RacePersonApply();
-			rpapply.setCreateTime(new Date());
-			rpapply.setName(StringUtils.trimToEmpty(name));
-			rpapply.setPhone(StringUtils.trimToEmpty(phone));
-			rpapply.setRaceId(teamapply.getRaceId());
-			rpapply.setRaceName(teamapply.getRaceName());
-			rpapply.setTeamApplyId(teamapply.getId());
-			rpapply.setTeamName(teamapply.getTeamName());
-			rpapply.setStudentNo(studentNo);
-			rpapply.setClassName(className);
-			teamApplyService.addPersonApply(rpapply);
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
+			return teamMemberAdd(token, name, nickName, phone, studentNo, className,null, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
 		}
 	}
+	
+	@RequestMapping(value = "teamMemberAddWithCode",method=RequestMethod.POST)
+	@ResponseBody
+	public String teamMemberAddWithCode(String token,String name,String nickName,String phone,String phoneCode,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
+		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
+		try {
+			return teamMemberAdd(token, name, nickName, phone, studentNo, className,phoneCode, request, response);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
+		}
+	}
+	
+	private String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,String phoneCode,HttpServletRequest request, HttpServletResponse response) {
+		//如果有短信验证码，则校验验证码
+		if (!StringUtils.isEmpty(phoneCode)) {
+			boolean valid = LocalCache.codeValid(phone, phoneCode);
+			if (!valid) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", "验证码错误");
+			}
+		}
+		if (StringUtils.isEmpty(phone)) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
+		}
+		
+		if (StringUtils.isEmpty(name)) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
+		}
+		
+		String taid = LocalUtil.decryLeader(token);
+		if ("_jz_unkownphone".equals(taid)) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+		}
+		//判断用户是否存在，不存在则新增用户
+		User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+		if ( null == user ) {
+			user = new User();
+			user.setCreateTime(new Date());
+			user.setName(org.apache.commons.lang.StringUtils.trimToEmpty(name));
+			user.setNickName(org.apache.commons.lang.StringUtils.trimToEmpty(nickName));
+			user.setPhone(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
+			user.setStudentNo(org.apache.commons.lang.StringUtils.trimToEmpty(studentNo));
+			userService.addUser(user);
+		}
+		
+		TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(taid);
+		if  (null == teamapply) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+		}
+		
+		Race race  = raceService.queryById(teamapply.getRaceId());
+		if (null == race || race.getStatus() == 2) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+		}
+		
+		if (race.getStatus() == 3) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+		}
+		
+		if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+		}
+		//所有
+		Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
+		if ( null != count && count > 0 ) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+		}
+		
+		RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
+		if ( null != rpapply ) {
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","只允许注册一个队伍", rpapply);
+		}
+		
+		rpapply = new RacePersonApply();
+		rpapply.setCreateTime(new Date());
+		rpapply.setName(StringUtils.trimToEmpty(name));
+		rpapply.setPhone(StringUtils.trimToEmpty(phone));
+		rpapply.setRaceId(teamapply.getRaceId());
+		rpapply.setRaceName(teamapply.getRaceName());
+		rpapply.setTeamApplyId(teamapply.getId());
+		rpapply.setTeamName(teamapply.getTeamName());
+		rpapply.setStudentNo(studentNo);
+		rpapply.setClassName(className);
+		teamApplyService.addPersonApply(rpapply);
+		return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
+	}
+	
+	
 	
 	@RequestMapping(value = "myApplyTeam",method=RequestMethod.GET)
 	@ResponseBody
@@ -273,7 +300,7 @@ public class TeamController {
 			List<TeamRaceApply> teams = teamApplyService.queryTeamApplyList(currentPhone);
 			if ( null != teams ) {
 				for (int i = 0 ; i < teams.size() ; i ++ ) {
-					initMembers(teams.get(i),request);
+					initMembers(teams.get(i),true,request);
 					initRaceInfo(teams.get(i));
 				}
 			}
@@ -290,6 +317,25 @@ public class TeamController {
 		teamRaceApply.setRace(race);
 	}
 	
+	@RequestMapping(value = "teamMemberList",method=RequestMethod.GET)
+	@ResponseBody
+	public String teamMemberList(Integer raceId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<TeamRaceApply> teams = teamApplyService.queryTeamRaceApplyList(raceId, null, 2, 1, null, 1, 100);
+			if ( null != teams ) {
+				for (int i = 0 ; i < teams.size() ; i ++ ) {
+					TeamRaceApply tra = teams.get(i);
+					initMembers(tra,false,request);
+					tra.setToken(LocalUtil.entryLeader(tra.getId()));
+					//initRaceInfo(teams.get(i));
+				}
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
+		}
+	}
 	
 	@RequestMapping(value = "detail",method=RequestMethod.GET)
 	@ResponseBody
