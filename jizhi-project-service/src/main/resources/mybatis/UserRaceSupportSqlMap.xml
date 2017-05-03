@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userRaceSupport" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.UserRaceSupport" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="owner_phone" property="ownerPhone" jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,owner_phone,phone,name,create_time,race_id
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.UserRaceSupport">
+  	insert into user_race_support_#{tbindex} (owner_phone,phone,name,create_time,race_id) 
+  		values (#{ownerPhone},#{phone},#{name},#{createTime},#{raceId})
+  </insert>
+ 
+  <select id="queryByRaceAndPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from user_race_support_#{tbindex} where owner_phone = #{ownerPhone} and race_id = #{raceId}
+  	order by create_time desc 
+  	limit #{begin},#{size}
+  </select>
+  
+  <select id="queryCountByRaceAndPhone" resultType="Integer" parameterType="java.util.HashMap">
+  	select count(1) from user_race_support_#{tbindex} where owner_phone = #{ownerPhone} and race_id = #{raceId}
+  </select>
+  
+  <select id="queryByRaceAndOwnerPhoneAndPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from user_race_support_#{tbindex} where owner_phone = #{ownerPhone} and race_id = #{raceId} and phone = #{phone}
+  </select>
+</mapper>

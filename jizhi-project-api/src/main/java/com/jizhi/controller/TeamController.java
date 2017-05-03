@@ -1,5 +1,6 @@
 package com.jizhi.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -195,6 +196,9 @@ public class TeamController {
 	public String teamMemberAddWithCode(String token,String name,String nickName,String phone,String phoneCode,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
 		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
 		try {
+			if (StringUtils.isEmpty(phoneCode)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
+			}
 			return teamMemberAdd(token, name, nickName, phone, studentNo, className,phoneCode, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -422,6 +426,4 @@ public class TeamController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"初始化失败", e.getLocalizedMessage());
 		}
 	}
-	
-	
 }
