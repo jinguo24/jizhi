@@ -2,38 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="yuyueActivityUser" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.YuyueActivityUser" >
-		<id column="id" property="id" jdbcType="VARCHAR" />
-		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<id column="id" property="id" jdbcType="Integer" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="activity_id" property="activityId" jdbcType="VARCHAR" />
-		<result column="image" property="image" jdbcType="VARCHAR" />
-		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
-		<result column="join_count" property="joinCounts" jdbcType="INTEGER" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,open_id,activity_id,image,nick_name,join_count
+	id,phone,activity_id,create_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.YuyueActivityUser">
-  	insert into yuyue_activity_user_#{tbindex} (id,open_id,activity_id,image,nick_name,join_count) 
-  		values (#{id},#{openId},#{activityId},#{image},#{nickName},#{joinCounts})
+  	insert into yuyue_activity_user_#{tbindex} (phone,activity_id,create_time) 
+  		values (#{phone},#{activityId},#{createTime})
   </insert>
  
-  <select id="queryByActivityId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  <select id="queryByPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
   	<include refid="Base_Column_List"></include>
-  	from yuyue_activity_user_#{tbindex} where activity_id = #{activityId} 
-  	order by join_count desc
+  	from yuyue_activity_user_#{tbindex} where phone = #{phone} 
+  	order by create_time desc
   	limit #{begin},#{size}
   </select>
   
-  <select id="queryByOpenId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-  	select 
-  	<include refid="Base_Column_List"></include>
-  	from yuyue_activity_user_#{tbindex} where open_id = #{openId} and activity_id = #{activityId}
+  <select id="queryCounts" resultType="Integer" parameterType="java.util.HashMap">
+  	select count(1) from 
+  	from yuyue_activity_user_#{tbindex} where phone = #{phone} and activity_id in 
+  	<foreach item="item" index="index" collection="activityIds" open="(" separator="," close=")">  
+	  #{item}  
+	</foreach>
   </select>
-  
-  <update id="increaseCounts" parameterType="java.util.HashMap">
-  	update yuyue_activity_user_#{tbindex} set join_count = join_count+1 where id = #{id} and activity_id = #{activityId}
-  </update>
-  
 </mapper>

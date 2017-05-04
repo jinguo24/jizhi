@@ -2,7 +2,6 @@ package com.jizhi.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.util.StringUtils;
 
@@ -10,63 +9,46 @@ public class YuyueActivityUser implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private String id;
-	private String openId;
+	private int id;
+	private String phone;
 	private String activityId;
-	private String image;
-	private String nickName;
-	private int joinCounts;
+	private YuyueActivity activity;
+	private Date createTime;
 	private int tbindex;
-	private List<YuyueActivityJoin> joins;
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public String getOpenId() {
-		return openId;
+	public String getPhone() {
+		return phone;
 	}
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
-	public int getTbindex() {
-		return tbindex;
-	}
-	public List<YuyueActivityJoin> getJoins() {
-		return joins;
-	}
-	public void setJoins(List<YuyueActivityJoin> joins) {
-		this.joins = joins;
+	public void setPhone(String phone) {
+		this.phone = phone;
+		if (!StringUtils.isEmpty(phone)) {
+			this.tbindex = (int)(Long.parseLong(phone)%100);
+		}
 	}
 	public String getActivityId() {
 		return activityId;
 	}
 	public void setActivityId(String activityId) {
 		this.activityId = activityId;
-		if (!StringUtils.isEmpty(activityId)) {
-			this.tbindex = Math.abs(activityId.hashCode()%100);
-		}
 	}
-	public String getImage() {
-		return image;
+	public int getTbindex() {
+		return tbindex;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public Date getCreateTime() {
+		return createTime;
 	}
-	public String getNickName() {
-		return nickName;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public YuyueActivity getActivity() {
+		return activity;
 	}
-	public int getJoinCounts() {
-		return joinCounts;
-	}
-	public void setJoinCounts(int joinCounts) {
-		this.joinCounts = joinCounts;
-	}
-	public void setTbindex(int tbindex) {
-		this.tbindex = tbindex;
+	public void setActivity(YuyueActivity activity) {
+		this.activity = activity;
 	}
 }

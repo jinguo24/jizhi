@@ -16,6 +16,7 @@ public class YuyueActivity implements Serializable{
 	private int maxAllowed;
 	private int surplus;
 	private String remark;
+	private String parentId;
 	public String getName() {
 		return name;
 	}
@@ -57,5 +58,11 @@ public class YuyueActivity implements Serializable{
 	}
 	public void setSurplus(int surplus) {
 		this.surplus = surplus;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 }

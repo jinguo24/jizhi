@@ -82,15 +82,11 @@ public class YuyueService {
 		yuyueActivityUserDao.addYuyueActivityUser(yau);
 	}
 	
-	public YuyueActivityUser queryYuyueActivityUserByOpenId(String activityId,String openId) {
-		return yuyueActivityUserDao.getByOpenId(activityId, openId);
-	}
-	
-	public List<YuyueActivityUser> queryYuyueActivityUserList(String activityId,int pageIndex,int pageSize) {
+	public List<YuyueActivityUser> queryYuyueActivityUserList(String phone,int pageIndex,int pageSize) {
 		if ( pageIndex < 1 ) {
 			pageIndex = 1;
 		}
-		return yuyueActivityUserDao.getListByActivityId(activityId, (pageIndex-1)*pageSize, pageSize);
+		return yuyueActivityUserDao.getListByPhone(phone, (pageIndex-1)*pageSize, pageSize);
 	}
 	
 	public List<YuyueActivityJoin> queryYuyueActivityJoins(String activityUserId,int pageIndex,int pageSize) {
@@ -104,15 +100,21 @@ public class YuyueService {
 		yuyueActivityJoinDao.addYuyueActivity(yuyueActivityJoin);
 	}
 	
-	public void increaseActivityJoinCount(String activityId,String activiyUserId) {
-		yuyueActivityUserDao.increaseJoinCount(activityId, activiyUserId);
-	}
-	
 	public YuyueActivityJoin queryJoinByActivityIdAndPhone(String activityId,String phone) {
 		return yuyueActivityJoinDao.getByActivityIdAndPhone(activityId, phone);
 	}
 	
-	public boolean join(String activityId,String phone) {
+	public List<String> queryChildActivityIds(String activityId) {
+		return yuyueActivityDao.queryChildIds(activityId);
+	}
+	
+	public Integer queryUserCount(String phone,List<String> activityIds) {
+		return yuyueActivityUserDao.queryCounts(phone,activityIds);
+	}
+	
+	
+	
+	public boolean updatejoin(String activityId,String phone) {
 		synchronized (yuyueLock) {
 			int count = yuyueActivityDao.updateUsed(activityId);
 			if (count>0) {
@@ -121,6 +123,12 @@ public class YuyueService {
 				yaj.setPhone(phone);
 				yaj.setCreateTime(new Date());
 				yuyueActivityJoinDao.addYuyueActivity(yaj);
+				
+				YuyueActivityUser yau = new YuyueActivityUser();
+				yau.setActivityId(activityId);
+				yau.setCreateTime(new Date());
+				yau.setPhone(phone);
+				yuyueActivityUserDao.addYuyueActivityUser(yau);
 				return true;
 			}else {
 				return false;

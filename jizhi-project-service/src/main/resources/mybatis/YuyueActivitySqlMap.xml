@@ -9,18 +9,19 @@
 		<result column="max_allowed" property="maxAllowed" jdbcType="INTEGER" />
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="surplus" property="surplus" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,create_time,status,max_allowed,remark,surplus
+	id,name,create_time,status,max_allowed,remark,surplus,parent_id
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.YuyueActivity">
-  	insert into yuyue_activity (id,name,create_time,status,max_allowed,remark,surplus) 
-  		values (#{id},#{name},#{createTime},#{status},#{maxAllowed},#{remark},#{surplus})
+  	insert into yuyue_activity (id,name,create_time,status,max_allowed,remark,surplus,parent_id) 
+  		values (#{id},#{name},#{createTime},#{status},#{maxAllowed},#{remark},#{surplus},#{parentId})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.YuyueActivity">
-  	update yuyue_activity set name = #{name},max_allowed = #{maxAllowed},remark=#{remark} where id = #{id}
+  	update yuyue_activity set name = #{name},max_allowed = #{maxAllowed},remark=#{remark},parent_id=#{parentId} where id = #{id}
   </update>
   
   <update id="updateUsed" parameterType="String">
@@ -50,5 +51,9 @@
   <update id="updateStatus" parameterType="java.util.HashMap">
   	update yuyue_activity set status = #{status} where id = #{id}
   </update>
+  
+  <select id="queryChildIds" resultType="String" parameterType="java.util.HashMap">
+  	select id from yuyue_activity where parent_id = #{id}
+  </select>
   
 </mapper>

@@ -53,4 +53,8 @@ public class YuyueActivityDao extends BaseIbatisDao {
 		return this.sqlSession.update("yuyueActivity.updateUsed",id);
 	}
 	
+	public List<String> queryChildIds(String id) {
+		return this.sqlSession.selectList("yuyueActivity.queryChildIds",id);
+	}
+	
 }
