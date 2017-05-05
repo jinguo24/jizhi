@@ -133,11 +133,8 @@
 	
 	
 	<!-- ==============事务相关控制===============-->
-  <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">     
+  <bean name="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"> 
           <property name="dataSource" ref="ds_all"></property>
-          <property name="dataSource" ref="ds_all_activity"></property>
-          <property name="dataSource" ref="ds_all_wx"></property>
-          <property name="dataSource" ref="ds_all_us"></property>
     </bean>     
   
   <tx:advice id="userTxAdvice" transaction-manager="transactionManager">

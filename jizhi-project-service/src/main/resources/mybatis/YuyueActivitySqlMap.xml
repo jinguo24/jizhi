@@ -10,18 +10,22 @@
 		<result column="remark" property="remark" jdbcType="VARCHAR" />
 		<result column="surplus" property="surplus" jdbcType="INTEGER" />
 		<result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+		<result column="begin_date" property="beginDate" jdbcType="DATE" />
+		<result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+		<result column="end_time" property="endTime" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-	id,name,create_time,status,max_allowed,remark,surplus,parent_id
+	id,name,create_time,status,max_allowed,remark,surplus,parent_id,begin_date,begin_time,end_time
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.YuyueActivity">
-  	insert into yuyue_activity (id,name,create_time,status,max_allowed,remark,surplus,parent_id) 
-  		values (#{id},#{name},#{createTime},#{status},#{maxAllowed},#{remark},#{surplus},#{parentId})
+  	insert into yuyue_activity (id,name,create_time,status,max_allowed,remark,surplus,parent_id,begin_date,begin_time,end_time) 
+  		values (#{id},#{name},#{createTime},#{status},#{maxAllowed},#{remark},#{surplus},#{parentId},#{beginDate},#{beginTime},#{endTime})
   </insert>
   
   <update id="update" parameterType="com.jizhi.model.YuyueActivity">
-  	update yuyue_activity set name = #{name},max_allowed = #{maxAllowed},remark=#{remark},parent_id=#{parentId} where id = #{id}
+  	update yuyue_activity set name = #{name},max_allowed = #{maxAllowed},remark=#{remark},
+  	parent_id=#{parentId},begin_date=#{beginDate},begin_time=#{beginTime},end_time=#{endTime} where id = #{id}
   </update>
   
   <update id="updateUsed" parameterType="String">

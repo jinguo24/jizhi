@@ -30,7 +30,7 @@ public class YuyueActivityUserDao extends BaseIbatisDao {
 		param.put("phone", phone);
 		param.put("begin", begin);
 		param.put("size", size);
-		return this.sqlSession.selectList("yuyueActivityUser.queryByActivityId",param);
+		return this.sqlSession.selectList("yuyueActivityUser.queryByPhone",param);
 	}
 	
 	public Integer queryCounts(String phone,List<String> activityIds) {

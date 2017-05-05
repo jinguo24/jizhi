@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="yuyueActivityUser" >
   <resultMap id="BaseResultMap" type="com.jizhi.model.YuyueActivityUser" >
-		<id column="id" property="id" jdbcType="Integer" />
+		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="activity_id" property="activityId" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -25,10 +25,11 @@
   </select>
   
   <select id="queryCounts" resultType="Integer" parameterType="java.util.HashMap">
-  	select count(1) from 
+  	select count(1) 
   	from yuyue_activity_user_#{tbindex} where phone = #{phone} and activity_id in 
   	<foreach item="item" index="index" collection="activityIds" open="(" separator="," close=")">  
 	  #{item}  
 	</foreach>
   </select>
+  
 </mapper>
