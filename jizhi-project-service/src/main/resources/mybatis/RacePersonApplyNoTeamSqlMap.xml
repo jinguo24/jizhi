@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="racePersonApplyNoTeam" >
+  <resultMap id="BaseResultMap" type="com.jizhi.model.RacePersonApplyNoTeam" >
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="race_id" property="raceId" jdbcType="INTEGER" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		
+  </resultMap>
+  <sql id="Base_Column_List" >
+	id,race_id,phone,create_time,name,remark
+  </sql>
+  
+  <insert id="insert" parameterType="com.jizhi.model.RacePersonApplyNoTeam">
+  	insert into race_person_apply_noteam_#{tbindex} (race_id,phone,create_time,name,remark) 
+  		values (#{raceId},#{phone},#{createTime},#{name},#{remark})
+  </insert>
+  
+  <select id="queryByRaceAndPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_person_apply_noteam_#{tbindex} where race_id = #{raceId} and phone = #{phone}
+  </select>
+  
+  <select id="query" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_person_apply_noteam_#{tbindex} where race_id = #{raceId}
+  	<if test="remark != null and remark != '' " > and remark LIKE CONCAT('%',#{remark},'%') </if>
+  	order by create_time desc limit #{begin},#{size}
+  </select>
+  
+  <delete id="deleteById" parameterType="java.util.HashMap">
+  	delete from race_person_apply_noteam_#{tbindex} where id = #{id} and race_id = #{raceId} 
+  </delete>
+</mapper>

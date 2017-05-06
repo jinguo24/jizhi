@@ -105,22 +105,22 @@ public class YuyueController {
 	
 	@RequestMapping(value = "yuyue",method=RequestMethod.POST)
 	@ResponseBody
-	public String doYuyue(String activityId,String dephone,HttpServletRequest request, HttpServletResponse response) {
+	public String doYuyue(String activityId,HttpServletRequest request, HttpServletResponse response) {
 		try {
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			
 			YuyueActivity ac = yuyueService.queryActivityById(activityId);
 			if ( null == ac) {
@@ -166,22 +166,22 @@ public class YuyueController {
 	
 	@RequestMapping(value = "my",method=RequestMethod.GET)
 	@ResponseBody
-	public String my(String dephone,int pageIndex,int pageSize,HttpServletRequest request, HttpServletResponse response) {
+	public String my(int pageIndex,int pageSize,HttpServletRequest request, HttpServletResponse response) {
 		try {
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
 			
 			List<YuyueActivityUser> list = yuyueService.queryYuyueActivityUserList(dephone, pageIndex, pageSize);
 			if ( null != list ) {
