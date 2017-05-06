@@ -14,8 +14,8 @@
   </sql>
   
   <insert id="insert" parameterType="com.jizhi.model.UserRaceSupport">
-  	insert into user_race_support_#{tbindex} (owner_phone,phone,name,create_time,race_id) 
-  		values (#{ownerPhone},#{phone},#{name},#{createTime},#{raceId})
+  	insert into user_race_support_#{tbindex} (owner_phone,phone,create_time,race_id) 
+  		values (#{ownerPhone},#{phone},#{createTime},#{raceId})
   </insert>
  
   <select id="queryByRaceAndPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">

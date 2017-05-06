@@ -144,9 +144,9 @@ public class RaceController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
 			}
 			boolean valid = LocalCache.codeValid(phone, phoneCode);
-			//if (!valid) {
-			//	return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", "验证码错误");
-			//}
+			if (!valid) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"验证码错误", "验证码错误");
+			}
 			RacePersonApplyNoTeam rpa = raceService.getPersonByRaceAndPhone(raceId, phone);
 			if (null != rpa) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", "重复申请");

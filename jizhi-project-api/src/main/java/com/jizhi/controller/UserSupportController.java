@@ -32,10 +32,9 @@ public class UserSupportController {
 	@Autowired
 	private RaceService raceService;
 	
-	@RequestMapping(value = "teamMemberAddWithCode",method=RequestMethod.POST)
+	@RequestMapping(value = "join",method=RequestMethod.POST)
 	@ResponseBody
-	public String teamMemberAddWithCode(int raceId,String ownerPhone,String name,String phone,String phoneCode,HttpServletRequest request, HttpServletResponse response) {
-		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
+	public String join(int raceId,String ownerPhone,String name,String phone,String phoneCode,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			if (raceId<=0) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动参数不对", "活动参数不对");
@@ -43,14 +42,14 @@ public class UserSupportController {
 			if (StringUtils.isEmpty(phoneCode)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
 			}
-			return teamMemberAdd(raceId, ownerPhone,name, phone, phoneCode, request, response);
+			return support(raceId, ownerPhone,name, phone, phoneCode, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
 		}
 	}
 	
-	private String teamMemberAdd(int raceId,String ownerPhone,String name,String phone,String phoneCode,HttpServletRequest request, HttpServletResponse response) {
+	private String support(int raceId,String ownerPhone,String name,String phone,String phoneCode,HttpServletRequest request, HttpServletResponse response) {
 		//如果有短信验证码，则校验验证码
 		if (!StringUtils.isEmpty(phoneCode)) {
 			boolean valid = LocalCache.codeValid(phone, phoneCode);
@@ -60,10 +59,6 @@ public class UserSupportController {
 		}
 		if (StringUtils.isEmpty(phone)) {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
-		}
-		
-		if (StringUtils.isEmpty(name)) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
 		}
 		//判断用户是否存在，不存在则新增用户
 		User user = userService.getUser(org.apache.commons.lang.StringUtils.trimToEmpty(phone));
@@ -86,18 +81,11 @@ public class UserSupportController {
 		}
 		
 		//所有
-		UserRaceSupport urs = userSupportService.getOne(raceId, ownerPhone, phoneCode);
-		if ( null != urs) {
+		Integer count = userSupportService.queryUserSupportCount(phone, raceId);
+		if ( null != count && count > 0 ) {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","不能重复投票", "不能重复投票");
 		}
-		
-		urs = new UserRaceSupport();
-		urs.setCreateTime(new Date());
-		urs.setName(StringUtils.trimToEmpty(name));
-		urs.setOwnerPhone(ownerPhone);
-		urs.setPhone(phone);
-		urs.setRaceId(raceId);
-		userSupportService.addUserRaceSupport(urs);
+		userSupportService.addUserRaceSupport(phone, ownerPhone, raceId);
 		return AjaxWebUtil.sendAjaxResponse(request, response, true,"投票成功", null);
 	}
 	
