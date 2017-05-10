@@ -47,16 +47,4 @@ public class UserRaceSupportDao extends BaseIbatisDao {
 		param.put("raceId", raceId);
 		return this.sqlSession.selectOne("userRaceSupport.queryCountByRaceAndPhone",param);
 	}
-	
-	public UserRaceSupport getByRaceAndOwnerPhone(int raceId,String ownerPhone,String phone) {
-		UserRaceSupport a = new UserRaceSupport();
-		a.setOwnerPhone(ownerPhone);
-		Map param = new HashMap();
-		param.put("tbindex", a.getTbindex());
-		param.put("ownerPhone", ownerPhone);
-		param.put("raceId", raceId);
-		param.put("phone", phone);
-		return this.sqlSession.selectOne("userRaceSupport.queryByRaceAndOwnerPhoneAndPhone",param);
-	}
-	
 }

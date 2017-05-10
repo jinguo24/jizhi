@@ -46,11 +46,7 @@ public class UserSupportService {
 		return userSupportDao.queryCount(ownerPhone, raceId);
 	}
 	
-	public UserRaceSupport getOne(int raceId,String ownerPhone,String phone) {
-		return userSupportDao.getByRaceAndOwnerPhone(raceId, ownerPhone, phone);
-	}
-	
-	public Integer queryUserSupportCount(String phone,int raceId) {
-		return raceUserSupportDao.queryCount(phone, raceId);
+	public Integer queryUserSupportCount(String phone,int raceId,Date date) {
+		return raceUserSupportDao.queryCount(phone, raceId,date);
 	}
 }

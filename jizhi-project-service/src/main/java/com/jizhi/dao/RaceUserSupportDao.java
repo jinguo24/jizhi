@@ -1,5 +1,6 @@
 package com.jizhi.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.jizhi.model.RaceUserSupport;
 import com.simple.common.mybatis.annotation.DatabaseTemplate;
 import com.simple.common.mybatis.dao.BaseIbatisDao;
+import com.simple.common.util.DateUtil;
 
 @Repository
 @DatabaseTemplate("st_all_us")
@@ -36,13 +38,18 @@ public class RaceUserSupportDao extends BaseIbatisDao {
 		return this.sqlSession.selectList("raceUserSupport.queryByPhone",param);
 	}
 	
-	public Integer queryCount(String phone,int raceId) {
+	public Integer queryCount(String phone,int raceId,Date date) {
 		RaceUserSupport a = new RaceUserSupport();
 		a.setPhone(phone);
 		Map param = new HashMap();
 		param.put("tbindex", a.getTbindex());
 		param.put("phone", phone);
 		param.put("raceId", raceId);
+		if ( null != date) {
+			param.put("createTime", DateUtil.date2String(date));
+		}else {
+			param.put("createTime", "");
+		}
 		return this.sqlSession.selectOne("raceUserSupport.queryCountByRaceAndPhone",param);
 	}
 }

@@ -30,9 +30,4 @@
   	select count(1) from user_race_support_#{tbindex} where owner_phone = #{ownerPhone} and race_id = #{raceId}
   </select>
   
-  <select id="queryByRaceAndOwnerPhoneAndPhone" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-  	select 
-  	<include refid="Base_Column_List"></include>
-  	from user_race_support_#{tbindex} where owner_phone = #{ownerPhone} and race_id = #{raceId} and phone = #{phone}
-  </select>
 </mapper>
