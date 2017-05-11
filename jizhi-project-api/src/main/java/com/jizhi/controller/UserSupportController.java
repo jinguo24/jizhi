@@ -106,17 +106,17 @@ public class UserSupportController {
 		
 		Race race  = raceService.queryById(raceId);
 		if (null == race || race.getStatus() == 2) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", LocalUtil.entry(phone));
 		}
 		
 		if (race.getStatus() == 3) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", LocalUtil.entry(phone));
 		}
 		
 		//所有
 		Integer count = userSupportService.queryUserSupportCount(phone, raceId,new Date());
 		if ( null != count && count > 0 ) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","您今天已经投过票,明天再投哦~", "您今天已经投过票,明天再投哦~");
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","您今天已经投过票,明天再投哦~", LocalUtil.entry(phone));
 		}
 		userSupportService.addUserRaceSupport(phone, ownerPhone, raceId);
 		return AjaxWebUtil.sendAjaxResponse(request, response, true,"投票成功", null);

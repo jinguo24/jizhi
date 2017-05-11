@@ -149,16 +149,16 @@ public class RaceController {
 			}
 			RacePersonApplyNoTeam rpa = raceService.getPersonByRaceAndPhone(raceId, phone);
 			if (null != rpa) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", "重复申请");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", LocalUtil.entry(phone));
 			}
 			
 			Race race = raceService.queryById(raceId);
 			if (null == race || race.getStatus() == 2) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", LocalUtil.entry(phone));
 			}
 			
 			if (race.getStatus() == 3) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", LocalUtil.entry(phone));
 			}
 			raceService.addRacePersonApplyNoTeam(phone, raceId, name, remark, race.getName());
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", LocalUtil.entry(phone)); 
@@ -189,16 +189,16 @@ public class RaceController {
 			
 			RacePersonApplyNoTeam rpa = raceService.getPersonByRaceAndPhone(raceId, dephone);
 			if (null != rpa) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", "重复申请");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", LocalUtil.entry(dephone));
 			}
 			
 			Race race = raceService.queryById(raceId);
 			if (null == race || race.getStatus() == 2) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", LocalUtil.entry(dephone));
 			}
 			
 			if (race.getStatus() == 3) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", LocalUtil.entry(dephone));
 			}
 			raceService.addRacePersonApplyNoTeam(dephone, raceId, null, remark, race.getName());
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", LocalUtil.entry(dephone)); 
