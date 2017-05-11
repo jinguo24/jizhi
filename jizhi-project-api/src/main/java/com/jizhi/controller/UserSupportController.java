@@ -3,21 +3,26 @@ package com.jizhi.controller;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.jizhi.model.Race;
+import com.jizhi.model.RacePersonApplyNoTeam;
 import com.jizhi.model.User;
 import com.jizhi.model.UserRaceSupport;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.UserService;
 import com.jizhi.service.UserSupportService;
 import com.simple.common.util.AjaxWebUtil;
+import com.simple.common.util.CookieUtils;
 
 @Controller
 @RequestMapping(value = "/usp")
@@ -43,6 +48,34 @@ public class UserSupportController {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
 			}
 			return support(raceId, ownerPhone,name, phone, phoneCode, request, response);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "currentJoin",method=RequestMethod.POST)
+	@ResponseBody
+	public String join(int raceId,String ownerPhone,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			if (raceId<=0) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动参数不对", "活动参数不对");
+			}
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			return support(raceId, ownerPhone,null, dephone, null, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());

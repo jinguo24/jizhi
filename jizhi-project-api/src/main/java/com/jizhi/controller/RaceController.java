@@ -168,6 +168,46 @@ public class RaceController {
 		}
 	}
 	
+	@RequestMapping(value = "currentMemberAdd",method=RequestMethod.POST)
+	@ResponseBody
+	public String currentMemberAdd(int raceId,String remark,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			RacePersonApplyNoTeam rpa = raceService.getPersonByRaceAndPhone(raceId, dephone);
+			if (null != rpa) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","重复申请", "重复申请");
+			}
+			
+			Race race = raceService.queryById(raceId);
+			if (null == race || race.getStatus() == 2) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已过期", "活动已过期");
+			}
+			
+			if (race.getStatus() == 3) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已停止报名", "活动已停止报名");
+			}
+			raceService.addRacePersonApplyNoTeam(dephone, raceId, null, remark, race.getName());
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", LocalUtil.entry(dephone)); 
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败："+e.getLocalizedMessage(), e.getLocalizedMessage());
+		}
+	}
+	
 	@RequestMapping(value = "myApply",method=RequestMethod.GET)
 	@ResponseBody
 	public String myteam(int pageIndex,int pageSize,HttpServletRequest request, HttpServletResponse response) {
