@@ -13,15 +13,15 @@ public class Team implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	private String id;
-	private String name;//名称
-	private String image;//队标
-	private String leaderPhone;//领队电话
-	private String leaderName;//领队名称
-	private String description;//描述
+	private String name="";//名称
+	private String image="";//队标
+	private String leaderPhone="";//领队电话
+	private String leaderName="";//领队名称
+	private String description="";//描述
 	private int type;//1-足球队 2-羽毛球队 3-篮球队
 	private Date createTime;//创建时间
 	private int status=1 ;//状态 1-有效 2-无效
-	private String remark;//审核备注
+	private String remark="";//审核备注
 	private List<TeamMembers> members = new ArrayList<TeamMembers>();
 	public String getId() {
 		return id;

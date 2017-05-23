@@ -261,5 +261,8 @@ public class YuyueController {
 //		return openId;
 //	}
 	
-	
+	public static void main(String[] args) {
+		System.out.println("33395584-4764-4a64-b668-883e642420b1".hashCode());
+		System.out.println("6c2ccbee-bf72-427f-b608-87faef677b00".hashCode());
+	}
 }

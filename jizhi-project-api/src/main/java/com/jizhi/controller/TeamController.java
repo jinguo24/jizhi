@@ -21,12 +21,14 @@ import com.jizhi.constant.ChouQianCache;
 import com.jizhi.constant.RaceEnums;
 import com.jizhi.model.Race;
 import com.jizhi.model.RacePersonApply;
+import com.jizhi.model.Team;
 import com.jizhi.model.TeamChouQianDetail;
 import com.jizhi.model.TeamRaceApply;
 import com.jizhi.model.User;
 import com.jizhi.service.RaceService;
 import com.jizhi.service.TeamApplyService;
 import com.jizhi.service.TeamChouQianService;
+import com.jizhi.service.TeamService;
 import com.jizhi.service.UserService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.CookieUtils;
@@ -41,6 +43,9 @@ public class TeamController {
 	
 	@Autowired
 	private TeamApplyService teamApplyService;
+	
+	@Autowired
+	private TeamService teamService;
 	
 	@Autowired
 	private RaceService raceService;
@@ -96,12 +101,12 @@ public class TeamController {
 			
 			Integer count = teamApplyService.getTeamRaceApplyCount(raceId, null, 0, type, phone);
 			if ( null != count && count > 0 ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"不允许重复申请", "不允许重复申请");
 			}
 			
 			RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(raceId, phone);
 			if ( null != rpapply ) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"不允许重复申请", "不允许重复申请");
 			}
 			
 			teamapply = new TeamRaceApply();
@@ -252,17 +257,17 @@ public class TeamController {
 		}
 		
 		if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"不允许重复申请", "不允许重复申请");
 		}
 		//所有
 		Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
 		if ( null != count && count > 0 ) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"只允许注册一个队伍", "只允许注册一个队伍");
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"不允许重复申请", "不允许重复申请");
 		}
 		
 		RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
 		if ( null != rpapply ) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","只允许注册一个队伍", rpapply);
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","不允许重复申请", rpapply);
 		}
 		
 		rpapply = new RacePersonApply();
@@ -423,6 +428,18 @@ public class TeamController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"初始化失败", e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "getTeamByName",method=RequestMethod.POST)
+	@ResponseBody
+	public String getTeamByName(String name,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Team team = teamService.getByName(name);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", team);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,e.getLocalizedMessage(), e.getLocalizedMessage());
 		}
 	}
 }
