@@ -47,7 +47,7 @@ public class TeamApplyService {
 		if (pageIndex <=0 ) {
 			pageIndex = 1;
 		}
-		return teamRaceApplyDao.getTeamRaceApplyList(raceId,raceName, status, type, phone, (pageIndex-1)*pageSize, pageSize);
+		return teamRaceApplyDao.getTeamRaceApplyList(raceId,raceName, status, type, phone, pageIndex, pageSize);
 	}
 	
 	public int getTeamRaceApplyCount(Integer raceId,String raceName,int status,int type,String phone) {
@@ -110,7 +110,7 @@ public class TeamApplyService {
 			teamMembersDao.updateTeamMembers(ld);
 		}
 		//查询申请的成员
-		List<RacePersonApply> rapplys = racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 1000);
+		List<RacePersonApply> rapplys = racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 10000000);
 		if ( null != rapplys) {
 			for ( int i = 0 ; i < rapplys.size() ; i ++) {
 				RacePersonApply ra = rapplys.get(i);
@@ -163,7 +163,7 @@ public class TeamApplyService {
 		tar.setTeamImage(teamapply.getTeamImage());
 		tar.setTeamName(teamapply.getTeamName());
 		tar.setType(teamapply.getType());
-		tar.setMemberList(racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 1000));
+		tar.setMemberList(racePersonApplyDao.queryList(teamapply.getRaceId(), teamapply.getId(), 0, 10000000));
 		tar.setStudentNo(teamapply.getStudentNo());
 		tar.setClassName(teamapply.getClassName());
 		teamRaceApplyRejectDao.addTeamRaceApply(tar);
@@ -182,17 +182,17 @@ public class TeamApplyService {
 	}
 	
 	public List<RacePersonApply> queryPersonApplysByTeamApply(int raceId,String teamApplyId) {
-		return racePersonApplyDao.queryList(raceId, teamApplyId, 0, 500);
+		return racePersonApplyDao.queryList(raceId, teamApplyId, 0, 10000000);
 	}
 	
 	public List<RacePersonApply> queryPersonApplysByTeamName(int raceId,List<String> teamNames) {
-		return racePersonApplyDao.queryListByTeamNames(raceId, teamNames, 0, 500);
+		return racePersonApplyDao.queryListByTeamNames(raceId, teamNames, 0, 10000000);
 	}
 	
 	public List<TeamRaceApply> queryTeamApplyList(String phone) {
 		//查询所有的leader
 		List<TeamRaceApply> alls = new ArrayList<TeamRaceApply>();
-		List<TeamRaceApply> ts = queryTeamRaceApplyList(0,null,0,0,phone,1,500);
+		List<TeamRaceApply> ts = queryTeamRaceApplyList(0,null,0,0,phone,1,10000000);
 		if ( null != ts && ts.size() > 0 ) {
 			alls.addAll(ts);
 		}
