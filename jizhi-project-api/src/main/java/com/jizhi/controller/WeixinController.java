@@ -100,4 +100,17 @@ public class WeixinController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
 		}
 	}
+	
+	@RequestMapping(value = "currentUrlTicket",method=RequestMethod.GET)
+	@ResponseBody
+	public String lenovoListTicket(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String retUrl = request.getHeader("Referer");
+			JsConfigInfo config = WeiXinAuth.getJsConfigInfo(retUrl);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"获取成功", config);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"获取失败", e.getLocalizedMessage());
+		}
+	}
 }
