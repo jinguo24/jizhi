@@ -185,10 +185,10 @@ public class TeamController {
 	
 	@RequestMapping(value = "teamMemberAdd",method=RequestMethod.POST)
 	@ResponseBody
-	public String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
+	public String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,String positions,HttpServletRequest request, HttpServletResponse response) {
 		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
 		try {
-			return teamMemberAdd(token, name, nickName, phone, studentNo, className,null, request, response);
+			return teamMemberAdd(token, name, nickName, phone, studentNo, className,null,positions, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
@@ -197,20 +197,20 @@ public class TeamController {
 	
 	@RequestMapping(value = "teamMemberAddWithCode",method=RequestMethod.POST)
 	@ResponseBody
-	public String teamMemberAddWithCode(String token,String name,String nickName,String phone,String phoneCode,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
+	public String teamMemberAddWithCode(String token,String name,String nickName,String phone,String phoneCode,String studentNo,String className,String positions,HttpServletRequest request, HttpServletResponse response) {
 		//return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动入口已关闭", "活动入口已关闭");
 		try {
 			if (StringUtils.isEmpty(phoneCode)) {
 				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
 			}
-			return teamMemberAdd(token, name, nickName, phone, studentNo, className,phoneCode, request, response);
+			return teamMemberAdd(token, name, nickName, phone, studentNo, className,phoneCode,positions, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
 		}
 	}
 	
-	private String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,String phoneCode,HttpServletRequest request, HttpServletResponse response) {
+	private String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,String phoneCode,String positions,HttpServletRequest request, HttpServletResponse response) {
 		//如果有短信验证码，则校验验证码
 		if (!StringUtils.isEmpty(phoneCode)) {
 			boolean valid = LocalCache.codeValid(phone, phoneCode);
@@ -280,6 +280,7 @@ public class TeamController {
 		rpapply.setTeamName(teamapply.getTeamName());
 		rpapply.setStudentNo(studentNo);
 		rpapply.setClassName(className);
+		rpapply.setPositions(positions);
 		teamApplyService.addPersonApply(rpapply);
 		return AjaxWebUtil.sendAjaxResponse(request, response, true,"申请成功", null);
 	}
