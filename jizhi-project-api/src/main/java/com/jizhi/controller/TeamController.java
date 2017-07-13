@@ -53,6 +53,20 @@ public class TeamController {
 	@Autowired
 	private TeamChouQianService teamChouQianService;
 	
+
+	@RequestMapping(value = "teamApplyList",method=RequestMethod.GET)
+	@ResponseBody
+	public String teamApplyList(int raceId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<TeamRaceApply> list = teamApplyService.queryTeamRaceApplyList(raceId, null, 0, 0, null, 1, 100);
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询通过", list); 
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败", e.getLocalizedMessage());
+		}
+	}
+	
+	
 	@RequestMapping(value = "foo/applyTeam",method=RequestMethod.POST)
 	@ResponseBody
 	public String applyTeam(Integer raceId,String raceName,String phone,String name,String teamname,String image,String studentNo,String className,HttpServletRequest request, HttpServletResponse response) {
