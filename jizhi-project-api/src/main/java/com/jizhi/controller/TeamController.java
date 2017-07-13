@@ -215,9 +215,9 @@ public class TeamController {
 	public String teamMemberAddWithId(String taId,String name,String nickName,String phone,String phoneCode,String studentNo,
 			String className,String positions,String headImage,HttpServletRequest request, HttpServletResponse response) {
 		try {
-			if (StringUtils.isEmpty(phoneCode)) {
-				return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
-			}
+			//if (StringUtils.isEmpty(phoneCode)) {
+			//	return AjaxWebUtil.sendAjaxResponse(request, response, false,"请输入验证码", "请输入验证码");
+			//}
 			return teamMemberAddWithTaId(taId, name, nickName, phone, studentNo, className,phoneCode,positions,headImage, request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -281,7 +281,7 @@ public class TeamController {
 				
 				TeamRaceApply teamapply = teamApplyService.queryTeamApplyById(taid);
 				if  (null == teamapply) {
-					return AjaxWebUtil.sendAjaxResponse(request, response, false,"token无效", null);
+					return AjaxWebUtil.sendAjaxResponse(request, response, false,"参数无效", null);
 				}
 				
 				Race race  = raceService.queryById(teamapply.getRaceId());
