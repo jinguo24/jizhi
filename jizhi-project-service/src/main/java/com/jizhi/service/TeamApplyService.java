@@ -216,6 +216,22 @@ public class TeamApplyService {
 		return alls;
 	}
 	
+	public TeamRaceApply queryTeamApply(Integer raceId,String phone) {
+		//查询所有的leader
+		List<TeamRaceApply> ts = queryTeamRaceApplyList(raceId,null,0,0,phone,1,10);
+		if ( null != ts && ts.size() > 0 ) {
+			return ts.get(0);
+		}
+		
+		//查询所有成员
+		
+		RacePersonApply ra = racePersonApplyDao.getByRaceAndPhone(raceId, phone);
+		if (null != ra) {
+			return teamRaceApplyDao.getTeamRaceApplyById(ra.getTeamApplyId());
+		}
+		return null;
+	}
+	
 	public PageResult getTeamRaceApplyRejectPageResult(Integer raceId,String raceName,int status,int type,String phone,int pageIndex,int pageSize) {
 		if (pageIndex <=0 ) {
 			pageIndex = 1;
