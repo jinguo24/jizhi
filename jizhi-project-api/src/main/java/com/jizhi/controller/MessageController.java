@@ -21,10 +21,10 @@ public class MessageController {
 	@Autowired
 	private SysConfigService sysConfigService;
 	
-	private void sendSms(String phone,String templateId) throws Exception {
+	private void sendSms(String phone,String appId,String templateId) throws Exception {
 		String validateCode = getValidateCode();
 		LocalCache.setCache(phone, validateCode);
-		SDKTestSendTemplateSMS.sendSms(phone, templateId, new String[]{validateCode});
+		SDKTestSendTemplateSMS.sendSms(phone,appId, templateId, new String[]{validateCode});
 	}
 	
 	@RequestMapping(value = "sendSms/lenovo",method=RequestMethod.GET)
@@ -32,7 +32,8 @@ public class MessageController {
 	public String sendSms(String phone,HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String templateId = sysConfigService.getConfigValue("sys_sms_lenovo_templateId");
-			sendSms(phone,templateId);
+			String appId = sysConfigService.getConfigValue("sys_sms_lenovo_appId");
+			sendSms(phone,appId,templateId);
 			return  AjaxWebUtil.sendAjaxResponse(request, response, true,"获取验证码成功", null);
 		}catch(Exception e) {
 			e.printStackTrace();

@@ -38,7 +38,7 @@
   	<if test="status > 0" > and status = #{status} </if>
   	<if test="type > 0" > and type = #{type} </if>
   	<if test="raceId > 0" > and race_id = #{raceId} </if>
-  	order by id desc limit #{begin},#{size}
+  	order by create_time asc limit #{begin},#{size}
   </select>
   
   <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
