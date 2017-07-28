@@ -388,6 +388,36 @@ public class TeamController {
 		}
 	}
 	
+	@RequestMapping(value = "currentRemoveApply",method=RequestMethod.GET)
+	@ResponseBody
+	public String currentRemoveApply(int raceId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String token = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(token)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(token);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			TeamRaceApply team = teamApplyService.queryTeamApply(raceId,currentPhone);
+			if ( null != team && team.getStatus() != 1) {
+				teamApplyService.deleteTeamApplyPerson(raceId, dephone);
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", team);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
+		}
+	}
+	
 	private void initRaceInfo(TeamRaceApply teamRaceApply) {
 		Race race = raceService.queryById(teamRaceApply.getRaceId());
 		teamRaceApply.setRace(race);

@@ -53,6 +53,10 @@
   	delete from race_person_apply_#{tbinedex} where id = #{id} and race_id = #{raceId} 
   </delete>
   
+  <delete id="deleteByPhone" parameterType="java.util.HashMap">
+  	delete from race_person_apply_#{tbinedex} where phone = #{phone} and race_id = #{raceId} 
+  </delete>
+  
   <select id="queryTeamApplyIds" resultType="String" parameterType="java.util.HashMap">
   	select distinct team_apply_id 
   	from race_person_apply_#{tbinedex} where phone = #{phone}

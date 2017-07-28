@@ -245,4 +245,8 @@ public class TeamApplyService {
 		racePersonApplyDao.delete(raceId, id);
 	}
 	
+	public void deleteTeamApplyPerson(int raceId,String phone) {
+		racePersonApplyDao.deleteByPhone(raceId, phone);
+	}
+	
 }
