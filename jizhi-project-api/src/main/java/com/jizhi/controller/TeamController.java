@@ -408,8 +408,12 @@ public class TeamController {
 			}
 			
 			TeamRaceApply team = teamApplyService.queryTeamApply(raceId,currentPhone);
-			if ( null != team && team.getStatus() != 1) {
+			if ( null != team && team.getStatus() == 1) {
 				teamApplyService.deleteTeamApplyPerson(raceId, dephone);
+				//CookieUtils.removeCookie(request, "cp",response);
+				//CookieUtils.removeCookie(request, "token",response);
+			}else {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"活动已失效，不能操作", null);
 			}
 			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", team);
 		}catch(Exception e) {

@@ -72,6 +72,7 @@ public class RacePersonApplyDao extends BaseIbatisDao {
 		u.setPhone(phone);
 		Map param = new HashMap();
 		param.put("tbinedex", u.getTbinedex());
+		param.put("raceId", raceId);
 		param.put("phone", phone);
 		this.sqlSession.delete("racePersonApply.deleteByPhone",param);
 	}
