@@ -66,5 +66,12 @@
   	delete from race_person_apply_#{tbinedex} where race_id = #{raceId}  and team_apply_id = #{teamApplyId}
   </delete>
   
+  <select id="queryByPosition" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from race_person_apply_#{tbindex} where race_id = #{raceId} and positions = #{position}
+  	order by id desc limit #{begin},#{size}
+  </select>
+  
   
 </mapper>

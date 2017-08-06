@@ -119,7 +119,7 @@ public class UserSupportController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","您今天已经投过票,明天再投哦~", LocalUtil.entry(phone));
 		}
 		userSupportService.addUserRaceSupport(phone, ownerPhone, raceId);
-		return AjaxWebUtil.sendAjaxResponse(request, response, true,"投票成功", null);
+		return AjaxWebUtil.sendAjaxResponse(request, response, true,"投票成功", LocalUtil.entry(phone));
 	}
 	
 	@RequestMapping(value = "userCounts",method=RequestMethod.GET)

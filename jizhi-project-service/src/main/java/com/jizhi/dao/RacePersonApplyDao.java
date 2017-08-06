@@ -94,4 +94,19 @@ public class RacePersonApplyDao extends BaseIbatisDao {
 		this.sqlSession.delete("racePersonApply.deleteByTeamApplyId",param);
 	}
 	
+	public List<RacePersonApply> queryListByPosition(int raceId,String position,int pageIndex,int pageSize) {
+		RacePersonApply u = new RacePersonApply();
+		u.setRaceId(raceId);
+		Map param = new HashMap();
+		param.put("tbindex", u.getTbinedex());
+		param.put("raceId", raceId);
+		param.put("position", position);
+		if (pageIndex < 1) {
+			pageIndex  =1;
+		}
+		param.put("begin", (pageIndex-1)*pageSize);
+		param.put("size", pageSize);
+		return this.sqlSession.selectList("racePersonApply.queryByPosition",param);
+	}
+	
 }

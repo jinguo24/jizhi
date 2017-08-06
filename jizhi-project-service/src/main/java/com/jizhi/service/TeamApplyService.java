@@ -249,4 +249,8 @@ public class TeamApplyService {
 		racePersonApplyDao.deleteByPhone(raceId, phone);
 	}
 	
+	public List<RacePersonApply> queryRacePersonApplyListByPosition(int raceId,String position,int pageIndex,int pageSize) {
+		return racePersonApplyDao.queryListByPosition(raceId, position, pageIndex, pageSize);
+	}
+	
 }

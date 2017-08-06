@@ -30,6 +30,7 @@ import com.jizhi.service.TeamApplyService;
 import com.jizhi.service.TeamChouQianService;
 import com.jizhi.service.TeamService;
 import com.jizhi.service.UserService;
+import com.jizhi.service.UserSupportService;
 import com.simple.common.util.AjaxWebUtil;
 import com.simple.common.util.CookieUtils;
 import com.simple.common.util.PrimaryKeyUtil;
@@ -52,6 +53,9 @@ public class TeamController {
 	
 	@Autowired
 	private TeamChouQianService teamChouQianService;
+	
+	@Autowired
+	private UserSupportService userSupportService;
 	
 
 	@RequestMapping(value = "teamApplyList",method=RequestMethod.GET)
@@ -480,59 +484,6 @@ public class TeamController {
 		}
 	}
 	
-	@RequestMapping(value = "chouqian",method=RequestMethod.GET)
-	@ResponseBody
-	public String chouqian(int raceId,String phone,HttpServletRequest request, HttpServletResponse response) {
-		try {
-			String label = teamChouQianService.chouqian(raceId, phone);
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"抽签成功", label);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,e.getLocalizedMessage(), e.getLocalizedMessage());
-		}
-	}
-	
-	@RequestMapping(value = "initChouqian",method=RequestMethod.GET)
-	@ResponseBody
-	public String initChouqian(int raceId,int lc,int tc,HttpServletRequest request, HttpServletResponse response) {
-		try {
-//			String currentPhone = CookieUtils.getCookie(request, "cp");
-//			if ( StringUtils.isEmpty(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String token = CookieUtils.getCookie(request, "token");
-//			if ( StringUtils.isEmpty(token)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			
-//			String dephone = LocalUtil.decry(token);
-//			if (!dephone.equals(currentPhone)) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
-//			}
-//			if (!dephone.equals("18600671341")) {
-//				return AjaxWebUtil.sendAjaxResponse(request, response, false,"非法操作", null);
-//			}
-			List<TeamChouQianDetail> dlist = teamChouQianService.queryDetails(raceId);
-			Map<String,Integer> counts = new HashMap<String,Integer>();
-			if ( null != dlist) {
-				for (int i = 0 ; i < dlist.size() ; i ++) {
-					TeamChouQianDetail tcqd = dlist.get(i);
-					if (counts.containsKey(tcqd.getLabel())) {
-						counts.put(tcqd.getLabel(), counts.get(tcqd.getLabel())+1);
-					}else {
-						counts.put(tcqd.getLabel(), 1);
-					}
-				}
-			}
-			ChouQianCache.getInstance().init(lc, tc,counts);
-			return AjaxWebUtil.sendAjaxResponse(request, response, true,"初始化成功", null);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"初始化失败", e.getLocalizedMessage());
-		}
-	}
-	
 	@RequestMapping(value = "getTeamByName",method=RequestMethod.POST)
 	@ResponseBody
 	public String getTeamByName(String name,HttpServletRequest request, HttpServletResponse response) {
@@ -542,6 +493,25 @@ public class TeamController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,e.getLocalizedMessage(), e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "positionList",method=RequestMethod.GET)
+	@ResponseBody
+	public String positionList(Integer raceId,String position,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<RacePersonApply> teams = teamApplyService.queryRacePersonApplyListByPosition(raceId, position, 1, 1000);
+			if ( null != teams ) {
+				for (int i = 0 ; i < teams.size() ; i ++ ) {
+					RacePersonApply rpa = teams.get(i);
+					Integer count = userSupportService.queryCount(rpa.getPhone(), rpa.getRaceId());
+					rpa.setSupportCount(count);
+				}
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
 		}
 	}
 }

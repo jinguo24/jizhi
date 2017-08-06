@@ -21,6 +21,7 @@ public class RacePersonApply implements Serializable{
 	private String headImage="";
 	private String studentNo;//学号
 	private String className;//班级名称
+	private int supportCount;
 	public int getId() {
 		return id;
 	}
@@ -102,5 +103,11 @@ public class RacePersonApply implements Serializable{
 	}
 	public void setHeadImage(String headImage) {
 		this.headImage = headImage;
+	}
+	public int getSupportCount() {
+		return supportCount;
+	}
+	public void setSupportCount(int supportCount) {
+		this.supportCount = supportCount;
 	}
 }
