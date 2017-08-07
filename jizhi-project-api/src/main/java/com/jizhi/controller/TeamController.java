@@ -412,7 +412,7 @@ public class TeamController {
 			}
 			
 			TeamRaceApply team = teamApplyService.queryTeamApply(raceId,currentPhone);
-			if ( null != team && team.getStatus() == 1) {
+			if ( null != team) {
 				teamApplyService.deleteTeamApplyPerson(raceId, dephone);
 				//CookieUtils.removeCookie(request, "cp",response);
 				//CookieUtils.removeCookie(request, "token",response);
