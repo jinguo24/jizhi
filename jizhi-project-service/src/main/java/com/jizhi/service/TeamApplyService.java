@@ -185,6 +185,15 @@ public class TeamApplyService {
 		return racePersonApplyDao.queryList(raceId, teamApplyId, 0, 10000000);
 	}
 	
+	public int queryPersonApplyCounts(int raceId,String teamApplyId) {
+		Integer count = racePersonApplyDao.queryCount(raceId, teamApplyId);
+		if (null == count) {
+			return 0;
+		}else {
+			return count;
+		}
+	}
+	
 	public List<RacePersonApply> queryPersonApplysByTeamName(int raceId,List<String> teamNames) {
 		return racePersonApplyDao.queryListByTeamNames(raceId, teamNames, 0, 10000000);
 	}

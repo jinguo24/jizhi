@@ -245,6 +245,32 @@ public class TeamController {
 		}
 	}
 	
+	@RequestMapping(value = "currentTeamMemberAddWithCode",method=RequestMethod.POST)
+	@ResponseBody
+	public String currentTeamMemberAddWithCode(String token,String name,String nickName,
+			String studentNo,String className,String positions,String headImage,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String currentPhone = CookieUtils.getCookie(request, "cp");
+			if ( StringUtils.isEmpty(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String cptoken = CookieUtils.getCookie(request, "token");
+			if ( StringUtils.isEmpty(cptoken)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			
+			String dephone = LocalUtil.decry(cptoken);
+			if (!dephone.equals(currentPhone)) {
+				return AjaxWebUtil.sendAjaxResponse(request, response, false,"4","登录失效", null);
+			}
+			return teamMemberAdd(token, name, nickName, dephone, studentNo, className,null,positions,headImage, request, response);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请失败", e.getLocalizedMessage());
+		}
+	}
+	
 	private String teamMemberAdd(String token,String name,String nickName,String phone,String studentNo,String className,
 			String phoneCode,String positions,String headImage,HttpServletRequest request, HttpServletResponse response) {
 		//如果有短信验证码，则校验验证码
@@ -258,9 +284,9 @@ public class TeamController {
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"电话不能为空", "电话不能为空");
 		}
 		
-		if (StringUtils.isEmpty(name)) {
-			return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
-		}
+		//if (StringUtils.isEmpty(name)) {
+		//	return AjaxWebUtil.sendAjaxResponse(request, response, false,"姓名不能为空", "姓名不能为空");
+		//}
 		
 		String taid = LocalUtil.decryLeader(token);
 		if ("_jz_unkownphone".equals(taid)) {
@@ -298,12 +324,12 @@ public class TeamController {
 				}
 				
 				if  (teamapply.getLeaderPhone().equals(StringUtils.trimToEmpty(phone))) {
-					return AjaxWebUtil.sendAjaxResponse(request, response, false,"不允许重复申请", "不允许重复申请");
+					return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","不允许重复申请", "不允许重复申请");
 				}
 				//所有
 				Integer count = teamApplyService.getTeamRaceApplyCount(teamapply.getRaceId(), null, 0, teamapply.getType(), phone);
 				if ( null != count && count > 0 ) {
-					return AjaxWebUtil.sendAjaxResponse(request, response, false,"不允许重复申请", "不允许重复申请");
+					return AjaxWebUtil.sendAjaxResponse(request, response, false,"3","不允许重复申请", "不允许重复申请");
 				}
 				
 				RacePersonApply rpapply = teamApplyService.queryPersonApplyByPhone(teamapply.getRaceId(), phone);
@@ -448,6 +474,26 @@ public class TeamController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			return AjaxWebUtil.sendAjaxResponse(request, response, false,"申请成功", e.getLocalizedMessage());
+		}
+	}
+	
+	@RequestMapping(value = "teamMemberCounts",method=RequestMethod.GET)
+	@ResponseBody
+	public String teamMemberCounts(Integer raceId,HttpServletRequest request, HttpServletResponse response) {
+		try {
+			List<TeamRaceApply> teams = teamApplyService.queryTeamRaceApplyList(raceId, null, 2, 1, null, 1, 100);
+			if ( null != teams ) {
+				for (int i = 0 ; i < teams.size() ; i ++ ) {
+					TeamRaceApply tra = teams.get(i);
+					tra.setMemberCount(teamApplyService.queryPersonApplyCounts(raceId, tra.getId()));
+					tra.setToken(LocalUtil.entryLeader(tra.getId()));
+					//initRaceInfo(teams.get(i));
+				}
+			}
+			return AjaxWebUtil.sendAjaxResponse(request, response, true,"查询成功", teams);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return AjaxWebUtil.sendAjaxResponse(request, response, false,"查询失败", e.getLocalizedMessage());
 		}
 	}
 	

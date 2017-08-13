@@ -24,6 +24,7 @@ public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 	private String leaderName;
 	private Date createTime;
 	private List<RacePersonApply> members;
+	private int memberCount;
 	private String token;//token
 	private int currentLeader;//当前用户是否领队
 	private String studentNo;//学号
@@ -130,6 +131,12 @@ public class TeamRaceApply implements Serializable,Comparable<TeamRaceApply>{
 	}
 	public void setClassName(String className) {
 		this.className = className;
+	}
+	public int getMemberCount() {
+		return memberCount;
+	}
+	public void setMemberCount(int memberCount) {
+		this.memberCount = memberCount;
 	}
 	@Override
 	public String toString() {

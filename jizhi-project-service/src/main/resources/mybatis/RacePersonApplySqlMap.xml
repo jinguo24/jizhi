@@ -38,6 +38,12 @@
   	<if test="teamApplyId != null and teamApplyId != '' " > and team_apply_id = #{teamApplyId} </if>
   	order by id desc limit #{begin},#{size}
   </select>
+
+  <select id="queryCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select count(1)
+  	from race_person_apply_#{tbinedex} where race_id = #{raceId}
+  	<if test="teamApplyId != null and teamApplyId != '' " > and team_apply_id = #{teamApplyId} </if>
+  </select>
   
   <select id="queryByTeamNames" resultMap="BaseResultMap" parameterType="java.util.HashMap">
   	select 
