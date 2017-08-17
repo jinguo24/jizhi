@@ -185,9 +185,9 @@ public class RaceScheduleController {
 			if (null == raceSchedule || raceSchedule.getUdefined()==1) {
 				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"该赛程无效，不能录入数据", null);
 			}
-			if (raceSchedule.getStatus()==3) {
-				return  AjaxWebUtil.sendAjaxResponse(request, response, false,"该赛程已经完成，不能修改结果", null);
-			}
+			//if (raceSchedule.getStatus()==3) {
+			//	return  AjaxWebUtil.sendAjaxResponse(request, response, false,"该赛程已经完成，不能修改结果", null);
+			//}
 			if (StringUtils.isEmpty(successTeamId)) {
 				raceSchedule.setSuccessTeamId("0");
 			}else {
